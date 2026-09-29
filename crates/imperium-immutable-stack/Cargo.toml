@@ -1,0 +1,14 @@
+[package]
+name = "imperium-immutable-stack"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Persistent immutable borrow paths with absorption accounting and transfer-function evolution"
+
+[dependencies]
+thiserror = { workspace = true }
+
+[features]
+default = []
+std = []

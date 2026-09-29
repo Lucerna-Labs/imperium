@@ -1,0 +1,22 @@
+[package]
+name = "imperium-memory-log"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Append-only event log for the Imperium runtime"
+
+[dependencies]
+imperium-protocol = { path = "../imperium-protocol" }
+# The bus is Spiderweb-Bus-Next, vendored at `vendor/spiderweb-bus/`.
+spiderweb = { workspace = true }
+serde = { workspace = true }
+chrono = { workspace = true }
+parking_lot = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+# The supervision tests own the process composition: they register the real
+# `spider` orchestrator and drive a real run loop.
+spider = { workspace = true }

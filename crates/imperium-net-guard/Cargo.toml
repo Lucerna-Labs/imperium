@@ -1,0 +1,19 @@
+[package]
+name = "imperium-net-guard"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "No-pass guard: a gate that refuses passage, not a function"
+
+[dependencies]
+# The bus is Spiderweb-Bus-Next, vendored at `vendor/spiderweb-bus/`.
+spiderweb = { workspace = true }
+imperium-protocol = { path = "../imperium-protocol" }
+tokio = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
+chrono = { workspace = true }
+parking_lot = { workspace = true }
+rand = { workspace = true }

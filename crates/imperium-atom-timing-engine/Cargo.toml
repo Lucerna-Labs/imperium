@@ -1,0 +1,15 @@
+[package]
+name = "imperium-atom-timing-engine"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Atom orchestrator crate: fixed order, execution, observation, and return for timing function"
+
+[dependencies]
+imperium-atom-timing-function = { path = "../imperium-atom-timing-function" }
+thiserror = { workspace = true }
+
+[features]
+default = []
+std = []

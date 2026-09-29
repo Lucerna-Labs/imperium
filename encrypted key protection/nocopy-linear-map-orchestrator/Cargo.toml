@@ -1,0 +1,10 @@
+[package]
+name = "nocopy-linear-map-orchestrator"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Runs linear-map walks and records degree growth; no predicates"
+
+[dependencies]
+nocopy-linear-map-core = { path = "../nocopy-linear-map-core" }

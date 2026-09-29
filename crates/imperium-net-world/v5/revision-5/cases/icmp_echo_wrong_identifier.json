@@ -1,0 +1,51 @@
+{
+  "id": "icmp_echo_wrong_identifier",
+  "control": "icmp_correlation",
+  "peer_id": "11111111-1111-4111-8111-111111111111",
+  "session_id": "55555555-5555-4555-8555-555555555555",
+  "direction": "inbound",
+  "at_ms": 20,
+  "packet_hex": "4500001c12340000400154a80a0200020a0100010000ffee000a0007",
+  "packet_sha256": "f6b4eade5870e0409e032ea3544391abf0c18fb5580e01a751edebc172a5c694",
+  "facts": [
+    {
+      "id": "packet.validation",
+      "value": "parsed",
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.ip_version",
+      "value": "ipv4",
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.next_protocol",
+      "value": "icmpv4",
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.fragmented",
+      "value": false,
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.transport_complete",
+      "value": true,
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "flow.event",
+      "value": "icmp_unmatched_reply_unsupported",
+      "producer": "mesh.FlowBehaviorTracker.observe_at"
+    }
+  ],
+  "expected_applicability": {
+    "v5e003": "false",
+    "v5e004": "false",
+    "v5e006": "false",
+    "v5e008": "false",
+    "v5e009": "false",
+    "v5e027": "unknown"
+  },
+  "expected_delivery": "unobserved"
+}

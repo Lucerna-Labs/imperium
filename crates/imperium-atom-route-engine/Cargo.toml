@@ -1,0 +1,15 @@
+[package]
+name = "imperium-atom-route-engine"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Atom orchestrator crate: fixed order, execution, observation, and return for route function"
+
+[dependencies]
+imperium-atom-route-function = { path = "../imperium-atom-route-function" }
+thiserror = { workspace = true }
+
+[features]
+default = []
+std = []

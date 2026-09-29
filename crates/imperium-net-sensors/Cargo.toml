@@ -1,0 +1,34 @@
+[package]
+name = "imperium-net-sensors"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Classifier micro-models, signature engine sensor, and packet capture"
+
+[dependencies]
+# The bus is Spiderweb-Bus-Next, vendored at `vendor/spiderweb-bus/`.
+# There is no Imperium bus crate: subsystem crates depend on the kernel
+# directly.
+spiderweb = { workspace = true }
+imperium-protocol = { path = "../imperium-protocol" }
+imperium-store = { path = "../imperium-store" }
+imperium-net-crypto = { path = "../imperium-net-crypto" }
+imperium-net-signatures = { path = "../imperium-net-signatures" }
+tokio = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
+sha2 = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+async-trait = { workspace = true }
+parking_lot = { workspace = true }
+yara-x = { workspace = true }
+
+[dev-dependencies]
+# The supervision tests own the process composition: they register the real
+# `spider` orchestrator and drive a real run loop.
+spider = { workspace = true }
+rand = { workspace = true }

@@ -1,0 +1,62 @@
+{
+  "blockers": [
+    "coverage:raw_ip_tuple:Parser success alone is not a service or identity decision.",
+    "coverage:fragment_reassembly:The current parser identifies fragments but no verified reassembly owner supplies a complete transport packet.",
+    "coverage:tcp_progression:Per-flow SYN/ACK, sequence/window, payload-length and lifetime tracking require matched live tests; raw header fields are not progression proof.",
+    "coverage:udp_tuple_context:UDP is connectionless; reverse tuple alone does not establish a permitted reply or a live service policy.",
+    "coverage:icmp_echo_correlation:IPv4 type/code/identifier/sequence are parsed; matching request/reply state and a live service rule are not yet verified.",
+    "coverage:mesh_authenticated_session:The mesh has signed handshakes and replay mechanics, but the current v5 registry has not pinned current code hashes or a host admission receipt tying them to each payload.",
+    "coverage:versioned_host_service_policy:No current versioned approved zone/endpoint/service/direction configuration exists in the node.",
+    "coverage:unknown_and_negative_controls:Held-out live false-pass/false-reject matrix remains unrun.",
+    "frontier:ipv6_echo:unrepresented",
+    "frontier:ipv6_extension_semantics:discovered_unscoped",
+    "frontier:dns_tls_quic_application_context:discovered_unscoped",
+    "frontier:dhcp_nat_multicast_routing:discovered_unscoped",
+    "frontier:ipsec_and_esp:discovered_unscoped",
+    "frontier:raw_layer_two_traffic:discovered_unscoped",
+    "frontier:v4_source_reproduction:blocked",
+    "frontier:positive_reachability_not_release:blocked",
+    "frontier:v5_runtime_capacity:blocked",
+    "parent v4 original source/geometry/split/trainer inputs absent in active checkout",
+    "live three-node packet/flow release acceptance matrix not yet passed"
+  ],
+  "control_counts": {
+    "adversarial": 1,
+    "negative": 4,
+    "unknown": 2
+  },
+  "counts": {
+    "new_edges": 31,
+    "new_nodes": 13,
+    "parent_edges": 188,
+    "parent_nodes": 208
+  },
+  "input_sha256": {
+    "PROTOCOL.md": "7ed117effd8713bb8d15ef3cf80ce36ce423fbcde8290c8e05240e1ab79831a2",
+    "curriculum.json": "9f3bcb38d56ed7494ae3c264231fb9617281e475b0ea3a4e5ec4396fcd36292c",
+    "registry.json": "11af000745aaa69b85d7b7ffd0d8d65f77bc7d1407602ef7efad982443ac05d8",
+    "sources.json": "cc871ab3354ecc3df4806a06307b0c2bf4ae3dfffc5683e50117e2336de81994",
+    "splits.json": "b93378371342c6f2d4ee28ff884e3f3b09371e4e71343facde797d1d5543d7ef"
+  },
+  "parent_pack_sha256": "7afb2e711601cd529640e840e57e8dda48bedccc00ebc16000bba7af74d385cf",
+  "release_ready": false,
+  "revision": "network-v5-diagnostic-2",
+  "schema": 1,
+  "source_checks": {
+    "nist80041": "hash_verified",
+    "rfc4443": "hash_verified",
+    "rfc4861": "hash_verified",
+    "rfc768": "hash_verified",
+    "rfc791": "hash_verified",
+    "rfc792": "hash_verified",
+    "rfc8200": "hash_verified",
+    "rfc9293": "hash_verified"
+  },
+  "split_edge_counts": {
+    "cross_composition": 2,
+    "sealed_test": 4,
+    "train": 19,
+    "validation": 6
+  },
+  "status": "local_diagnostic_structural_valid"
+}

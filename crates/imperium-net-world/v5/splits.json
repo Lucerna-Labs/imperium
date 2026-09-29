@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "revision": "network-v5-diagnostic-2",
+  "frozen_before_training": "2026-09-29T13:42:12Z",
+  "supersedes": {
+    "file": "splits-v1-rejected.json",
+    "sha256": "1246a3fce7fafc0a00f4b6099075b0132225dac93c8335169164d1916f4e59ce",
+    "reason": "Pretraining design failure: the only positive packet-to-host-context bridge was held out, leaving no trained bridge. No trainer was run under revision 1."
+  },
+  "seed": 73129,
+  "unit": "mechanism_group",
+  "groups": [
+    { "id": "tuple_extraction", "split": "train", "reason": "IP endpoint and TCP/UDP port representation precedes any temporal flow interpretation." },
+    { "id": "fragment_boundary", "split": "train", "reason": "Fragment identity and reassembly prerequisite precede transport attribution." },
+    { "id": "tcp_open", "split": "train", "reason": "SYN/ACK opening supplies the first stateful sequence relation." },
+    { "id": "udp_datagram", "split": "train", "reason": "UDP tuple and datagram length are structural context only." },
+    { "id": "policy_context", "split": "train", "reason": "Host-approved service and endpoint context is a separate necessary input." },
+    { "id": "packet_policy_negative", "split": "train", "reason": "Packet structure alone does not establish authorized-flow state." },
+    { "id": "flow_authorization_composition", "split": "train", "reason": "The sourced positive packet-plus-validated-host-context bridge must be visible during training; edge conditions still reserve release for the host." },
+    { "id": "icmp_echo", "split": "validation", "reason": "Hold out request/reply identifier and sequence correlation." },
+    { "id": "tcp_window", "split": "validation", "reason": "Hold out bounded sequence/window progression beyond opening." },
+    { "id": "udp_reply_ambiguity", "split": "sealed_test", "reason": "Hold out reverse tuple as a weak response observation, not a connection proof." },
+    { "id": "unknown_protocol", "split": "sealed_test", "reason": "Hold out unknown/unrepresented transport negative control." },
+    { "id": "fragment_policy_limit", "split": "cross_composition", "reason": "Distinct held-out network composition: unreassembled fragments versus the trained complete-tuple and service-context bridge." }
+  ]
+}

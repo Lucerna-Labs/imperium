@@ -1,0 +1,9 @@
+[package]
+name = "nocopy-generator-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Move/Split/Merge carrier generators only; no predicates, filters, or copy checks"
+
+[dependencies]

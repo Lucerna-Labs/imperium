@@ -1,0 +1,17 @@
+[package]
+name = "nocopy-demo"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Evidence harness: asks the copy question only after closures are computed"
+
+[[bin]]
+name = "nocopy_demo"
+path = "src/bin/nocopy_demo.rs"
+
+[dependencies]
+nocopy-generator-core = { path = "../nocopy-generator-core" }
+nocopy-closure-orchestrator = { path = "../nocopy-closure-orchestrator" }
+nocopy-linear-map-core = { path = "../nocopy-linear-map-core" }
+nocopy-linear-map-orchestrator = { path = "../nocopy-linear-map-orchestrator" }

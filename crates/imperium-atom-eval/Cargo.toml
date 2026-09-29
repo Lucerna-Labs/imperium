@@ -1,0 +1,25 @@
+[package]
+name = "imperium-atom-eval"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Stage 3 evaluation: singles, pairs, chaos positions, ablations, order sweeps, blind corpora"
+
+[[bin]]
+name = "atom-eval"
+path = "src/main.rs"
+
+[dependencies]
+imperium-atom-timing-function = { path = "../imperium-atom-timing-function" }
+imperium-atom-timing-engine = { path = "../imperium-atom-timing-engine" }
+imperium-atom-longevity-function = { path = "../imperium-atom-longevity-function" }
+imperium-atom-longevity-engine = { path = "../imperium-atom-longevity-engine" }
+imperium-atom-route-function = { path = "../imperium-atom-route-function" }
+imperium-atom-route-engine = { path = "../imperium-atom-route-engine" }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+[features]
+default = []
+std = []

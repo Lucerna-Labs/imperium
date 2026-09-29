@@ -1,0 +1,14 @@
+[package]
+name = "imperium-managed-process"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Subprocess lifecycle management with resource budgets"
+
+[dependencies]
+tokio = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+libc = "0.2"

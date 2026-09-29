@@ -1,0 +1,61 @@
+{
+  "id": "udp_service_a",
+  "control": "same_shape_service",
+  "peer_id": "11111111-1111-4111-8111-111111111111",
+  "session_id": "22222222-2222-4222-8222-222222222222",
+  "direction": "outbound",
+  "at_ms": 0,
+  "packet_hex": "4500001c12340000401154980a0100010a0200029c4014e900080000",
+  "packet_sha256": "af7f96a91ce914fa20a83dfb6b4bfe70f0b33d8bc655ac6b0af8400d1eb83a11",
+  "facts": [
+    {
+      "id": "packet.validation",
+      "value": "parsed",
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.ip_version",
+      "value": "ipv4",
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.next_protocol",
+      "value": "udp",
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.fragmented",
+      "value": false,
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.transport_complete",
+      "value": true,
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.source_port",
+      "value": 40000,
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "packet.destination_port",
+      "value": 5353,
+      "producer": "observer.parse_raw_ip_flow"
+    },
+    {
+      "id": "flow.event",
+      "value": "udp_tuple_observed",
+      "producer": "mesh.FlowBehaviorTracker.observe_at"
+    }
+  ],
+  "expected_applicability": {
+    "v5e003": "false",
+    "v5e004": "true",
+    "v5e006": "false",
+    "v5e008": "false",
+    "v5e009": "false",
+    "v5e027": "unknown"
+  },
+  "expected_delivery": "unobserved"
+}

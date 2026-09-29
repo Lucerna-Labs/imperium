@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = [
+    "nocopy-generator-core",
+    "nocopy-closure-orchestrator",
+    "nocopy-linear-map-core",
+    "nocopy-linear-map-orchestrator",
+    "nocopy-demo",
+]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+authors = ["Lucerna Labs"]
+version = "0.1.0"

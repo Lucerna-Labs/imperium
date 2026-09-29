@@ -1,0 +1,131 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/imperium-protocol",
+    "crates/imperium-store",
+    "crates/imperium-runtime",
+    "crates/imperium-secrets-vault",
+    "crates/imperium-secrets-broker",
+    "crates/imperium-secrets-threshold",
+    "crates/imperium-secrets-audit",
+    "crates/imperium-memory-log",
+    "crates/imperium-memory-projection",
+    "crates/imperium-managed-process",
+    "crates/imperium-net-crypto",
+    "crates/imperium-net-mesh",
+    "crates/imperium-net-host",
+    "crates/imperium-net-world",
+    "crates/imperium-net-observer",
+    "crates/imperium-net-lightcone",
+    "crates/imperium-net-cluster",
+    "crates/imperium-net-transport",
+    "crates/imperium-gui",
+    "crates/imperium-net-strainer",
+    "crates/imperium-net-guard",
+    "crates/imperium-net-sensors",
+    "crates/imperium-net-signatures",
+    "crates/imperium-net-toolkit",
+    "crates/imperium-cli",
+    "crates/imperium-immutable-stack",
+    "crates/imperium-nocopy-vpn-observer",
+    "crates/imperium-atom-eval",
+    "crates/imperium-atom-vpn-policy",
+    "crates/imperium-atom-timing-function",
+    "crates/imperium-atom-timing-engine",
+    "crates/imperium-atom-longevity-function",
+    "crates/imperium-atom-longevity-engine",
+    "crates/imperium-atom-route-function",
+    "crates/imperium-atom-route-engine",
+
+    # Vendored: the Spiderweb bus. See vendor/spiderweb-bus/PROVENANCE.md —
+    # this is a working-tree copy, not a commit, and its root manifest lives
+    # there verbatim because two [workspace] tables cannot coexist.
+    "vendor/spiderweb-bus/crates/spiderweb",
+    "vendor/spiderweb-bus/crates/spider",
+    "vendor/spiderweb-bus/crates/highway",
+    "vendor/spiderweb-bus/crates/preload",
+    "vendor/spiderweb-bus/crates/spiderweb-registry",
+    "vendor/spiderweb-bus/crates/spiderweb-viz",
+    "vendor/spiderweb-bus/crates/spiderweb-edge",
+    "vendor/spiderweb-bus/crates/spiderweb-heat",
+    "vendor/spiderweb-bus/crates/spiderweb-lanes",
+    "vendor/spiderweb-bus/crates/cap-source",
+    "vendor/spiderweb-bus/crates/cap-sink",
+    "vendor/spiderweb-bus/crates/cap-slow-sink",
+    "vendor/spiderweb-bus/crates/cap-crasher",
+    "vendor/spiderweb-bus/crates/cap-image",
+    "vendor/spiderweb-bus/tools/webctl",
+    "encrypted key protection/nocopy-generator-core",
+    "encrypted key protection/nocopy-closure-orchestrator",
+    "encrypted key protection/nocopy-linear-map-core",
+    "encrypted key protection/nocopy-linear-map-orchestrator",
+]
+exclude = ["reference"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+authors = ["Lucerna Labs"]
+# Declared only because the vendored Spiderweb members reference
+# `version.workspace` / `rust-version.workspace`; no Imperium crate inherits
+# these (they hardcode `version = "0.1.0"`).
+version = "0.1.0"
+rust-version = "1.91"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full", "signal"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+async-trait = "0.1"
+bytes = "1"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+parking_lot = "0.12"
+
+# Cryptography — classical
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+hkdf = "0.12"
+hmac = "0.12"
+sha2 = "0.10"
+zeroize = { version = "1", features = ["derive"] }
+rand_core = { version = "0.6", features = ["getrandom"] }
+rand = "0.8"
+
+# Cryptography — post-quantum
+ml-kem = "0.2"
+ml-dsa = "0.1.0-rc.11"
+
+# Symmetric encryption — session data
+chacha20poly1305 = "0.10"
+
+# Signature matching
+yara-x = "1.16.0"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Vendored Spiderweb bus — hoisted from vendor/spiderweb-bus/Cargo.toml because
+# the vendored members reference these as `*.workspace = true`.
+spiderweb = { path = "vendor/spiderweb-bus/crates/spiderweb" }
+spider = { path = "vendor/spiderweb-bus/crates/spider" }
+highway = { path = "vendor/spiderweb-bus/crates/highway" }
+preload = { path = "vendor/spiderweb-bus/crates/preload" }
+spiderweb-registry = { path = "vendor/spiderweb-bus/crates/spiderweb-registry" }
+spiderweb-viz = { path = "vendor/spiderweb-bus/crates/spiderweb-viz" }
+spiderweb-edge = { path = "vendor/spiderweb-bus/crates/spiderweb-edge" }
+spiderweb-heat = { path = "vendor/spiderweb-bus/crates/spiderweb-heat" }
+spiderweb-lanes = { path = "vendor/spiderweb-bus/crates/spiderweb-lanes" }
+
+[profile.release]
+lto = true
+codegen-units = 1
+# `panic = "unwind"` is required, not cosmetic: the spiderweb bus uses
+# catch_unwind to convert a strand panic into LifecycleEvent::Crashed so the
+# spider can restart or quarantine it. Under `abort`, one strand panic takes
+# the whole node down and the supervision machinery is dead code.
+panic = "unwind"
+strip = true

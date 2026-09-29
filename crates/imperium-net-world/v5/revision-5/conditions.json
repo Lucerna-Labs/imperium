@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "revision": "network-v5-condition-evidence-1",
+  "parent_curriculum_sha256": "ea05008804f819e7410ef8578348f9aa1f667d59044cdc8c9eef6db65927ce26",
+  "bindings": [
+    {
+      "edge_id": "v5e003",
+      "status": "evaluable",
+      "source_sections": ["rfc9293#3.1"],
+      "when": {"all": [
+        {"fact": "packet.validation", "eq": "parsed"},
+        {"fact": "packet.next_protocol", "eq": "tcp"},
+        {"fact": "packet.transport_complete", "eq": true}
+      ]},
+      "unless": {"any": [{"fact": "packet.fragmented", "eq": true}]}
+    },
+    {
+      "edge_id": "v5e004",
+      "status": "evaluable",
+      "source_sections": ["rfc768#format"],
+      "when": {"all": [
+        {"fact": "packet.validation", "eq": "parsed"},
+        {"fact": "packet.next_protocol", "eq": "udp"},
+        {"fact": "packet.transport_complete", "eq": true}
+      ]},
+      "unless": {"any": [{"fact": "packet.fragmented", "eq": true}]}
+    },
+    {
+      "edge_id": "v5e006",
+      "status": "evaluable",
+      "source_sections": ["rfc791#3.2", "rfc8200#4.5"],
+      "when": {"all": [
+        {"fact": "packet.validation", "eq": "fragment"},
+        {"fact": "packet.fragmented", "eq": true},
+        {"fact": "packet.transport_complete", "eq": false}
+      ]},
+      "unless": {"any": []}
+    },
+    {
+      "edge_id": "v5e008",
+      "status": "evaluable",
+      "source_sections": ["rfc9293#3.5"],
+      "when": {"all": [
+        {"fact": "packet.next_protocol", "eq": "tcp"},
+        {"fact": "flow.event", "eq": "tcp_handshake_correlated"}
+      ]},
+      "unless": {"any": []}
+    },
+    {
+      "edge_id": "v5e009",
+      "status": "evaluable",
+      "source_sections": ["rfc9293#3.5"],
+      "when": {"all": [
+        {"fact": "packet.next_protocol", "eq": "tcp"},
+        {"fact": "flow.event", "eq": "tcp_synack_correlated"}
+      ]},
+      "unless": {"any": []}
+    },
+    {
+      "edge_id": "v5e027",
+      "status": "blocked_missing_host_facts",
+      "source_sections": [],
+      "when": {"all": [
+        {"fact": "host.policy_current", "eq": true},
+        {"fact": "host.zones_validated", "eq": true},
+        {"fact": "host.endpoints_validated", "eq": true},
+        {"fact": "host.service_rule_match", "eq": true},
+        {"fact": "host.direction_validated", "eq": true},
+        {"fact": "host.flow_state_valid", "eq": true},
+        {"fact": "mesh.session_authenticated", "eq": true}
+      ]},
+      "unless": {"any": []},
+      "blockers": ["no_current_host_policy_source", "no_packet_bound_subject_or_mesh_session_receipt", "no_independent_flow_state_validation", "nist80041_section_entailment_not_reverified"]
+    }
+  ]
+}

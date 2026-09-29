@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "status": "local_loopback_verified",
+  "sealed": false,
+  "source": {
+    "atom_os_commit": "db5f662",
+    "training_source_revision": "6613786f628c51cf07b844eb7e2c2e499c8e9d21",
+    "device": "NVIDIA GeForce RTX 5070 Ti",
+    "jax": "0.11.2",
+    "pack_sha256": "e6a97fde814d04ea4a5b306b19aad2cf98d370fbedd0d364dadd11cf497d4eae",
+    "geometry_sha256": "d65547632653e42c3288c2ccda663577daee71bbcc1b7ccac291c0a265e32689"
+  },
+  "boundary": {
+    "transport": "Imperium encrypted UDP mesh",
+    "addresses": [
+      "127.0.0.1"
+    ],
+    "external_packets_sent": 0,
+    "lightcone_role": "passive exact-graph admission and receipts",
+    "rejection_owners": [
+      "v3 frame parser",
+      "session AEAD",
+      "replay window",
+      "strainer stack",
+      "normality envelope"
+    ]
+  },
+  "safe_fixture_result": {
+    "valid_encrypted_frames_accepted": 1,
+    "replays_rejected": 1,
+    "tampered_frames_rejected": 1,
+    "unauthenticated_probe_datagrams_rejected": 5,
+    "strainer_rejections": 5,
+    "hostile_shape_controls_outside_envelope": 4,
+    "benign_shape_controls_inside_envelope": 16,
+    "outbound_lightcone_receipts": 1,
+    "inbound_lightcone_receipts": 8
+  },
+  "validation": {
+    "imperium_net_world_tests": 4,
+    "rtx_world_vpn_safety_tests": 1,
+    "imperium_runtime_unit_tests": 23,
+    "imperium_runtime_integration_tests": 19,
+    "full_workspace": "pass",
+    "bounded_live_startup": "pass",
+    "startup_world_hash": "e6a97fde814d04ea4a5b306b19aad2cf98d370fbedd0d364dadd11cf497d4eae"
+  },
+  "file_sha256": {
+    "Cargo.toml": "b3a62f947ff381c67a48c7034d56e8288256ecfb18500300566d7a51e8914150",
+    "Cargo.lock": "8cf2d31ecca8856436a9e5dc1b7016d6ae4a786f9c30c40a51ca572eec3ec771",
+    "README.md": "b7d9acc5a9ae725cde1ef73fd670a9c3147b9c578dec1b8471a4d64a349341c9",
+    "RTX_LIGHTCONE_VPN.md": "442ebe32f4d6a65f02574ba7c6135a871b7e620b61c7dd15b6a1172f2e2e8ac2",
+    "crates/imperium-net-world/src/world.bin": "e6a97fde814d04ea4a5b306b19aad2cf98d370fbedd0d364dadd11cf497d4eae",
+    "crates/imperium-net-mesh/src/transport.rs": "723053818d970d1947330fc147e7b0855e133d409d9a7b5e39d9ae0ea651c186",
+    "crates/imperium-net-mesh/src/world_lightcone.rs": "b502cbd85e3092ec822904f368bee233ac47471a8c74761e0f2536d68ece0185",
+    "crates/imperium-net-mesh/tests/rtx_world_vpn_safety.rs": "3723fc23535a875084bd11ce04a7b01b9d112a2191eff73b3dd19197243e3384"
+  },
+  "limitations": [
+    "local GPU diagnostic, not TPU accelerator acceptance",
+    "Imperium checkout has no host TUN adapter",
+    "tested fixtures are inert and loopback-only",
+    "passing fixtures do not prove universal malicious-traffic detection",
+    "the passive Lightcone does not reject traffic"
+  ]
+}

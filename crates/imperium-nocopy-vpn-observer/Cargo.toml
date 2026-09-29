@@ -1,0 +1,27 @@
+[package]
+name = "imperium-nocopy-vpn-observer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Read-only behavioral measurement tap: redacted frame classes feed the no-copy stacks; never alters the data path"
+
+[dependencies]
+nocopy-generator-core = { path = "../../encrypted key protection/nocopy-generator-core" }
+nocopy-closure-orchestrator = { path = "../../encrypted key protection/nocopy-closure-orchestrator" }
+nocopy-linear-map-core = { path = "../../encrypted key protection/nocopy-linear-map-core" }
+nocopy-linear-map-orchestrator = { path = "../../encrypted key protection/nocopy-linear-map-orchestrator" }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true }
+imperium-net-mesh = { path = "../imperium-net-mesh" }
+imperium-net-crypto = { path = "../imperium-net-crypto" }
+imperium-protocol = { path = "../imperium-protocol" }
+spiderweb = { workspace = true }
+chrono = { workspace = true }
+rand = { workspace = true }
+
+[features]
+default = []
+std = []

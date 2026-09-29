@@ -1,0 +1,14 @@
+[package]
+name = "imperium-atom-route-function"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Atom function crate: synthetic-emergence route and peer-selection measurements"
+
+[dependencies]
+thiserror = { workspace = true }
+
+[features]
+default = []
+std = []

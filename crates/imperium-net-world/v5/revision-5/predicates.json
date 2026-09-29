@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "revision": "network-v5-condition-evidence-1",
+  "predicates": [
+    {"id": "packet.validation", "type": "enum", "values": ["parsed", "fragment", "malformed", "unsupported"], "scope": "packet", "producer": "observer.parse_raw_ip_flow", "available": true},
+    {"id": "packet.ip_version", "type": "enum", "values": ["ipv4", "ipv6"], "scope": "packet", "producer": "observer.parse_raw_ip_flow", "available": true},
+    {"id": "packet.next_protocol", "type": "enum", "values": ["tcp", "udp", "icmpv4", "icmpv6"], "scope": "packet", "producer": "observer.parse_raw_ip_flow", "available": true},
+    {"id": "packet.fragmented", "type": "bool", "scope": "packet", "producer": "observer.parse_raw_ip_flow", "available": true},
+    {"id": "packet.transport_complete", "type": "bool", "scope": "packet", "producer": "observer.parse_raw_ip_flow", "available": true},
+    {"id": "packet.source_port", "type": "u16", "scope": "packet", "producer": "observer.parse_raw_ip_flow", "available": true},
+    {"id": "packet.destination_port", "type": "u16", "scope": "packet", "producer": "observer.parse_raw_ip_flow", "available": true},
+    {"id": "flow.event", "type": "enum", "values": ["tcp_syn_observed", "tcp_synack_correlated", "tcp_handshake_correlated", "tcp_segment_at_expected", "tcp_segment_ahead", "tcp_midstream_unsupported", "udp_tuple_observed", "udp_reverse_tuple_observed", "icmp_echo_request_observed", "icmp_echo_reply_correlated", "icmp_unmatched_reply_unsupported", "fragmented_unsupported"], "scope": "peer_session_flow", "producer": "mesh.FlowBehaviorTracker.observe_at", "available": true},
+    {"id": "subject.kind", "type": "enum", "values": ["mesh", "local_socket", "transit", "kernel_generated"], "scope": "packet", "producer": "host.kernel_subject_capture", "available": false},
+    {"id": "subject.uid", "type": "u32", "scope": "socket", "producer": "host.kernel_subject_capture", "available": false},
+    {"id": "subject.cgroup_id", "type": "u64", "scope": "socket", "producer": "host.kernel_subject_capture", "available": false},
+    {"id": "subject.netns_id", "type": "u64", "scope": "packet", "producer": "host.kernel_subject_capture", "available": false},
+    {"id": "mesh.session_authenticated", "type": "bool", "scope": "peer_session_flow", "producer": "mesh.authenticated_session_receipt", "available": false},
+    {"id": "host.policy_current", "type": "bool", "scope": "policy_revision", "producer": "host.versioned_policy", "available": false},
+    {"id": "host.zones_validated", "type": "bool", "scope": "packet", "producer": "host.versioned_policy", "available": false},
+    {"id": "host.endpoints_validated", "type": "bool", "scope": "packet", "producer": "host.versioned_policy", "available": false},
+    {"id": "host.service_rule_match", "type": "bool", "scope": "packet", "producer": "host.versioned_policy", "available": false},
+    {"id": "host.direction_validated", "type": "bool", "scope": "packet", "producer": "host.versioned_policy", "available": false},
+    {"id": "host.flow_state_valid", "type": "bool", "scope": "peer_session_flow", "producer": "host.flow_state_validator", "available": false}
+  ]
+}

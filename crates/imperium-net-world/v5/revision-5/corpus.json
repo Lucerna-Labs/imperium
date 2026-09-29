@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "revision": "network-v5-condition-evidence-1",
+  "scope": "offline_parser_and_flow_facts_only",
+  "producer_binding": "actual Rust parser and tracker checked by v5_condition_evidence.rs",
+  "cases": [
+    {
+      "id": "udp_service_a",
+      "file": "cases/udp_service_a.json",
+      "sha256": "9373a4bd496348f668cca04b452af4e06a08e66a8446f40f31d634b0e46203bc"
+    },
+    {
+      "id": "udp_service_b_same_shape",
+      "file": "cases/udp_service_b_same_shape.json",
+      "sha256": "418d48604569569aa82bae51e1251e2d3875d5821463da2af93d98c46ca8adc5"
+    },
+    {
+      "id": "udp_reverse_correlated",
+      "file": "cases/udp_reverse_correlated.json",
+      "sha256": "87bb370c22bf6f9864d5f6f14c8f2c74e7c8b90c6ad3f7d3cc6dbfc0495f6dcd"
+    },
+    {
+      "id": "udp_reverse_after_expiry",
+      "file": "cases/udp_reverse_after_expiry.json",
+      "sha256": "b3630b54d18e3065d22b4b5790fab7e6f1937ed8c2eebffab8ddf4bed71a5089"
+    },
+    {
+      "id": "tcp_syn",
+      "file": "cases/tcp_syn.json",
+      "sha256": "ff3bcd586a74b5e27a4bfe86f5cc23c2cfd6c6d32f8bfc8c8e7dc05207a825df"
+    },
+    {
+      "id": "tcp_synack_correlated",
+      "file": "cases/tcp_synack_correlated.json",
+      "sha256": "cb01be5e9752a8731bfaf8be9f96aefde331b81a460942fe779ce733b90140ca"
+    },
+    {
+      "id": "tcp_ack_correlated",
+      "file": "cases/tcp_ack_correlated.json",
+      "sha256": "5b7163d9f7a4c68199d1cb202d171b0a4616e2cd4f4947facdbb59cb7dbef467"
+    },
+    {
+      "id": "tcp_ack_ahead",
+      "file": "cases/tcp_ack_ahead.json",
+      "sha256": "9d8ada497cf2a78a3c17f122c1520132c4e76dac912b3b2da71ca58b299f951f"
+    },
+    {
+      "id": "tcp_orphan_ack",
+      "file": "cases/tcp_orphan_ack.json",
+      "sha256": "c6352dbcfa3bab003d0aec4059cb98f3742b0741a47bd87507163afe8b3414c4"
+    },
+    {
+      "id": "icmp_echo_request",
+      "file": "cases/icmp_echo_request.json",
+      "sha256": "fe3e46cd3ef31b120aaba9ba2e8217c113ff3fd0821d279352fa23d093879151"
+    },
+    {
+      "id": "icmp_echo_reply_correlated",
+      "file": "cases/icmp_echo_reply_correlated.json",
+      "sha256": "7ed0e1e44ba5d4fbe2c51c9f1ae1d95efa7f3309bd06c7ac6b1fe22de9114542"
+    },
+    {
+      "id": "icmp_echo_wrong_identifier",
+      "file": "cases/icmp_echo_wrong_identifier.json",
+      "sha256": "5759af43833365373c3375c12384c01cad77337a847c5ec0ea3deb1f938b8229"
+    },
+    {
+      "id": "ipv4_udp_fragment",
+      "file": "cases/ipv4_udp_fragment.json",
+      "sha256": "bce98d8b725bcad9f5172c11a30b650f014c8f9a59db305df6053929aada0c51"
+    },
+    {
+      "id": "unsupported_upper_protocol",
+      "file": "cases/unsupported_upper_protocol.json",
+      "sha256": "d5206bd3fea4785843bf74083e2f6644b3ae3266e080cc3a7c69c84149fb7f14"
+    },
+    {
+      "id": "malformed_ipv4_checksum",
+      "file": "cases/malformed_ipv4_checksum.json",
+      "sha256": "b93c4127ba4bf8b2a58d28c1e656202d85168f1bb3b9b11bf2a5c45b83e01646"
+    }
+  ]
+}

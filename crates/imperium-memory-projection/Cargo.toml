@@ -1,0 +1,11 @@
+[package]
+name = "imperium-memory-projection"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Deterministic projection functions over the Imperium memory log"
+
+[dependencies]
+imperium-memory-log = { path = "../imperium-memory-log" }
+serde = { workspace = true }

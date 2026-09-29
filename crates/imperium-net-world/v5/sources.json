@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "retrieved_at_utc": "2026-09-29T13:32:13Z",
+  "rights_policy": "RFC text is citation-only evidence; no verbatim RFC prose is copied into training. Curriculum statements are original factual paraphrases. NIST SP 800-41 is public domain in the US with attribution. Rights outside these lanes remain unresolved.",
+  "sources": [
+    {
+      "id": "rfc791",
+      "title": "Internet Protocol",
+      "maintainer": "RFC Editor",
+      "version": "RFC 791, September 1981",
+      "uri": "https://www.rfc-editor.org/rfc/rfc791.txt",
+      "sha256": "6cfb387fcecfc1b72f2f69343c5b6951b5d263d708162e2b5c66ab8f394f6265",
+      "bytes": 94892,
+      "rights_lane": "citation_only",
+      "rights_uri": "https://trustee.ietf.org/documents/trust-legal-provisions/",
+      "training_use": "original_factual_paraphrase_only",
+      "attribution": "RFC 791, RFC Editor"
+    },
+    {
+      "id": "rfc768",
+      "title": "User Datagram Protocol",
+      "maintainer": "RFC Editor",
+      "version": "RFC 768, August 1980",
+      "uri": "https://www.rfc-editor.org/rfc/rfc768.txt",
+      "sha256": "7dc8880e1ecef9c3f9da0db4b876a16e96bfa4f0953cc9d977d414f8f680c2f0",
+      "bytes": 5896,
+      "rights_lane": "citation_only",
+      "rights_uri": "https://trustee.ietf.org/documents/trust-legal-provisions/",
+      "training_use": "original_factual_paraphrase_only",
+      "attribution": "RFC 768, RFC Editor"
+    },
+    {
+      "id": "rfc792",
+      "title": "Internet Control Message Protocol",
+      "maintainer": "RFC Editor",
+      "version": "RFC 792, September 1981",
+      "uri": "https://www.rfc-editor.org/rfc/rfc792.txt",
+      "sha256": "58714393ded142bacf188d7e8977eef98f4110c4c87ac94595f750df5664c2c6",
+      "bytes": 29186,
+      "rights_lane": "citation_only",
+      "rights_uri": "https://trustee.ietf.org/documents/trust-legal-provisions/",
+      "training_use": "original_factual_paraphrase_only",
+      "attribution": "RFC 792, RFC Editor"
+    },
+    {
+      "id": "rfc8200",
+      "title": "Internet Protocol, Version 6 (IPv6) Specification",
+      "maintainer": "RFC Editor / IETF",
+      "version": "RFC 8200, July 2017; check updates including RFC 9673 before promotion",
+      "uri": "https://www.rfc-editor.org/rfc/rfc8200.txt",
+      "sha256": "371ae3f133d562db5d6385e6def4ca9914c4f831be228ea7779fd28799c2f490",
+      "bytes": 93162,
+      "rights_lane": "citation_only",
+      "rights_uri": "https://trustee.ietf.org/documents/trust-legal-provisions/",
+      "training_use": "original_factual_paraphrase_only",
+      "attribution": "RFC 8200, RFC Editor"
+    },
+    {
+      "id": "rfc9293",
+      "title": "Transmission Control Protocol (TCP)",
+      "maintainer": "RFC Editor / IETF",
+      "version": "RFC 9293, August 2022",
+      "uri": "https://www.rfc-editor.org/rfc/rfc9293.txt",
+      "sha256": "6d9ac8be4b0286f8c3d337addf442b2eb6a9b14e1366594ea7fbc273f93dc2d9",
+      "bytes": 263696,
+      "rights_lane": "citation_only",
+      "rights_uri": "https://trustee.ietf.org/documents/trust-legal-provisions/",
+      "training_use": "original_factual_paraphrase_only",
+      "attribution": "RFC 9293, RFC Editor"
+    },
+    {
+      "id": "rfc4443",
+      "title": "Internet Control Message Protocol (ICMPv6) for the Internet Protocol Version 6 (IPv6) Specification",
+      "maintainer": "RFC Editor / IETF",
+      "version": "RFC 4443, March 2006",
+      "uri": "https://www.rfc-editor.org/rfc/rfc4443.txt",
+      "sha256": "f20d1de8878e1142000bfeaa3ad1b0540fab7653a395cf7b07e81d2da2f650bf",
+      "bytes": 48969,
+      "rights_lane": "citation_only",
+      "rights_uri": "https://trustee.ietf.org/documents/trust-legal-provisions/",
+      "training_use": "original_factual_paraphrase_only",
+      "attribution": "RFC 4443, RFC Editor"
+    },
+    {
+      "id": "rfc4861",
+      "title": "Neighbor Discovery for IP version 6 (IPv6)",
+      "maintainer": "RFC Editor / IETF",
+      "version": "RFC 4861, September 2007",
+      "uri": "https://www.rfc-editor.org/rfc/rfc4861.txt",
+      "sha256": "1a4309c117d765a7c0edfcb2297fc90c3c09f0fcae255f15e53b20748bcc09fb",
+      "bytes": 235106,
+      "rights_lane": "citation_only",
+      "rights_uri": "https://trustee.ietf.org/documents/trust-legal-provisions/",
+      "training_use": "original_factual_paraphrase_only",
+      "attribution": "RFC 4861, RFC Editor"
+    },
+    {
+      "id": "nist80041",
+      "title": "Guidelines on Firewalls and Firewall Policy",
+      "maintainer": "National Institute of Standards and Technology",
+      "version": "NIST SP 800-41 Rev. 1, September 2009",
+      "uri": "https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-41r1.pdf",
+      "sha256": "06642409a8f0dcc9de8725f2d76d6feedea2d4d1faa860c2ee18488863dd1f4f",
+      "bytes": 339557,
+      "rights_lane": "green_us",
+      "rights_uri": "https://www.nist.gov/itl/publications-0/nist-special-publication-800-series-general-information",
+      "training_use": "original_factual_paraphrase_only",
+      "attribution": "NIST SP 800-41 Rev. 1"
+    }
+  ]
+}

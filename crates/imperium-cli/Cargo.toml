@@ -1,0 +1,51 @@
+[package]
+name = "imperium-cli"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "CLI binary for the Imperium runtime — operator commands and node lifecycle"
+
+[[bin]]
+name = "imperium"
+path = "src/main.rs"
+
+[dependencies]
+# The bus is Spiderweb-Bus-Next, vendored at `vendor/spiderweb-bus/`.
+# There is no Imperium bus crate: subsystem crates depend on the kernel
+# directly.
+spiderweb = { workspace = true }
+# The supervision composition builds the `spider` orchestrator, so the CLI is a
+# direct consumer of the orchestrator crate too.
+spider = { workspace = true }
+imperium-protocol = { path = "../imperium-protocol" }
+imperium-runtime = { path = "../imperium-runtime" }
+imperium-memory-log = { path = "../imperium-memory-log" }
+imperium-net-cluster = { path = "../imperium-net-cluster" }
+imperium-net-crypto = { path = "../imperium-net-crypto" }
+imperium-net-mesh = { path = "../imperium-net-mesh" }
+imperium-net-host = { path = "../imperium-net-host" }
+imperium-net-sensors = { path = "../imperium-net-sensors" }
+imperium-net-signatures = { path = "../imperium-net-signatures" }
+imperium-net-strainer = { path = "../imperium-net-strainer" }
+imperium-net-toolkit = { path = "../imperium-net-toolkit" }
+imperium-net-lightcone = { path = "../imperium-net-lightcone" }
+imperium-net-transport = { path = "../imperium-net-transport" }
+imperium-gui = { path = "../imperium-gui" }
+imperium-store = { path = "../imperium-store" }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+clap = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+rand = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+libc = "0.2"
+
+[dev-dependencies]
+# The supervision tests own the process composition: they register the real
+# `spider` orchestrator and drive a real run loop.
+spider = { workspace = true }
