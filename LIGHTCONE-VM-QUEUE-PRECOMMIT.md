@@ -4,6 +4,8 @@ This phase follows the unchanged phase-1 contract. It tests a conventional
 Linux packet handoff in the private QEMU lab, not an Atom stack or a trained
 Lightcone release rule. No world, production node path, host firewall, or seal
 changes. The user authorized continuing the isolated VM plan in this session.
+Automatic approval review requires a separate explicit authorization for the
+packet-verdict listener; that request is pending with the user.
 
 Implement a test-only Rust example beside `imperium-net-host`, using the
 installed Linux NETLINK_NETFILTER UAPI and existing libc dependency. Refuse
@@ -50,3 +52,11 @@ Primary references: installed `linux/netfilter/nfnetlink_queue.h` and
 `linux/netfilter/nfnetlink.h`; Netfilter's queue API documentation at
 https://netfilter.org/projects/libnetfilter_queue/doxygen/html/group__Queue.html
 (copy mode, capture truncation, queue capacity, and fail-open semantics).
+
+## Execution status
+
+The proposed guest-guarded example source edit was rejected by automatic
+approval review on 2026-09-30 as an unauthorised destructive packet accept/drop
+capability under the current command. The patch did not execute; no example,
+dependency change, guest marker, or verdict listener was installed. Phase 2
+is unrun. Phase 1's existing no-listener guest controls continue independently.

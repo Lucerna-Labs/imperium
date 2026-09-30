@@ -90,8 +90,8 @@ def mesh(lab):
     required(lab, "hub", "for i in $(seq 1 150); do sed 's/\\x1b\\[[0-9;]*m//g' /control/node.log | grep -q 'peers_established=2' && exit 0; sleep .2; done; tail -5 /control/node.log; exit 1", 35)
     routed = [required(lab, "hub", "ping -n -q -c 3 -W 2 " + addr) for addr in ("10.88.0.1", "10.99.0.1")]
     capture(lab, "mesh", True)
-    required(lab, "receiver", "python3 - <<'PY' >/control/udp.log 2>&1 </dev/null &\nimport socket,json,pathlib\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);s.bind(('10.99.0.1',45999));s.settimeout(8);pathlib.Path('/control/udp-ready').touch()\ntry:\n data,peer=s.recvfrom(256);pathlib.Path('/control/udp-received.json').write_text(json.dumps({'payload':data.decode(),'peer':peer}))\nexcept socket.timeout: pass\nPY")
-    required(lab, "receiver", "for i in $(seq 1 40); do test -e /control/udp-ready && exit 0; sleep .1; done; exit 1")
+    required(lab, "receiver", "python3 - <<'PY' >/control/udp.log 2>&1 &\nimport socket,json,pathlib\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);s.bind(('10.99.0.1',45999));s.settimeout(8);pathlib.Path('/control/udp-ready').touch()\ntry:\n data,peer=s.recvfrom(256);pathlib.Path('/control/udp-received.json').write_text(json.dumps({'payload':data.decode(),'peer':peer}))\nexcept socket.timeout: pass\nPY")
+    required(lab, "receiver", "for i in $(seq 1 40); do test -e /control/udp-ready && exit 0; sleep .1; done; cat /control/udp.log; exit 1")
     required(lab, "hub", "python3 - <<'PY'\nimport socket\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);s.sendto(b'imperium-vm-untrained-flow',('10.99.0.1',45999))\nPY")
     time.sleep(2)
     capture(lab, "mesh", False)
