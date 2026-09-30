@@ -91,6 +91,9 @@ class Lab:
                                "/lab/runtime/usr/lib/x86_64-linux-gnu "
                                f"/lab/runtime/{str(original).lstrip('/')} \"$@\"\n")
             wrapper.chmod(0o755)
+        copied_binary = runtime / str(ROOT / "target/debug/imperium").lstrip("/")
+        if digest(copied_binary) != self.manifest["binary_sha256"]:
+            raise RuntimeError("guest executable copy differs from the built executable")
         execute([str(ROOT / "target/debug/examples/lab_operator_key"), str(self.input / "operator-key")])
         self.manifest["operator_key_sha256"] = digest(self.input / "operator-key")
         for role, macs in MACS.items():

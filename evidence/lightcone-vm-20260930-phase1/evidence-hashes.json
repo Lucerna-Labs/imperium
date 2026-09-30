@@ -1,0 +1,92 @@
+{
+  "copied": {
+    "manifest.json": {
+      "sha256": "31388420ac3fd9159d01592816269e3940103bb7b3718eaac866b6754071c63c",
+      "size": 12134
+    },
+    "report.json": {
+      "sha256": "11796a8cfdb69ea192738cb348c762092808df2ad1d61f76beee8a254c777e8c",
+      "size": 20163
+    },
+    "commands.json": {
+      "sha256": "e034057c8f004493ccfc1bb96ee0225250434df58213d943fc84c1556216291d",
+      "size": 14096
+    },
+    "hub/control/ready.json": {
+      "sha256": "dce85ea4fac357d799ed9903b1cd56972e3f4fa897799a26bf97e5b46a17a47f",
+      "size": 4321
+    },
+    "source/control/ready.json": {
+      "sha256": "d31875d8309a460fa31d7a0e38af71ae4b3b46cccc002eb6c3dbf94cbfe6ee0e",
+      "size": 2933
+    },
+    "receiver/control/ready.json": {
+      "sha256": "0306cbb571edc65795c9b5ccbb4e074ea0fc4c0b3587f2747fdf0cd696658494",
+      "size": 2944
+    },
+    "receiver/control/recovery.pcap": {
+      "sha256": "5478d2c0428f713f039b12a58fea2e10991eebebd832b540e4169809922bb36e",
+      "size": 3560
+    },
+    "receiver/control/baseline.pcap": {
+      "sha256": "a797cf666a4db2b0803ce18cfd231a49123279af9d990d02a0affeaa333571db",
+      "size": 3860
+    },
+    "receiver/control/mesh.pcap": {
+      "sha256": "52e741255a3cf6be52188717bcac2ae7c9c4aff418b691c7482c3fac808a54fb",
+      "size": 114
+    },
+    "receiver/control/no-listener.pcap": {
+      "sha256": "e3f42e2687636327d7f18c9635173252505b4a838fa6829a755bab06c9c69749",
+      "size": 24
+    },
+    "baseline.json": {
+      "sha256": "a3bfc4aa409c5031a905cb29dd20b5f4ec0a3102fa998c30b87e51f656d67458",
+      "size": 3114
+    },
+    "no-listener.json": {
+      "sha256": "74ce2803c1166b84ead5379418171dd207664e0e013f1315505fa9f582b7af4a",
+      "size": 2740
+    },
+    "recovery.json": {
+      "sha256": "93ec68a17967a31c9d8ad264ea4413c0fd7dd83529969e64ee019269967abbe3",
+      "size": 3116
+    },
+    "mesh.json": {
+      "sha256": "6fbce215b437ef58468199ce8516b8eb2ee2755affb955ee16a96ce1bfa30a5d",
+      "size": 5125
+    },
+    "receiver/control/udp-received.json": {
+      "sha256": "119a8d521bcbc611cf5aeee1391aa12cc619f1f412c5105d04df38f947043afa",
+      "size": 71
+    }
+  },
+  "retained_local_logs": {
+    "receiver/serial.log": {
+      "sha256": "24957dbc0cea262563cd45445a6b32c012535d4294a0940dacc8a04cc4eeba72",
+      "size": 77713
+    },
+    "hub/serial.log": {
+      "sha256": "d044b5e8d6d45a02f880a198809018c148196b9d194c7ef5b52c932c1ef7c87b",
+      "size": 78046
+    },
+    "source/serial.log": {
+      "sha256": "01529162354f75b4d2f5c21d86809669fdd5d14f1b2e69db535d1c7c938ca060",
+      "size": 77088
+    },
+    "receiver/control/node.log": {
+      "sha256": "012d9648943147732ab67ddd4ecb9807fe48fa5d69f4dcfb21aa6ba658b62e12",
+      "size": 17048
+    },
+    "hub/control/node.log": {
+      "sha256": "14af8c0b5845eccd542889b5c25679f932ede2ed527a6901abc35e34817c3107",
+      "size": 20259
+    },
+    "source/control/node.log": {
+      "sha256": "df691ddae04ed5349a9f1dd2472790a302866ace0802da2cab771e1bb6e3833a",
+      "size": 16934
+    }
+  },
+  "private_original_run": "/home/jesse/Desktop/Projects/imperium-main/imperium-main/target/lightcone-vm/runs/20260930-144758",
+  "guest_keys_and_disks_exported": false
+}

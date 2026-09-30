@@ -56,6 +56,16 @@ diagnostic; `vpn lightcone status` reports `filter_enforced: false`.
 
 ## P0 — all-traffic enforcement and actual delivery tests
 
+- [x] Establish an isolated three-QEMU/KVM-guest baseline with independent
+  receiver captures. The eight IPv4/IPv6 input/output/forward/loopback paths
+  passed baseline, no-listener blocking, and recovery controls. Native cluster
+  receipts passed, but the undeclared UDP flow arrived: filter acceptance
+  failed. See `LIGHTCONE-VM-OUTCOME.md` and `scripts/lightcone-vm-test.sh`.
+- [ ] Run the guest-only accept/drop/hold/crash/overflow matrix frozen in
+  `LIGHTCONE-VM-QUEUE-PRECOMMIT.md`. Automatic approval review rejected the
+  listener source edit; explicit VM-only packet-verdict authorization is
+  pending. No listener or causal release gate exists yet.
+
 - [ ] Implement a bounded userspace packet-verdict service and atomically
   installed kernel hooks. The isolated
   `scripts/lightcone-nfqueue-boundary-test.sh` verifies that IPv4/IPv6

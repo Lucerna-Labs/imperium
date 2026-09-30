@@ -1,0 +1,470 @@
+[
+  {
+    "sequence": 1,
+    "role": "source",
+    "command": "ping -n -q -c 1 -W 2 192.0.2.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 2,
+    "role": "source",
+    "command": "ping -n -q -c 1 -W 2 fd77::1",
+    "timeout": 45
+  },
+  {
+    "sequence": 1,
+    "role": "hub",
+    "command": "ping -n -q -c 1 -W 2 198.51.100.2",
+    "timeout": 45
+  },
+  {
+    "sequence": 2,
+    "role": "hub",
+    "command": "ping -n -q -c 1 -W 2 fd78::2",
+    "timeout": 45
+  },
+  {
+    "sequence": 3,
+    "role": "source",
+    "command": "ping -n -q -c 1 -W 2 198.51.100.2",
+    "timeout": 45
+  },
+  {
+    "sequence": 4,
+    "role": "source",
+    "command": "ping -n -q -c 1 -W 2 fd78::2",
+    "timeout": 45
+  },
+  {
+    "sequence": 3,
+    "role": "hub",
+    "command": "ping -n -q -c 1 -W 2 127.0.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 4,
+    "role": "hub",
+    "command": "ping -n -q -c 1 -W 2 ::1",
+    "timeout": 45
+  },
+  {
+    "sequence": 1,
+    "role": "receiver",
+    "command": "/lab/tcpdump -U -n -i any -w /tmp/baseline.pcap 'icmp or icmp6 or udp port 45999' >/control/baseline-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 2,
+    "role": "receiver",
+    "command": "for i in $(seq 1 30); do grep -q 'listening on' /control/baseline-capture.log && exit 0; sleep .1; done; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 5,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 192.0.2.1",
+    "timeout": 12
+  },
+  {
+    "sequence": 6,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 fd77::1",
+    "timeout": 12
+  },
+  {
+    "sequence": 5,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 198.51.100.2",
+    "timeout": 12
+  },
+  {
+    "sequence": 6,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 fd78::2",
+    "timeout": 12
+  },
+  {
+    "sequence": 7,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 198.51.100.2",
+    "timeout": 12
+  },
+  {
+    "sequence": 8,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 fd78::2",
+    "timeout": 12
+  },
+  {
+    "sequence": 7,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 127.0.0.1",
+    "timeout": 12
+  },
+  {
+    "sequence": 8,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 ::1",
+    "timeout": 12
+  },
+  {
+    "sequence": 9,
+    "role": "source",
+    "command": "ping -n -q -c 1 -W 1 127.0.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 3,
+    "role": "receiver",
+    "command": "ping -n -q -c 1 -W 1 127.0.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 4,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/baseline.pcap /control/baseline.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 5,
+    "role": "receiver",
+    "command": "/lab/tcpdump -nn -r /control/baseline.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 9,
+    "role": "hub",
+    "command": "/lab/nft -f - <<'NFT'\nadd table inet lc_vm\nadd chain inet lc_vm input { type filter hook input priority 0; policy accept; }\nadd rule inet lc_vm input meta nfproto ipv4 counter queue num 42777\nadd rule inet lc_vm input meta nfproto ipv6 counter queue num 42777\nadd chain inet lc_vm output { type filter hook output priority 0; policy accept; }\nadd rule inet lc_vm output meta nfproto ipv4 counter queue num 42777\nadd rule inet lc_vm output meta nfproto ipv6 counter queue num 42777\nadd chain inet lc_vm forward { type filter hook forward priority 0; policy accept; }\nadd rule inet lc_vm forward meta nfproto ipv4 counter queue num 42777\nadd rule inet lc_vm forward meta nfproto ipv6 counter queue num 42777\nNFT",
+    "timeout": 45
+  },
+  {
+    "sequence": 6,
+    "role": "receiver",
+    "command": "/lab/tcpdump -U -n -i any -w /tmp/no-listener.pcap 'icmp or icmp6 or udp port 45999' >/control/no-listener-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 7,
+    "role": "receiver",
+    "command": "for i in $(seq 1 30); do grep -q 'listening on' /control/no-listener-capture.log && exit 0; sleep .1; done; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 10,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 192.0.2.1",
+    "timeout": 12
+  },
+  {
+    "sequence": 11,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 fd77::1",
+    "timeout": 12
+  },
+  {
+    "sequence": 10,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 198.51.100.2",
+    "timeout": 12
+  },
+  {
+    "sequence": 11,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 fd78::2",
+    "timeout": 12
+  },
+  {
+    "sequence": 12,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 198.51.100.2",
+    "timeout": 12
+  },
+  {
+    "sequence": 13,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 fd78::2",
+    "timeout": 12
+  },
+  {
+    "sequence": 12,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 127.0.0.1",
+    "timeout": 12
+  },
+  {
+    "sequence": 13,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 ::1",
+    "timeout": 12
+  },
+  {
+    "sequence": 14,
+    "role": "source",
+    "command": "ping -n -q -c 1 -W 1 127.0.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 8,
+    "role": "receiver",
+    "command": "ping -n -q -c 1 -W 1 127.0.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 9,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/no-listener.pcap /control/no-listener.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 10,
+    "role": "receiver",
+    "command": "/lab/tcpdump -nn -r /control/no-listener.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 14,
+    "role": "hub",
+    "command": "/lab/nft -j list table inet lc_vm",
+    "timeout": 45
+  },
+  {
+    "sequence": 15,
+    "role": "hub",
+    "command": "/lab/nft delete table inet lc_vm",
+    "timeout": 45
+  },
+  {
+    "sequence": 11,
+    "role": "receiver",
+    "command": "/lab/tcpdump -U -n -i any -w /tmp/recovery.pcap 'icmp or icmp6 or udp port 45999' >/control/recovery-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 12,
+    "role": "receiver",
+    "command": "for i in $(seq 1 30); do grep -q 'listening on' /control/recovery-capture.log && exit 0; sleep .1; done; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 15,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 192.0.2.1",
+    "timeout": 12
+  },
+  {
+    "sequence": 16,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 fd77::1",
+    "timeout": 12
+  },
+  {
+    "sequence": 16,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 198.51.100.2",
+    "timeout": 12
+  },
+  {
+    "sequence": 17,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 fd78::2",
+    "timeout": 12
+  },
+  {
+    "sequence": 17,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 198.51.100.2",
+    "timeout": 12
+  },
+  {
+    "sequence": 18,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 fd78::2",
+    "timeout": 12
+  },
+  {
+    "sequence": 18,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 127.0.0.1",
+    "timeout": 12
+  },
+  {
+    "sequence": 19,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 1 ::1",
+    "timeout": 12
+  },
+  {
+    "sequence": 19,
+    "role": "source",
+    "command": "ping -n -q -c 1 -W 1 127.0.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 13,
+    "role": "receiver",
+    "command": "ping -n -q -c 1 -W 1 127.0.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 14,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/recovery.pcap /control/recovery.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 15,
+    "role": "receiver",
+    "command": "/lab/tcpdump -nn -r /control/recovery.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 20,
+    "role": "source",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 21,
+    "role": "source",
+    "command": "XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info /lab/imperium node start --mesh-bind 192.0.2.2:41000 --tunnel-ip 10.88.0.1 --tun impb --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --route 10.77.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 22,
+    "role": "source",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 16,
+    "role": "receiver",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 17,
+    "role": "receiver",
+    "command": "XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info /lab/imperium node start --mesh-bind 198.51.100.2:41000 --tunnel-ip 10.99.0.1 --tun impc --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --route 10.77.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 18,
+    "role": "receiver",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 20,
+    "role": "hub",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 21,
+    "role": "hub",
+    "command": "XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info /lab/imperium node start --mesh-bind 0.0.0.0:41000 --tunnel-ip 10.77.0.1 --tun impa --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --peer 0772e4b8-1695-4f1c-a957-adc7d31cef98@192.0.2.2:41000 --peer-route 0772e4b8-1695-4f1c-a957-adc7d31cef98=10.88.0.0/24 --peer a938dd30-cc7a-4c3f-ad6c-a9480e79f7ad@198.51.100.2:41000 --peer-route a938dd30-cc7a-4c3f-ad6c-a9480e79f7ad=10.99.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 22,
+    "role": "hub",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 23,
+    "role": "hub",
+    "command": "for i in $(seq 1 150); do sed 's/\\x1b\\[[0-9;]*m//g' /control/node.log | grep -q 'peers_established=2' && exit 0; sleep .2; done; tail -5 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 24,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 2 10.88.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 25,
+    "role": "hub",
+    "command": "ping -n -q -c 3 -W 2 10.99.0.1",
+    "timeout": 45
+  },
+  {
+    "sequence": 19,
+    "role": "receiver",
+    "command": "/lab/tcpdump -U -n -i any -w /tmp/mesh.pcap 'icmp or icmp6 or udp port 45999' >/control/mesh-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 20,
+    "role": "receiver",
+    "command": "for i in $(seq 1 30); do grep -q 'listening on' /control/mesh-capture.log && exit 0; sleep .1; done; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 21,
+    "role": "receiver",
+    "command": "python3 - <<'PY' >/control/udp.log 2>&1 &\nimport socket,json,pathlib\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);s.bind(('10.99.0.1',45999));s.settimeout(8);pathlib.Path('/control/udp-ready').touch()\ntry:\n data,peer=s.recvfrom(256);pathlib.Path('/control/udp-received.json').write_text(json.dumps({'payload':data.decode(),'peer':peer}))\nexcept socket.timeout: pass\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 22,
+    "role": "receiver",
+    "command": "for i in $(seq 1 40); do test -e /control/udp-ready && exit 0; sleep .1; done; cat /control/udp.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 26,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);s.sendto(b'imperium-vm-untrained-flow',('10.99.0.1',45999))\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 23,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/mesh.pcap /control/mesh.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 27,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 23,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 24,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 28,
+    "role": "hub",
+    "command": "kill -TERM $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 24,
+    "role": "source",
+    "command": "kill -TERM $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 25,
+    "role": "receiver",
+    "command": "kill -TERM $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 29,
+    "role": "hub",
+    "command": "for i in $(seq 1 40); do ip route show | grep -qE '10\\.(88|99)' || exit 0; sleep .25; done; exit 1",
+    "timeout": 15
+  }
+]

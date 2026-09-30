@@ -1,7 +1,6 @@
 """Export small, non-secret VM evidence; guest disk/key files stay private."""
 
 import argparse
-import json
 import shutil
 from pathlib import Path
 
@@ -19,6 +18,7 @@ def main():
     for role in ("hub", "source", "receiver"):
         paths += list((root / role / "control").glob("ready.json"))
         paths += list((root / role / "control").glob("*.pcap"))
+        paths += list((root / role / "control").glob("udp-received.json"))
     paths += list(root.glob("baseline.json")) + list(root.glob("no-listener.json"))
     paths += list(root.glob("recovery.json")) + list(root.glob("mesh.json"))
     hashes = {}

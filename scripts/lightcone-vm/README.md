@@ -21,8 +21,9 @@ configuration is changed. Shutdown targets only the three subprocesses owned
 by this run. The local artifact directories and socket directory are retained.
 
 `LIGHTCONE-VM-PRECOMMIT.md` freezes the matrix and its limits. The script
-returns success when its measurement/queue/recovery controls and native mesh
-receipt integration work; **read `report.json` for the separate filter result**.
+returns 1 for setup/control/integration failure, 3 when the undeclared UDP
+probe crosses (filter failure), and 2 for non-arrival without an enforced
+causal gate (inconclusive). **Read `report.json` for each measured result**.
 The current v4 baseline must not be reported as useful filtering. An undeclared
 UDP arrival is a filter failure; non-arrival without an enforced causal gate
 is inconclusive. The Lightcone stays unsealed throughout.

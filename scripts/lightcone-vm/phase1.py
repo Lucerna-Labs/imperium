@@ -99,6 +99,10 @@ def mesh(lab):
     delivered = received_file.exists() and json.loads(received_file.read_text())["payload"] == "imperium-vm-untrained-flow"
     statuses = {role: status(lab, role) for role in ("hub", "source", "receiver")}
     receipts = all(value.get("working") is True and value.get("sealed") is False
+                   and value.get("world_version") == 4
+                   and value.get("pack_sha256") == lab.manifest["world_sha256"]
+                   and value.get("training_platform") == "local_diagnostic"
+                   and value.get("passive") is True and value.get("holds_verdict") is False
                    and value.get("raw_ip_rx", 0) > 0 and value.get("raw_ip_tx", 0) > 0
                    and value.get("mesh_rx", 0) > 0 and value.get("mesh_tx", 0) > 0
                    and value.get("lightcone_observations_dropped") == 0
@@ -160,7 +164,9 @@ def main():
         report["owned_vms_stopped"] = all(process.poll() is not None for process in lab.processes.values())
         atomic_json(lab.path / "report.json", report)
     print(json.dumps({key: value for key, value in report.items() if not isinstance(value, dict)}), flush=True)
-    return 0 if report["phase1_controls_pass"] and report.get("mesh", {}).get("receipt_integration_pass") else 1
+    if not report["phase1_controls_pass"] or not report.get("mesh", {}).get("receipt_integration_pass"):
+        return 1
+    return 3 if report["mesh"]["undeclared_udp_delivered"] else 2
 
 
 if __name__ == "__main__":

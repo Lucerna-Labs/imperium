@@ -1,0 +1,79 @@
+{
+  "paths": [
+    {
+      "path": "input4",
+      "received": 3,
+      "pass": true,
+      "returncode": 0,
+      "stdout": "PING 192.0.2.1 (192.0.2.1) 56(84) bytes of data.\n\n--- 192.0.2.1 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2039ms\nrtt min/avg/max/mdev = 0.433/0.708/0.934/0.207 ms\n",
+      "stderr": "",
+      "elapsed": 2.0476020069999947
+    },
+    {
+      "path": "input6",
+      "received": 3,
+      "pass": true,
+      "returncode": 0,
+      "stdout": "PING fd77::1 (fd77::1) 56 data bytes\n\n--- fd77::1 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2063ms\nrtt min/avg/max/mdev = 0.343/0.632/0.780/0.204 ms\n",
+      "stderr": "",
+      "elapsed": 2.0676428999999956
+    },
+    {
+      "path": "output4",
+      "received": 3,
+      "pass": true,
+      "returncode": 0,
+      "stdout": "PING 198.51.100.2 (198.51.100.2) 56(84) bytes of data.\n\n--- 198.51.100.2 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2047ms\nrtt min/avg/max/mdev = 0.379/0.528/0.634/0.108 ms\n",
+      "stderr": "",
+      "elapsed": 2.054195007000004
+    },
+    {
+      "path": "output6",
+      "received": 3,
+      "pass": true,
+      "returncode": 0,
+      "stdout": "PING fd78::2 (fd78::2) 56 data bytes\n\n--- fd78::2 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2086ms\nrtt min/avg/max/mdev = 0.199/0.421/0.699/0.207 ms\n",
+      "stderr": "",
+      "elapsed": 2.093761298000004
+    },
+    {
+      "path": "forward4",
+      "received": 3,
+      "pass": true,
+      "returncode": 0,
+      "stdout": "PING 198.51.100.2 (198.51.100.2) 56(84) bytes of data.\n\n--- 198.51.100.2 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2041ms\nrtt min/avg/max/mdev = 0.577/0.676/0.761/0.075 ms\n",
+      "stderr": "",
+      "elapsed": 2.0479416310000005
+    },
+    {
+      "path": "forward6",
+      "received": 3,
+      "pass": true,
+      "returncode": 0,
+      "stdout": "PING fd78::2 (fd78::2) 56 data bytes\n\n--- fd78::2 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2003ms\nrtt min/avg/max/mdev = 1.074/1.192/1.407/0.151 ms\n",
+      "stderr": "",
+      "elapsed": 2.0105534279999944
+    },
+    {
+      "path": "loopback4",
+      "received": 3,
+      "pass": true,
+      "returncode": 0,
+      "stdout": "PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.\n\n--- 127.0.0.1 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2039ms\nrtt min/avg/max/mdev = 0.033/0.051/0.068/0.014 ms\n",
+      "stderr": "",
+      "elapsed": 2.0459480150000076
+    },
+    {
+      "path": "loopback6",
+      "received": 3,
+      "pass": true,
+      "returncode": 0,
+      "stdout": "PING ::1 (::1) 56 data bytes\n\n--- ::1 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2066ms\nrtt min/avg/max/mdev = 0.014/0.041/0.055/0.019 ms\n",
+      "stderr": "",
+      "elapsed": 2.0679989260000013
+    }
+  ],
+  "receiver_echo_requests": 12,
+  "receiver_capture": "receiver/control/recovery.pcap",
+  "pass": true
+}

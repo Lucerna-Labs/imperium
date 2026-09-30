@@ -1,0 +1,79 @@
+{
+  "paths": [
+    {
+      "path": "input4",
+      "received": 0,
+      "pass": true,
+      "returncode": 1,
+      "stdout": "PING 192.0.2.1 (192.0.2.1) 56(84) bytes of data.\n\n--- 192.0.2.1 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2024ms\n\n",
+      "stderr": "",
+      "elapsed": 3.031345359999996
+    },
+    {
+      "path": "input6",
+      "received": 0,
+      "pass": true,
+      "returncode": 1,
+      "stdout": "PING fd77::1 (fd77::1) 56 data bytes\n\n--- fd77::1 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2048ms\n\n",
+      "stderr": "",
+      "elapsed": 3.0550020060000023
+    },
+    {
+      "path": "output4",
+      "received": 0,
+      "pass": true,
+      "returncode": 1,
+      "stdout": "PING 198.51.100.2 (198.51.100.2) 56(84) bytes of data.\n\n--- 198.51.100.2 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2035ms\n\n",
+      "stderr": "",
+      "elapsed": 3.0388989399999957
+    },
+    {
+      "path": "output6",
+      "received": 0,
+      "pass": true,
+      "returncode": 1,
+      "stdout": "PING fd78::2 (fd78::2) 56 data bytes\n\n--- fd78::2 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2051ms\n\n",
+      "stderr": "",
+      "elapsed": 3.0560503549999964
+    },
+    {
+      "path": "forward4",
+      "received": 0,
+      "pass": true,
+      "returncode": 1,
+      "stdout": "PING 198.51.100.2 (198.51.100.2) 56(84) bytes of data.\n\n--- 198.51.100.2 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2033ms\n\n",
+      "stderr": "",
+      "elapsed": 3.039083673999997
+    },
+    {
+      "path": "forward6",
+      "received": 0,
+      "pass": true,
+      "returncode": 1,
+      "stdout": "PING fd78::2 (fd78::2) 56 data bytes\n\n--- fd78::2 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2081ms\n\n",
+      "stderr": "",
+      "elapsed": 3.088902103999999
+    },
+    {
+      "path": "loopback4",
+      "received": 0,
+      "pass": true,
+      "returncode": 1,
+      "stdout": "PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.\n\n--- 127.0.0.1 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2035ms\n\n",
+      "stderr": "",
+      "elapsed": 3.039075616000005
+    },
+    {
+      "path": "loopback6",
+      "received": 0,
+      "pass": true,
+      "returncode": 1,
+      "stdout": "PING ::1 (::1) 56 data bytes\n\n--- ::1 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2083ms\n\n",
+      "stderr": "",
+      "elapsed": 3.0899576939999918
+    }
+  ],
+  "receiver_echo_requests": 0,
+  "receiver_capture": "receiver/control/no-listener.pcap",
+  "pass": true
+}
