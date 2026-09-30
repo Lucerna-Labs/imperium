@@ -23,12 +23,12 @@ def required(lab, role, command, timeout=45):
 
 def capture(lab, phase, start):
     if start:
-        command = f"/lab/tcpdump -U -n -i any -w /control/{phase}.pcap 'icmp or icmp6 or udp port 45999' "
+        command = f"/lab/tcpdump -U -n -i any -w /tmp/{phase}.pcap 'icmp or icmp6 or udp port 45999' "
         command += f">/control/{phase}-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid"
         required(lab, "receiver", command)
         required(lab, "receiver", f"for i in $(seq 1 30); do grep -q 'listening on' /control/{phase}-capture.log && exit 0; sleep .1; done; exit 1")
     else:
-        required(lab, "receiver", "kill -INT $(cat /control/capture.pid); sleep .5")
+        required(lab, "receiver", f"kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/{phase}.pcap /control/{phase}.pcap")
 
 
 def probes(lab, name, blocked=False):
