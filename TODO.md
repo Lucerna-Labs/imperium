@@ -29,7 +29,9 @@ diagnostic; `vpn lightcone status` reports `filter_enforced: false`.
   offline** slice. Add packet-bound, source-checked fact producers for IPv6,
   mesh authentication/replay, direct-host socket identity, forwarded traffic,
   ARP/NDP/DHCP, fragments/reassembly, and other supported network mechanisms.
-  Keep every unknown or unsupported form explicit.
+  Keep every unknown or unsupported form explicit. The separate
+  `ipv6_flow_evidence` Rust test now covers supported IPv6 parser/tracker
+  behavior, but the condition catalog and trained pack do not yet include it.
 - [ ] Obtain versioned host policy facts for services, endpoints, zones,
   direction, process/peer identity, freshness, and flow state. Bind each fact
   to the exact packet, network namespace, interface, policy revision, and
@@ -60,7 +62,10 @@ diagnostic; `vpn lightcone status` reports `filter_enforced: false`.
   input/output/forward/loopback queues **drop without a listener** and recover
   after cleanup; it does not implement a Lightcone verdict. Omit NFQUEUE
   `bypass` and fail-open. Verify queue binding, overload, crash, startup,
-  shutdown, and recovery without an open interval.
+  shutdown, and recovery without an open interval. Automatic approval review
+  rejected a packet-verdict listener implementation because its accept/drop
+  capability was not explicitly authorized; namespace-only authorization is
+  pending, and no real-host rules were changed.
 - [ ] Cover non-IP/link and bypass paths separately: ARP, bridge and netdev
   ingress/egress, raw and packet sockets, offload, interface hotplug, and
   every managed network namespace. Prove each path at its actual kernel or
