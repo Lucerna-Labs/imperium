@@ -87,7 +87,7 @@ def mesh(lab):
     start_node(lab, "hub", "0.0.0.0", "10.77.0.1", "impa",
                f"--peer {b}@192.0.2.2:41000 --peer-route {b}=10.88.0.0/24 "
                f"--peer {c}@198.51.100.2:41000 --peer-route {c}=10.99.0.0/24")
-    required(lab, "hub", "for i in $(seq 1 150); do grep -q 'peers_established=2' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1", 35)
+    required(lab, "hub", "for i in $(seq 1 150); do sed 's/\\x1b\\[[0-9;]*m//g' /control/node.log | grep -q 'peers_established=2' && exit 0; sleep .2; done; tail -5 /control/node.log; exit 1", 35)
     routed = [required(lab, "hub", "ping -n -q -c 3 -W 2 " + addr) for addr in ("10.88.0.1", "10.99.0.1")]
     capture(lab, "mesh", True)
     required(lab, "receiver", "python3 - <<'PY' >/control/udp.log 2>&1 </dev/null &\nimport socket,json,pathlib\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);s.bind(('10.99.0.1',45999));s.settimeout(8);pathlib.Path('/control/udp-ready').touch()\ntry:\n data,peer=s.recvfrom(256);pathlib.Path('/control/udp-received.json').write_text(json.dumps({'payload':data.decode(),'peer':peer}))\nexcept socket.timeout: pass\nPY")
@@ -109,12 +109,13 @@ def mesh(lab):
         required(lab, role, "kill -TERM $(cat /control/node.pid)")
     required(lab, "hub", "for i in $(seq 1 40); do ip route show | grep -qE '10\\.(88|99)' || exit 0; sleep .25; done; exit 1", 15)
     result = {"routed": routed, "statuses": statuses, "receipt_integration_pass": receipts,
-              "undeclared_udp_delivered": delivered, "filter_pass": not delivered,
+              "undeclared_udp_delivered": delivered, "filter_pass": False,
+              "filter_probe_outcome": "failed" if delivered else "inconclusive",
               "teardown_routes_removed": True}
     atomic_json(lab.path / "mesh.json", result)
     if not receipts:
         raise RuntimeError("VM mesh receipt integration failed")
-    print(f"VM mesh receipt integration PASS; undeclared UDP delivered={delivered}; filter_pass={not delivered}", flush=True)
+    print(f"VM mesh receipt integration PASS; undeclared UDP delivered={delivered}; filter_pass=False", flush=True)
     return result
 
 
