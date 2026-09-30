@@ -91,8 +91,7 @@ class Lab:
                                "/lab/runtime/usr/lib/x86_64-linux-gnu "
                                f"/lab/runtime/{str(original).lstrip('/')} \"$@\"\n")
             wrapper.chmod(0o755)
-        (self.input / "operator-key").write_bytes(os.urandom(32))
-        (self.input / "operator-key").chmod(0o600)
+        execute([str(ROOT / "target/debug/examples/lab_operator_key"), str(self.input / "operator-key")])
         self.manifest["operator_key_sha256"] = digest(self.input / "operator-key")
         for role, macs in MACS.items():
             directory = self.path / role
