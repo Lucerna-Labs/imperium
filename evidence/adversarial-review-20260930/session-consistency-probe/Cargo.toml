@@ -1,0 +1,10 @@
+[package]
+name = "imperium-review-session-consistency"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+imperium-net-mesh = { path = "../../../crates/imperium-net-mesh" }
+imperium-protocol = { path = "../../../crates/imperium-protocol" }
+
+[workspace]

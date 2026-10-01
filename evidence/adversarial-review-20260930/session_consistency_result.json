@@ -1,0 +1,14 @@
+{
+  "source_head_at_probe": "c2bb612f7f6df13b811aed0ce7442ad78764ddce",
+  "command": "cargo run --offline --quiet --manifest-path target/adversarial-review-20260930/network/session_consistency/Cargo.toml --target-dir target",
+  "exit_code": 0,
+  "observations": {
+    "duplicate_accepted": true,
+    "first_mapping_retained": true,
+    "second_mapping_created": true,
+    "stored_owner_is_second": true,
+    "stored_address_is_second": true
+  },
+  "scope": "In-memory SessionManager API; no UDP, packet crafting, peer credentials, or plaintext transfer",
+  "claim_limit": "Internal ownership-map collision reproduced. Live plaintext delivery to another peer was not tested."
+}

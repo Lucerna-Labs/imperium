@@ -27,6 +27,7 @@ passive Lightcone.
 | Two isolated same-UID nodes, one private control pathname | The second server logged `control socket already has a live server`, but its node continued running. The original socket still answered. Both owned processes stopped. This demonstrates missing fail-closed duplicate startup. The GUI cross-node action is a source-traced consequence, not a clicked GUI exploit. |
 | `Store::open` with a private fixture path | `file_created=false recovered_after_reopen=false`; no persistence despite a successful `put`. |
 | Standalone CLI commands with a synthetic non-existent UUID | `cluster approve` and `signatures approve` both exited 0 and printed “dispatched” without connecting to a node. This proves their misleading local acknowledgements, not an actual approval. |
+| In-memory duplicate session-ID fixture | `adopt_session` accepted a second peer using the first peer's ID. Both peer indexes retained the ID; the stored session owner and address became the second peer's. This proves ownership-map corruption. No live packet or plaintext transfer was tested. |
 | RustSec snapshot against `Cargo.lock` | 658 registry package entries; 138 advisory-version pairs checked, nine potential matches and zero unsupported range checks. These are package matches, not demonstrated reachable exploits. YARA-X's separate upstream advisory is not in that RustSec snapshot. |
 | Existing committed three-VM run | All eight IPv4/IPv6 input/output/forward/loopback paths passed 3/3 baseline, 0/3 no-listener guest NFQUEUE, 3/3 recovery. All three native mesh nodes produced v4 receipts; the receiver obtained the tagged undeclared UDP packet. See `LIGHTCONE-VM-OUTCOME.md` and `evidence/lightcone-vm-20260930-phase1/`. This run preceded the present code-review turn; no second VM run is claimed. |
 | GUI visual evidence | Existing native captures at 960×640 and 1360×852 were inspected. Production GUI code did not change after those captures. A new keyboard, screen-reader, scaling, or configured-backend interaction run was not performed. |
@@ -34,6 +35,10 @@ passive Lightcone.
 The new reproducible probe source and full process logs are retained under
 the ignored `target/adversarial-review-20260930/` directory. Small selected
 results and their hashes are in `evidence/adversarial-review-20260930/`.
+The in-memory session check is also saved there as a standalone locked Cargo
+probe; repeat it with `cargo run --offline --locked --manifest-path
+evidence/adversarial-review-20260930/session-consistency-probe/Cargo.toml
+--target-dir target`. It opens no network socket.
 No operator key, guest disk, private process profile, or credential was copied
 into Git evidence.
 
@@ -41,7 +46,7 @@ into Git evidence.
 
 | ID | Finding and evidence | Required repair and acceptance |
 | --- | --- | --- |
-| S1 | **An admitted malicious peer can collide with another peer's session ID.** `crates/imperium-net-mesh/src/session.rs:275-288` checks duplicate peer IDs but overwrites `sessions[session_id]`. Live responder adoption uses the Hello's ID (`daemon.rs:1415-1444`), and send resolves the original peer through that ID (`daemon.rs:1937-1945`). The scenario requires an admitted peer able to choose/observe the ID. The exact plaintext-delivery exploit was not executed. | Atomically reject a session ID already owned by another peer; verify peer/session ownership at seal and address lookup. Add a three-peer isolated regression with no attacker receipt of a victim frame. |
+| S1 | **An admitted malicious peer can collide with another peer's session ID.** `crates/imperium-net-mesh/src/session.rs:275-288` checks duplicate peer IDs but overwrites `sessions[session_id]`. An isolated in-memory API probe measured two peer indexes pointing at the same ID while the stored owner and address belonged to the second peer (`evidence/adversarial-review-20260930/session_consistency_result.json`). Live responder adoption uses the Hello's ID (`daemon.rs:1415-1444`), and send resolves the original peer through that ID (`daemon.rs:1937-1945`). A network scenario would require an admitted peer able to choose/observe the ID. Plaintext delivery was not tested. | Atomically reject a session ID already owned by another peer; verify peer/session ownership at seal and address lookup. Add a three-peer isolated regression with no attacker receipt of a victim frame. |
 | S2 | **A replayed or delayed valid Hello replaces an established session before key confirmation.** `daemon.rs:1415-1444` removes the incumbent before validating that the new initiator can use its key. Normal duplicate delivery can also do this. | Bind fresh attempts to a responder challenge, make retransmission idempotent, and preserve the incumbent until a confirmed new session exists. Test duplicate and replay after establishment. |
 | S3 | **The shared operator signing key sits on every mesh node.** `imperium-cli/src/main.rs:837-889` loads and passes it into every daemon, which mints its own operator binding. Live admission at `net-mesh/src/daemon.rs:1347-1366` reads configured peers; it does not consult `MembershipManager` or revocation. A compromised node compromises the issuing trust root. | Separate issuer custody from node runtime: provision certified per-node identities and distribute only the operator verification key. Enforce current membership and revocation in the live handshake. |
 | S4 | **The requested causal filter is absent.** Mesh UDP and inbound TUN packets are observed after I/O (`net-mesh/src/daemon.rs`, `net-host/src/bridge.rs:312-320`). The active Lightcone returns receipts but never owns a packet verdict. V4 gives identical neighborhoods to matched different endpoints and ACK progressions and lacks a positive packet-to-authorized-flow path (`net-lightcone/tests/filter_feasibility.rs:77-141`). The receiving VM's undeclared UDP arrival independently confirms non-enforcement. | Train and validate a new condition-sensitive, packet-bound world with real host facts; hold packets at a separately owned synchronous host boundary. Unknown, unsupported, late and unexamined traffic must fail closed. Preserve passive geometry and keep the world unsealed while expanding it. |
@@ -149,8 +154,10 @@ Lightcone and its failed evidence rather than turning it into a verdict engine.
 
 The attempted delegated live session-collision attack reproduction was
 rejected by automatic cybersecurity review as a possible risk; it was not
-executed. A narrower in-memory follow-up was unavailable because the worker
-service returned a model-access error. S1 is therefore a source-traced
-high-priority finding awaiting safe reproduction. Other source-only issues
-above are explicitly distinguished from the fresh runtime probes and the
-earlier real-VM acceptance. No production behavior was changed in this review.
+executed. The narrowed worker retry still returned a model-access error after
+Daybreak was enabled. The parent task then ran the bounded, in-memory
+`SessionManager` ownership probe without network traffic. S1's internal map
+collision is measured; a live plaintext-delivery claim is still untested.
+Other source-only issues above are explicitly distinguished from the fresh
+runtime probes and the earlier real-VM acceptance. No production behavior
+was changed in this review.
