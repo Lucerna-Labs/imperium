@@ -61,6 +61,12 @@ scripts/mesh-multipeer-test.sh  # isolated three-node TUN/Lightcone check
 
 See `LIGHTCONE-CLUSTER-ACCEPTANCE.md` for the measured v4 cluster run,
 fault drills, and limits before any sealing decision.
+`bash scripts/lightcone-vm-test.sh --io` runs the isolated three-VM
+ingress/egress logging comparison. See
+`LIGHTCONE-VM-IO-OUTCOME-2026-10-01.md` for raw capture/receipt logs and the
+measured result: the same 49 probes were delivered with healthy and
+quarantined Lightcone strands, so this runtime has no observed causal
+forwarding enforcement in that bounded matrix.
 
 Simulation coverage lives in:
 

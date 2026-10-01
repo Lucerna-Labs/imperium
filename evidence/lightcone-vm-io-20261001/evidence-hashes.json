@@ -1,0 +1,498 @@
+{
+  "files": {
+    "commands.json": {
+      "sha256": "cfbf572a5977112d499389651cc965906bedafb86d5cd2e3151481d7114f43c0",
+      "bytes": 55682
+    },
+    "comparison.json": {
+      "sha256": "2718a8e666c77605b7bdc3823d1e4f1e345407137311ca69a3a93c5a12c125f2",
+      "bytes": 7179
+    },
+    "comparison.md": {
+      "sha256": "2e4fddbac5369e4f7b975c9644fe72459f37861daff39331a98214bff32c7139",
+      "bytes": 1390
+    },
+    "healthy-hub-packets.csv": {
+      "sha256": "80ffcc40b1aa5d526513fd1e7d13f7867039d9041abf66a9f6d8b808aa4a38a5",
+      "bytes": 150159
+    },
+    "healthy-hub-packets.jsonl": {
+      "sha256": "038d7bc3b5babe9b4b9c338e7c0f3f3e1dca583eacc1524d02bc3541c4105f80",
+      "bytes": 1116636
+    },
+    "healthy-hub-receipts.jsonl": {
+      "sha256": "093333b1f3a731897ade0b8adeaf923c82e2af209adcb76cafb085ba03831138",
+      "bytes": 206784
+    },
+    "healthy-receiver-packets.csv": {
+      "sha256": "4c489841fab77b6561277cdd8a02f2787123bcef0b295bf95672610638994c98",
+      "bytes": 91552
+    },
+    "healthy-receiver-packets.jsonl": {
+      "sha256": "180a8116ab83eb851669a561679c5ecf5312c00160958329d83f6b64e3fed2c7",
+      "bytes": 643468
+    },
+    "healthy-receiver-receipts.jsonl": {
+      "sha256": "95baf72c1bc3e1f7c9221fe47eac5ddc587b136b9f3d1625d39bdbdd4db436fc",
+      "bytes": 107771
+    },
+    "healthy-result.json": {
+      "sha256": "85744d2e406df8e9dacca010696ca6062ac289f8ae4797b4d0d98ec4ac76ccb4",
+      "bytes": 48607
+    },
+    "healthy-source-packets.csv": {
+      "sha256": "ae67a979fc6836618a7f058c87f31473a13fa90005d7f584a38cddb72e67ce71",
+      "bytes": 88987
+    },
+    "healthy-source-packets.jsonl": {
+      "sha256": "d61852a5f7edd37d83969f83d0e797ce3b61b0d518c27039ce144b6e229da4bb",
+      "bytes": 638051
+    },
+    "healthy-source-receipts.jsonl": {
+      "sha256": "4b9aca9f37d8682067b1aa7b3eed363ef38f4b63c4dc5c5368eb6d3b1d27205a",
+      "bytes": 107759
+    },
+    "hub/control/application.jsonl": {
+      "sha256": "a973690d6b93701e11ed64f9805f0b7399b3703f7c334514de62d1de0f1a2fb7",
+      "bytes": 19356
+    },
+    "hub/control/healthy-capture.log": {
+      "sha256": "b33da3611cefefe2cc62b697abcf736cfce025bd2c3ea0c49837a3df9d28dcc4",
+      "bytes": 212
+    },
+    "hub/control/healthy-interfaces.json": {
+      "sha256": "0bbcbe068a0cf6f9b0ffd81480f10b1706ebac8294307a76a11856b0a02cadf4",
+      "bytes": 3758
+    },
+    "hub/control/healthy-loopback_udp4-client.json": {
+      "sha256": "c390bee5af107365807ddf0d73a565c313880f9301c4ece0a9960833d0b37c5b",
+      "bytes": 356
+    },
+    "hub/control/healthy-loopback_udp6-client.json": {
+      "sha256": "4e84a66ba7f54d714e2fecd04d25af446b97daf37b7d40a3fc1842c3e24e8b19",
+      "bytes": 356
+    },
+    "hub/control/healthy-node.log": {
+      "sha256": "516a6a964d8700c5ae0d0a8281c2bac3ef2db9ea2f451a42664992f84b64e384",
+      "bytes": 283151
+    },
+    "hub/control/healthy.pcap": {
+      "sha256": "72f29667b52247e70ed85a78b3abbb189a796bb88306e1a8b98b2028f800cc84",
+      "bytes": 166061
+    },
+    "hub/control/kernel_blocked-capture.log": {
+      "sha256": "204de85f49af1ce2d6b671860af6b2dc8a5a0f0c599b7ba78cc74573af8f713a",
+      "bytes": 207
+    },
+    "hub/control/kernel_blocked-interfaces.json": {
+      "sha256": "f295433413b53a21452a0ec58b69b49dc575f3fc0fbc4880a366a96fd1c6731b",
+      "bytes": 2992
+    },
+    "hub/control/kernel_blocked.pcap": {
+      "sha256": "f162bb1da6191d9fca0270876d735e4e0384988c16033df6f86e13df6d6a030d",
+      "bytes": 712
+    },
+    "hub/control/kernel_recovered-capture.log": {
+      "sha256": "5b5a503266d7d34211b9b74534a0c3bc3eb84025036418ac1eee0e9e75d3bf46",
+      "bytes": 209
+    },
+    "hub/control/kernel_recovered-interfaces.json": {
+      "sha256": "f295433413b53a21452a0ec58b69b49dc575f3fc0fbc4880a366a96fd1c6731b",
+      "bytes": 2992
+    },
+    "hub/control/kernel_recovered.pcap": {
+      "sha256": "a3703980b85155bfdd5bbbbc3070b5d965fd6cb150e93121ff9607d20ba2ce9f",
+      "bytes": 1200
+    },
+    "hub/control/quarantined-capture.log": {
+      "sha256": "ef146e65d774eb85ef8118f38b6c69d66355f826a2663d026fc95d1459ad6d34",
+      "bytes": 212
+    },
+    "hub/control/quarantined-interfaces.json": {
+      "sha256": "84f60df467c74b7deebce44136a863794ab115363cd9c7b1b631a5dccbf17543",
+      "bytes": 3759
+    },
+    "hub/control/quarantined-loopback_udp4-client.json": {
+      "sha256": "7336e8fb9798f1cc28f80335a8550744b2260a95db41e3eb885c549a08631699",
+      "bytes": 360
+    },
+    "hub/control/quarantined-loopback_udp6-client.json": {
+      "sha256": "b7a68f6df4b700bbc7ebad211992732ccaae92dfeb97de63fd7428883dc39136",
+      "bytes": 360
+    },
+    "hub/control/quarantined-node.log": {
+      "sha256": "80f3c57c108471d3c3d636de44bb1828ef66a0dd924aa9d93398508c3033a763",
+      "bytes": 48174
+    },
+    "hub/control/quarantined.pcap": {
+      "sha256": "f65ea5946d73557e7c5f92eaec3f5ce287f44ef30edc7ad4a4c087992470dcaf",
+      "bytes": 165055
+    },
+    "hub/control/ready.json": {
+      "sha256": "dce85ea4fac357d799ed9903b1cd56972e3f4fa897799a26bf97e5b46a17a47f",
+      "bytes": 4321
+    },
+    "hub/control/traffic-health.json": {
+      "sha256": "114c23fdbccb9dc9d67abefcb0ae024ceb166ebd89a06525341501357b19b0fe",
+      "bytes": 75
+    },
+    "hub/control/traffic-server.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "hub/qemu-command.json": {
+      "sha256": "58e24d6edf98c300bb8e69987053d74e1f6d91a5982ff59a5fcedb6d1698accf",
+      "bytes": 1564
+    },
+    "kernel_blocked-hub-packets.csv": {
+      "sha256": "0469ca3c850ea5e7e9041dd95ac15de5bf260141af9e288a5fd4fac45906bf17",
+      "bytes": 1456
+    },
+    "kernel_blocked-hub-packets.jsonl": {
+      "sha256": "6a2cb406f9d2066d752aaa29906104969634e16978a66438a552c94da6dcdd3e",
+      "bytes": 6618
+    },
+    "kernel_blocked-hub-receipts.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "kernel_blocked-receiver-packets.csv": {
+      "sha256": "203adb151d2c8e5e4c337e705eda32beaa0d1cfd120e33c3d034a71c1d31983e",
+      "bytes": 546
+    },
+    "kernel_blocked-receiver-packets.jsonl": {
+      "sha256": "363decc91fd78706fa2d848db344cd847de1dcadf5e5bb3be7ed93adc86a00e9",
+      "bytes": 1773
+    },
+    "kernel_blocked-receiver-receipts.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "kernel_blocked-source-packets.csv": {
+      "sha256": "c7ea3c419550fabf7bf93502a84865901abbe8132d6327b9877ada37fc59f64d",
+      "bytes": 1121
+    },
+    "kernel_blocked-source-packets.jsonl": {
+      "sha256": "0700b1fe496c7b1e5b2daec13732da4a0aba46aa38873e6697d5acf3ae1bfe8a",
+      "bytes": 4875
+    },
+    "kernel_blocked-source-receipts.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "kernel_recovered-hub-packets.csv": {
+      "sha256": "a3dc7aeb4ba3a6d4dcbd019fa4312a839040117a0a07c1901de55f2868fbc849",
+      "bytes": 2445
+    },
+    "kernel_recovered-hub-packets.jsonl": {
+      "sha256": "64be94cb1951d52498e9af8684a46c58709c20153acfb8a336b7ed3f692811a2",
+      "bytes": 11804
+    },
+    "kernel_recovered-hub-receipts.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "kernel_recovered-receiver-packets.csv": {
+      "sha256": "4c570f986bc052ebee2bf43c627c35aa70c52b2c0a9b68d7a0873b21424402bd",
+      "bytes": 1342
+    },
+    "kernel_recovered-receiver-packets.jsonl": {
+      "sha256": "fe3e7a57d7f549c9d2c707b90cdc21a02b071c000368062803a4c9d2d8fb3a39",
+      "bytes": 5931
+    },
+    "kernel_recovered-receiver-receipts.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "kernel_recovered-source-packets.csv": {
+      "sha256": "de0f40d048b8c667c6ee858aab4c2204916690d02581f90443a801e093df2525",
+      "bytes": 1330
+    },
+    "kernel_recovered-source-packets.jsonl": {
+      "sha256": "060f2911f9b9204300f33675360e74459e07a20e3e81d6aa9bedcfe2bc80bcc7",
+      "bytes": 5919
+    },
+    "kernel_recovered-source-receipts.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "manifest.json": {
+      "sha256": "a682f56292f56a61513b0d8e9de3d83d728d9dd39c8e6677459f5338750c0d87",
+      "bytes": 12134
+    },
+    "measurement-control.json": {
+      "sha256": "59f155f3695662db626bc0d2cade1fbcf458d6556cf160dc33392f04b09f58b0",
+      "bytes": 7105
+    },
+    "quarantined-hub-packets.csv": {
+      "sha256": "ec26c229a5c1ca72be217b823001b78ad89256131741f75694761385d42fb9a7",
+      "bytes": 151900
+    },
+    "quarantined-hub-packets.jsonl": {
+      "sha256": "7b6dfdb97156c567f4a2df2189b60dae191b562b83624da1dcc0bebe63a413a9",
+      "bytes": 1111153
+    },
+    "quarantined-hub-receipts.jsonl": {
+      "sha256": "8d5c19cda5e7bc4a59506cf6009b1dcee8528faa05077de772c52fed5c4e7ca6",
+      "bytes": 1795
+    },
+    "quarantined-receiver-packets.csv": {
+      "sha256": "19333a51dcab710f02e9aa64d269962359a7a8e848c352204a4abb1b0138f384",
+      "bytes": 92451
+    },
+    "quarantined-receiver-packets.jsonl": {
+      "sha256": "fc593eef47bcbc9e27ae9f98dd6076e7089954f43e2532502211c3b83bb7f8f4",
+      "bytes": 639547
+    },
+    "quarantined-receiver-receipts.jsonl": {
+      "sha256": "da340b340617bdf8f734e02343d56307f90b8dbb5b3b6d9f6acc213813a369c0",
+      "bytes": 1818
+    },
+    "quarantined-result.json": {
+      "sha256": "e1e5743a7e5a88a7d4c3a8238737cb663f982768a50b2107356684e805b12bf3",
+      "bytes": 48541
+    },
+    "quarantined-source-packets.csv": {
+      "sha256": "836e02c9b3ec0c7e1a9c4cc5d08b5ed694c882e092b0c9439f5e38985ae6bd99",
+      "bytes": 90431
+    },
+    "quarantined-source-packets.jsonl": {
+      "sha256": "43b7a672997cfd8c445576a6ea570e07ce1fa94ce165dada0409a3cdcfef7274",
+      "bytes": 637091
+    },
+    "quarantined-source-receipts.jsonl": {
+      "sha256": "c7bb30a6b4f57c5830d659f51c4cf3801fbc200ae43766d04b54016ea0ded8ce",
+      "bytes": 1832
+    },
+    "receiver/control/application.jsonl": {
+      "sha256": "8fcf9cb1aa77b28168422b2f51657c0caf01b3fb0a526b16899d8bea6f779ca9",
+      "bytes": 65442
+    },
+    "receiver/control/healthy-capture.log": {
+      "sha256": "c92be0c39be77df6526881815b8db424783d94d05066aa32805a71f8981fe06a",
+      "bytes": 211
+    },
+    "receiver/control/healthy-interfaces.json": {
+      "sha256": "9de2dd30e72d3d0d153f489807679f25a4521641dd5c455e78c9753b066345ad",
+      "bytes": 2673
+    },
+    "receiver/control/healthy-node.log": {
+      "sha256": "53e73f8e0717c7a4fe3609d1ca32fc20d03b19e931d488b659e9269933299a8c",
+      "bytes": 154227
+    },
+    "receiver/control/healthy.pcap": {
+      "sha256": "42e9b620d19c3123f19b5ee017c5bc86cfce8ce40dd4f859eaad09d656ff3838",
+      "bytes": 91695
+    },
+    "receiver/control/kernel_blocked-capture.log": {
+      "sha256": "f753645d2549b86db1fd1a21a59d10e2d6f3ea1ad8c3cfb631e38fe13eb1d5b8",
+      "bytes": 207
+    },
+    "receiver/control/kernel_blocked-interfaces.json": {
+      "sha256": "12323819317a1a24132ed57c444a1a6b4bec9c2f31d0c56f5588e55282f2c866",
+      "bytes": 1906
+    },
+    "receiver/control/kernel_blocked.pcap": {
+      "sha256": "b57ecd93dd7b3afd291d41368c46f10b57b36439f318f4533d83a840abcb532a",
+      "bytes": 232
+    },
+    "receiver/control/kernel_recovered-capture.log": {
+      "sha256": "9a80a9de6c36f1856bc7a30c74b39ee1960937e9d775bc472284c19a0edb318a",
+      "bytes": 207
+    },
+    "receiver/control/kernel_recovered-interfaces.json": {
+      "sha256": "12323819317a1a24132ed57c444a1a6b4bec9c2f31d0c56f5588e55282f2c866",
+      "bytes": 1906
+    },
+    "receiver/control/kernel_recovered.pcap": {
+      "sha256": "abad081a6a703290a60775e8ea5c637d27889eb45b7caf2db84c77fa32fc98af",
+      "bytes": 612
+    },
+    "receiver/control/quarantined-capture.log": {
+      "sha256": "73ca1ca2d764ffd7877b96b558aac6cc6fe960fd6575d80d497ad8fca2b95b34",
+      "bytes": 211
+    },
+    "receiver/control/quarantined-interfaces.json": {
+      "sha256": "e4eeebf2139cb657c7d26bfe2871914a0b9ebb44569f032d23294e9ae2f3194f",
+      "bytes": 2673
+    },
+    "receiver/control/quarantined-node.log": {
+      "sha256": "a140c8d3b8578c2a317e0945fd17dea3c3251b66738ba909192559b774215fdc",
+      "bytes": 35655
+    },
+    "receiver/control/quarantined.pcap": {
+      "sha256": "0b3dd6c7515a34a6b7235e881139ccfdaaaa999a3964422cda56b69f9868d725",
+      "bytes": 91017
+    },
+    "receiver/control/ready.json": {
+      "sha256": "0306cbb571edc65795c9b5ccbb4e074ea0fc4c0b3587f2747fdf0cd696658494",
+      "bytes": 2944
+    },
+    "receiver/control/traffic-health.json": {
+      "sha256": "16537df6f6b0fdd111a3587ed552133388ebf42d302afdd63692658b2cc6bab3",
+      "bytes": 75
+    },
+    "receiver/control/traffic-server.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "receiver/qemu-command.json": {
+      "sha256": "46995487c5287b3180752ce830f476b62460be64a7fa324873593f420aed489e",
+      "bytes": 1426
+    },
+    "report.json": {
+      "sha256": "79e56564d781625b0c04ca352f7b45344c72658a467932a0df536e7d93f67ff9",
+      "bytes": 117936
+    },
+    "source/control/application.jsonl": {
+      "sha256": "e29de5799bc1e6454b3dafd638236986f15428663c060ac2207ad274dd88a691",
+      "bytes": 69830
+    },
+    "source/control/healthy-capture.log": {
+      "sha256": "24020b99e822ab03c8a88ff24c4268e5d4f69d0d96b524a9047128e4ab1d9406",
+      "bytes": 211
+    },
+    "source/control/healthy-direct_tcp6-client.json": {
+      "sha256": "b6b00d9b531fcb59bd30a013cd3faf0c57aa38d5c4fec726b6144f86c3e0e9ef",
+      "bytes": 522
+    },
+    "source/control/healthy-direct_udp4-client.json": {
+      "sha256": "63e375a9ac3cf8aeb0b2975266750a938e1c52d3b151a4c97c1d7922e9252af1",
+      "bytes": 944
+    },
+    "source/control/healthy-direct_udp6-client.json": {
+      "sha256": "743faba87f25e211329c4e4cdc5712f0838a576af8e4280a3c449b0ec82dbf24",
+      "bytes": 944
+    },
+    "source/control/healthy-interfaces.json": {
+      "sha256": "aca8d64e31e53258457e90b11f9ad1b3cff91ee59389ed093e8f66027fc5aecd",
+      "bytes": 2669
+    },
+    "source/control/healthy-node.log": {
+      "sha256": "55a65c03bce1afd52c78266fe8faa125dee8653bdaf9bbf81485fc83b5629536",
+      "bytes": 155040
+    },
+    "source/control/healthy-tunnel_icmp4-client.json": {
+      "sha256": "4ceba838a719e96975d71c867715c4b7b356b0d11ce52beead5087bdc87fe145",
+      "bytes": 372
+    },
+    "source/control/healthy-tunnel_tcp4-client.json": {
+      "sha256": "a1144fd25fe8aed691e774372126bfd25df490d3e26baeb1dafe61aec50991df",
+      "bytes": 527
+    },
+    "source/control/healthy-tunnel_udp4-client.json": {
+      "sha256": "ba02f2bc1cab2f43f553b92ba297f104ebf1ddd75247bc968d248218100c1bb9",
+      "bytes": 944
+    },
+    "source/control/healthy.pcap": {
+      "sha256": "970a9e5e95e7a3efb93a3bf63df388e7427ed08bd79f96ec4d6c84683c502374",
+      "bytes": 91270
+    },
+    "source/control/kernel_blocked-blocked_udp4-client.json": {
+      "sha256": "6e19b7f2a9acac9ae225115907875e874c47f7efee5a2d42e76400a1bc81453c",
+      "bytes": 690
+    },
+    "source/control/kernel_blocked-capture.log": {
+      "sha256": "ef411dc84aba145d6a8d74ecf19c0ed76802e2a6c095c5ff8a76c0599a6b833f",
+      "bytes": 207
+    },
+    "source/control/kernel_blocked-interfaces.json": {
+      "sha256": "b85d5ca7107126cca46dbcb3e1c8ffdace0cee51b7268ce5b682bc2f6dcf52ab",
+      "bytes": 1903
+    },
+    "source/control/kernel_blocked.pcap": {
+      "sha256": "db9bb0bda293970c7e382c2475cb3354cbaf185fe763b7e43cd283ba30fff503",
+      "bytes": 504
+    },
+    "source/control/kernel_recovered-capture.log": {
+      "sha256": "9a80a9de6c36f1856bc7a30c74b39ee1960937e9d775bc472284c19a0edb318a",
+      "bytes": 207
+    },
+    "source/control/kernel_recovered-interfaces.json": {
+      "sha256": "b85d5ca7107126cca46dbcb3e1c8ffdace0cee51b7268ce5b682bc2f6dcf52ab",
+      "bytes": 1903
+    },
+    "source/control/kernel_recovered-recovered_udp4-client.json": {
+      "sha256": "ea3a48c0a716fb6c5b3c258f1ebfb688140272e3233e7e167e164a4fd15945fa",
+      "bytes": 366
+    },
+    "source/control/kernel_recovered.pcap": {
+      "sha256": "4235c0717b0e09e182361de7e3b6f3d28520de107c8cb2ced039b0bd2f73b775",
+      "bytes": 612
+    },
+    "source/control/quarantined-capture.log": {
+      "sha256": "73ca1ca2d764ffd7877b96b558aac6cc6fe960fd6575d80d497ad8fca2b95b34",
+      "bytes": 211
+    },
+    "source/control/quarantined-direct_tcp6-client.json": {
+      "sha256": "232684a7192356bef7624f32f4bbc15446e6235cb6eefe0dda37b913b4b5d0b5",
+      "bytes": 526
+    },
+    "source/control/quarantined-direct_udp4-client.json": {
+      "sha256": "d61dd5872473938fc5cd2f8bd7c9daeca0a882e6c7c86904969a2b712ffafb79",
+      "bytes": 948
+    },
+    "source/control/quarantined-direct_udp6-client.json": {
+      "sha256": "f3a23f7d05e7c1564e1a22f8826b29ecbe366db30b6dae6d43c09030686dc666",
+      "bytes": 948
+    },
+    "source/control/quarantined-interfaces.json": {
+      "sha256": "7304dcaf5b49b71e0a745dcc94e4d242c28b4b3a79dd616996dcf8fe4795f7ef",
+      "bytes": 2669
+    },
+    "source/control/quarantined-node.log": {
+      "sha256": "ba1b1bd4e6a47b7efc656b49dbfc3df262ec71a1f2bed4ff2d793343c2bbf62c",
+      "bytes": 35775
+    },
+    "source/control/quarantined-tunnel_icmp4-client.json": {
+      "sha256": "ab4c71a19a5367f8448ecf94d0b3589967f649367e288d9ef7f2d0f76d8252c2",
+      "bytes": 377
+    },
+    "source/control/quarantined-tunnel_tcp4-client.json": {
+      "sha256": "8cc7780ed15fe9ca0514c5e5d15248c57c2f16fd69db0ddc1858fd37942053e0",
+      "bytes": 531
+    },
+    "source/control/quarantined-tunnel_udp4-client.json": {
+      "sha256": "080020dd99096ed5e659d7786e6dfe498ff783e79b7de92a15a13a0fb1e6bc29",
+      "bytes": 948
+    },
+    "source/control/quarantined.pcap": {
+      "sha256": "e58559bace34f80fe9abc3b8850da3467179b674635f710f66dc68de17adbe7e",
+      "bytes": 90942
+    },
+    "source/control/ready.json": {
+      "sha256": "d31875d8309a460fa31d7a0e38af71ae4b3b46cccc002eb6c3dbf94cbfe6ee0e",
+      "bytes": 2933
+    },
+    "source/qemu-command.json": {
+      "sha256": "45ad378eac82108aa141c26b2ad93ee15f823b707ba985eaf486d304950bfa1f",
+      "bytes": 1413
+    },
+    "application-integrity.json": {
+      "sha256": "940b721aa71115e69821cacd25f70db6d337c74e79ba96d3d917a3ef294e4fb6",
+      "bytes": 1271
+    },
+    "failed_setup_attempts/20261001-094907/report.json": {
+      "sha256": "00d96097666b5da82798f2ac972ef7da513fe7ad1a63cc820ef89c59dc085e31",
+      "bytes": 117014
+    },
+    "failed_setup_attempts/20261001-094907/comparison.json": {
+      "sha256": "afd5826ef6b1452ea347e6e4b9060a2261d6aee548618f0d03e65e42d9259af6",
+      "bytes": 7180
+    },
+    "failed_setup_attempts/20261001-094907/hub/control/kernel_recovered-capture.log": {
+      "sha256": "f0670c11b7d07c6be9a5a8f05c3ff9d218dccb60d70fee025d2dafeaa09bd511",
+      "bytes": 208
+    },
+    "failed_setup_attempts/20261001-095519/report.json": {
+      "sha256": "56b74176acdf9ade8f25ddbf4cff41a7e3c4cc1cb477b69dbca43a84b67e1c74",
+      "bytes": 381
+    },
+    "failed_setup_attempts/20261001-095519/hub/control/healthy-capture.log": {
+      "sha256": "9e5f6a0fe69a4aef79d4fb5fce1b5e44307f0c6aceee9ab676831e028ef5d00b",
+      "bytes": 213
+    }
+  },
+  "private_original_run": "/home/jesse/Desktop/Projects/imperium-main/imperium-main/target/lightcone-vm/io-runs/20261001-095948",
+  "guest_keys_and_disks_exported": false
+}

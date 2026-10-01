@@ -1,0 +1,591 @@
+[2m2026-10-01T14:01:02.874926Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m starting imperium node
+[2m2026-10-01T14:01:02.878229Z[0m [32m INFO[0m [2mimperium_net_cluster[0m[2m:[0m imperium-net-cluster initialized
+[2m2026-10-01T14:01:02.888338Z[0m [32m INFO[0m [2mimperium_net_mesh[0m[2m:[0m RTX network causal world verified [3mworld_sha256[0m[2m=[0m7afb2e711601cd529640e840e57e8dda48bedccc00ebc16000bba7af74d385cf [3mtraining_platform[0m[2m=[0m"local_diagnostic" [3msealed[0m[2m=[0mfalse
+[2m2026-10-01T14:01:02.888519Z[0m [32m INFO[0m [2mimperium_net_mesh[0m[2m:[0m imperium-net-mesh initialized
+[2m2026-10-01T14:01:02.889725Z[0m [32m INFO[0m [2mimperium_net_transport[0m[2m:[0m imperium-net-transport initialized
+[2m2026-10-01T14:01:02.889908Z[0m [32m INFO[0m [2mimperium_net_strainer[0m[2m:[0m imperium-net-strainer initialized
+[2m2026-10-01T14:01:02.890376Z[0m [32m INFO[0m [2mimperium_net_sensors[0m[2m:[0m imperium-net-sensors initialized
+[2m2026-10-01T14:01:02.890573Z[0m [32m INFO[0m [2mimperium_net_signatures[0m[2m:[0m imperium-net-signatures initialized
+[2m2026-10-01T14:01:02.899922Z[0m [32m INFO[0m [2mimperium_net_lightcone[0m[2m:[0m passive network lightcone initialized [3mworld_version[0m[2m=[0m4 [3mnodes[0m[2m=[0m208 [3medges[0m[2m=[0m188 [3mplatform[0m[2m=[0m"local_diagnostic" [3msealed[0m[2m=[0mfalse
+[2m2026-10-01T14:01:02.900161Z[0m [33m WARN[0m [2mimperium_net_lightcone[0m[2m:[0m lightcone fault injection ARMED — the strand will crash or stall on purpose [3mpolicy[0m[2m=[0mCrashAfterFrames(1) [3menv[0m[2m=[0m"IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES"
+[2m2026-10-01T14:01:02.901241Z[0m [32m INFO[0m [2mimperium_net_toolkit[0m[2m:[0m tool registered without a program: activation is state-only [3mtool[0m[2m=[0mtransport.diagnostics
+[2m2026-10-01T14:01:02.901689Z[0m [32m INFO[0m [2mimperium_net_toolkit[0m[2m:[0m tool registered without a program: activation is state-only [3mtool[0m[2m=[0mforensics.emergency.snapshot
+[2m2026-10-01T14:01:02.917457Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m node wiring complete [3mtask_count[0m[2m=[0m2
+[   41ms] [kernel] 🕸️  imperium-net-lightcone registered (1 inputs, 1 outputs)
+[   41ms] [kernel] 🕸️  imperium-runtime-deployment-plans registered (1 inputs, 1 outputs)
+[   42ms] [kernel] 🕸️  imperium-memory-log-rejections registered (1 inputs, 0 outputs)
+[   42ms] [kernel] 🕸️  imperium-net-cluster.config registered (1 inputs, 0 outputs)
+[   42ms] [kernel] 🕸️  imperium-runtime-deployment-status registered (1 inputs, 1 outputs)
+[   42ms] [kernel] 🕸️  imperium-net-toolkit registered (1 inputs, 2 outputs)
+[   42ms] [kernel] 🕸️  imperium-net-signatures registered (1 inputs, 2 outputs)
+[   42ms] [kernel] 🕸️  imperium-memory-log-protocol-events registered (1 inputs, 0 outputs)
+[   42ms] [kernel] 🕸️  imperium-net-transport-orchestrator registered (1 inputs, 1 outputs)
+[   42ms] [kernel] 🕸️  imperium-net-transport-threats registered (1 inputs, 1 outputs)
+[   42ms] [kernel] 🕸️  imperium-net-transport-hardening registered (1 inputs, 1 outputs)
+[   42ms] [kernel] 🕸️  imperium-net-cluster.membership registered (1 inputs, 0 outputs)
+[   42ms] [kernel] 🕸️  imperium-net-sensors registered (1 inputs, 2 outputs)
+[   42ms] [kernel] 🕸️  spider registered (2 inputs, 1 outputs)
+[   43ms] [spider] ⏳ buffered `net.cluster.ready` from <external> (no subscriber yet)
+[   43ms] [spider] 🧵 thread 0 born at <external>
+[   43ms] [spider] 🧵 thread 1 born at <external>
+[   43ms] [spider] 🧵 thread 2 born at <external>
+[   43ms] [spider] 🧵 thread 3 born at <external>
+[   43ms] [spider] 🧵 thread 4 born at <external>
+[   44ms] [spider] 🧵 thread 5 born at <external>
+[   44ms] [spider] 🧵 thread 6 born at <external>
+[   44ms] [spider] 🧵 thread 7 born at <external>
+[   44ms] [spider] 🧵 thread 8 born at <external>
+[   44ms] [spider] 🧵 thread 9 born at <external>
+[   44ms] [spider] 🧵 thread 10 born at <external>
+[   44ms] [spider] 🧵 thread 11 born at <external>
+[   44ms] [spider] 🧵 thread 12 born at <external>
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-lightcone
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-runtime-deployment-plans
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-runtime-deployment-status
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-toolkit
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-transport-hardening
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-memory-log-rejections
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-memory-log-protocol-events
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-cluster.membership
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-cluster.config
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-signatures
+[   44ms] [spider] 👁  imperium-net-lightcone is online (in: net.lightcone.frame, out: net.lightcone.receipt)
+[   44ms] [spider] 👁  imperium-runtime-deployment-plans is online (in: net.vpn.deployment.apply, out: net.vpn.deployment.status)
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-transport-orchestrator
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-transport-threats
+[   44ms] [spider] 📨 flushed 13 pending on `<pending>` to imperium-net-sensors
+[   44ms] [spider] 👁  imperium-memory-log-rejections is online (in: net.strainer.rejection, out: )
+[   44ms] [spider] 👁  imperium-net-cluster.config is online (in: net.cluster.config.fetch_response, out: )
+[   44ms] [spider] 📨 flushed 31 pending on `<pending>` to spider
+[   44ms] [spider] 👁  imperium-runtime-deployment-status is online (in: net.vpn.deployment.status_request, out: net.vpn.deployment.status)
+[   44ms] [spider] ✕ intersection emerged at imperium-runtime-deployment-plans (threads [0, 1])
+[   44ms] [spider] ✕ intersection emerged at imperium-net-cluster.config (threads [0, 1])
+[   44ms] [spider] ✕ intersection emerged at imperium-memory-log-rejections (threads [0, 1])
+[   44ms] [spider] ✕ intersection emerged at imperium-runtime-deployment-status (threads [0, 1])
+[   44ms] [spider] ✕ intersection emerged at imperium-net-lightcone (threads [0, 1])
+[   44ms] [spider] 👁  imperium-net-toolkit is online (in: net.toolkit.request, out: net.toolkit.activation, net.toolkit.state)
+[   44ms] [spider] ✕ intersection emerged at imperium-net-toolkit (threads [0, 1])
+[   45ms] [spider] 👁  imperium-net-signatures is online (in: net.signatures.extraction_request, out: net.signatures.candidate_pending, net.signatures.extraction_failed)
+[   45ms] [spider] ✕ intersection emerged at imperium-net-signatures (threads [0, 1])
+[   45ms] [spider] 👁  imperium-memory-log-protocol-events is online (in: net.transport., out: )
+[   45ms] [spider] 👁  imperium-net-transport-orchestrator is online (in: net.transport.event, out: net.transport.decision)
+[   45ms] [spider] ✕ intersection emerged at imperium-memory-log-protocol-events (threads [0, 1])
+[   45ms] [spider] ✕ intersection emerged at imperium-net-transport-orchestrator (threads [0, 1])
+[   45ms] [spider] 👁  imperium-net-transport-threats is online (in: net.sensors., out: net.toolkit.request)
+[   45ms] [spider] ✕ intersection emerged at imperium-net-transport-threats (threads [0, 1])
+[   45ms] [spider] 👁  imperium-net-transport-hardening is online (in: net.transport.hardening.apply, out: net.transport.hardening.status)
+[   45ms] [spider] ✕ intersection emerged at imperium-net-transport-hardening (threads [0, 1])
+[   45ms] [spider] 👁  imperium-net-cluster.membership is online (in: net.cluster.membership.granted, out: )
+[   45ms] [spider] 👁  imperium-net-sensors is online (in: net.signatures.approved, out: net.signatures.activated, net.signatures.activation_failed)
+[   45ms] [spider] ✕ intersection emerged at imperium-net-cluster.membership (threads [0, 1])
+[   45ms] [spider] 👁  spider is online (in: sys.lifecycle, sys.vibration, out: sys.control)
+[   45ms] [spider] ✕ intersection emerged at imperium-net-sensors (threads [0, 1])
+[2m2026-10-01T14:01:02.943706Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link bound [3mbound[0m[2m=[0m0.0.0.0:41000 [3mpeer_id[0m[2m=[0m46bedb37-0aee-4fed-92e6-c66c5a028dae [3midentity_file[0m[2m=[0m/control/identity [3moperator_file[0m[2m=[0m/lab/operator-key [3mpeers[0m[2m=[0m2 [3mdialing[0m[2m=[0m2
+[2m2026-10-01T14:01:02.945521Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m tunnel interface up (no host routes were changed) [3mname[0m[2m=[0m"impa" [3mmtu[0m[2m=[0m1280 [3maddress[0m[2m=[0m10.77.0.1 [3mnetmask[0m[2m=[0m255.255.255.0
+[2m2026-10-01T14:01:02.946079Z[0m [32m INFO[0m [2mimperium_net_host::route[0m[2m:[0m route installed through the tunnel [3mdestination[0m[2m=[0m10.88.0.0/24 [3mdevice[0m[2m=[0m"impa"
+[2m2026-10-01T14:01:02.946507Z[0m [32m INFO[0m [2mimperium_net_host::route[0m[2m:[0m route installed through the tunnel [3mdestination[0m[2m=[0m10.99.0.0/24 [3mdevice[0m[2m=[0m"impa"
+[2m2026-10-01T14:01:02.947834Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m routing these destinations through the tunnel [3mroutes[0m[2m=[0m[Destination { network: 10.88.0.0, prefix: 24 }, Destination { network: 10.99.0.0, prefix: 24 }]
+[2m2026-10-01T14:01:02.949398Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m subsystems initialized, control surface listening, runtime entering run loop [3mendpoint[0m[2m=[0m/run/lcnode/imperium/control.sock
+[2m2026-10-01T14:01:02.960729Z[0m [35mTRACE[0m [2mimperium_net_lightcone::strand[0m[2m:[0m LIGHTCONE_RECEIPT [3msequence[0m[2m=[0m1 [3mdirection[0m[2m=[0m1 [3mframe_format[0m[2m=[0mRawIp [3mobservation_kind[0m[2m=[0m0 [3mpack_sha256[0m[2m=[0m7afb2e711601cd529640e840e57e8dda48bedccc00ebc16000bba7af74d385cf [3mquery_sha256[0m[2m=[0m0ad0fe1e26c8c84b6a46cec2a82292eaa47b260c52c6644b23f86948d568d34f [3mreceipt_sha256[0m[2m=[0mcd8723d63c396e6800e543703ba6b28f848a3bc01d30034541c7c25718f46759
+[   84ms] [kernel] 💥 imperium-net-lightcone crashed: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[  105ms] [spider] 🧵 thread 13 born at <external>
+[  105ms] [spider] 🧵 thread 26 born at <external>
+[  105ms] [spider] 🧵 thread 39 born at <external>
+[  105ms] [spider] 💥 imperium-net-lightcone crashed: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[  105ms] [spider] 🔄 imperium-net-lightcone sending Restart (attempt 1)
+[  136ms] [kernel] ⚠️  imperium-net-lightcone disconnected mid-deliver
+[  166ms] [spider] 🧵 thread 64 born at <external>
+[  166ms] [spider] 🧵 thread 77 born at <external>
+[  166ms] [spider] 🧵 thread 89 born at <external>
+[  166ms] [spider] 🧵 thread 101 born at <external>
+[  166ms] [spider] 🧵 thread 113 born at <external>
+[  166ms] [spider] 🧵 thread 125 born at <external>
+[  166ms] [spider] 🧵 thread 137 born at <external>
+[  166ms] [spider] 🧵 thread 149 born at <external>
+[  166ms] [spider] 🧵 thread 161 born at <external>
+[  166ms] [spider] 🧵 thread 173 born at <external>
+[  166ms] [spider] 🧵 thread 185 born at <external>
+[  166ms] [spider] 🧵 thread 197 born at <external>
+[  166ms] [spider] 🧵 thread 209 born at <external>
+[  166ms] [spider] 🧵 thread 221 born at <external>
+[  166ms] [spider] 🧵 thread 233 born at <external>
+[  166ms] [spider] 🧵 thread 245 born at <external>
+[  166ms] [spider] 🧵 thread 257 born at <external>
+[  166ms] [spider] 🧵 thread 269 born at <external>
+[  167ms] [spider] 🧵 thread 281 born at <external>
+[  167ms] [spider] 🧵 thread 293 born at <external>
+[  167ms] [spider] 🧵 thread 305 born at <external>
+[  167ms] [spider] 🧵 thread 317 born at <external>
+[  167ms] [spider] 🧵 thread 329 born at <external>
+[  167ms] [spider] 🧵 thread 341 born at <external>
+[  167ms] [spider] 🧵 thread 353 born at <external>
+[  168ms] [spider] 🧵 thread 365 born at <external>
+[  168ms] [spider] 🧵 thread 377 born at <external>
+[  168ms] [spider] 🧵 thread 389 born at <external>
+[  168ms] [spider] 🧵 thread 401 born at <external>
+[  168ms] [spider] 🧵 thread 413 born at <external>
+[  168ms] [spider] 🧵 thread 425 born at <external>
+[  168ms] [spider] 🧵 thread 437 born at <external>
+[  168ms] [spider] 🧵 thread 449 born at <external>
+[  168ms] [spider] 🧵 thread 461 born at <external>
+[  168ms] [spider] 🧵 thread 473 born at <external>
+[  168ms] [spider] 🧵 thread 485 born at <external>
+[  168ms] [spider] 🧵 thread 497 born at <external>
+[  168ms] [spider] 🧵 thread 509 born at <external>
+[  168ms] [spider] 🧵 thread 521 born at <external>
+[  168ms] [spider] 🧵 thread 533 born at <external>
+[  168ms] [spider] 🧵 thread 545 born at <external>
+[  168ms] [spider] 🧵 thread 557 born at <external>
+[  168ms] [spider] 🧵 thread 569 born at <external>
+[  168ms] [spider] 🧵 thread 581 born at <external>
+[  168ms] [spider] 🧵 thread 593 born at <external>
+[  168ms] [spider] 🧵 thread 605 born at <external>
+[  168ms] [spider] ⏳ buffered `sys.control` from spider (no subscriber yet)
+[  193ms] [kernel] 🕸️  imperium-net-lightcone registered (1 inputs, 1 outputs)
+[2m2026-10-01T14:01:03.070381Z[0m [35mTRACE[0m [2mimperium_net_lightcone::strand[0m[2m:[0m LIGHTCONE_RECEIPT [3msequence[0m[2m=[0m2 [3mdirection[0m[2m=[0m1 [3mframe_format[0m[2m=[0mMeshDatagram [3mobservation_kind[0m[2m=[0m3 [3mpack_sha256[0m[2m=[0m7afb2e711601cd529640e840e57e8dda48bedccc00ebc16000bba7af74d385cf [3mquery_sha256[0m[2m=[0m6a581457f846b610010a61736048f1bd7bc427dec1c4337bc80af5ac6c2f5445 [3mreceipt_sha256[0m[2m=[0m9cf4156d21b00aa5aa808a0356c4abd4752d11424e910fc8b89b9081c74c3e8c
+[  194ms] [kernel] 💥 imperium-net-lightcone crashed: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[2m2026-10-01T14:01:03.080395Z[0m [32m INFO[0m [2mimperium_net_mesh::daemon[0m[2m:[0m mesh handshake complete [3msource[0m[2m=[0m198.51.100.2:41000 [3mpeer[0m[2m=[0mffc19cac-dd6c-4e05-bc04-24d3b1aba5a5
+[  229ms] [spider] 📨 flushed 32 pending on `<pending>` to imperium-net-lightcone
+[  229ms] [spider] 🔄 imperium-net-lightcone restarted (attempt 1)
+[  229ms] [spider] 👁  imperium-net-lightcone is online (in: net.lightcone.frame, out: net.lightcone.receipt)
+[  229ms] [spider] 💥 imperium-net-lightcone crashed: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[  229ms] [spider] 🔄 imperium-net-lightcone sending Restart (attempt 2)
+[2m2026-10-01T14:01:03.107386Z[0m [32m INFO[0m [2mimperium_net_mesh::daemon[0m[2m:[0m mesh handshake complete [3msource[0m[2m=[0m192.0.2.2:41000 [3mpeer[0m[2m=[0m3918c1cf-cd7c-4722-98ef-86e4e587dcd4
+[  231ms] [kernel] ⚠️  imperium-net-lightcone disconnected mid-deliver
+[  289ms] [spider] 🧵 thread 629 born at <external>
+[  290ms] [spider] 🧵 thread 642 born at <external>
+[  291ms] [spider] 🧵 thread 654 born at <external>
+[  291ms] [spider] 🧵 thread 666 born at <external>
+[  292ms] [spider] 🧵 thread 678 born at <external>
+[  292ms] [spider] 🧵 thread 690 born at <external>
+[  292ms] [spider] 🧵 thread 702 born at <external>
+[  293ms] [spider] 🧵 thread 714 born at <external>
+[  293ms] [spider] 🧵 thread 726 born at <external>
+[  293ms] [spider] 🧵 thread 738 born at <external>
+[  293ms] [spider] 🧵 thread 750 born at <external>
+[  294ms] [spider] 🧵 thread 762 born at <external>
+[  294ms] [spider] 🧵 thread 774 born at <external>
+[  294ms] [spider] 🧵 thread 786 born at <external>
+[  294ms] [spider] 🧵 thread 798 born at <external>
+[  295ms] [spider] 🧵 thread 810 born at <external>
+[  295ms] [spider] 🧵 thread 822 born at <external>
+[  295ms] [spider] 🧵 thread 834 born at <external>
+[  296ms] [spider] 🧵 thread 846 born at <external>
+[  296ms] [spider] 🧵 thread 858 born at <external>
+[  296ms] [spider] 🧵 thread 870 born at <external>
+[  294ms] [kernel] 🕸️  imperium-net-lightcone registered (1 inputs, 1 outputs)
+[2m2026-10-01T14:01:03.175410Z[0m [35mTRACE[0m [2mimperium_net_lightcone::strand[0m[2m:[0m LIGHTCONE_RECEIPT [3msequence[0m[2m=[0m3 [3mdirection[0m[2m=[0m1 [3mframe_format[0m[2m=[0mMeshDatagram [3mobservation_kind[0m[2m=[0m3 [3mpack_sha256[0m[2m=[0m7afb2e711601cd529640e840e57e8dda48bedccc00ebc16000bba7af74d385cf [3mquery_sha256[0m[2m=[0m327d74aabf216600f2ed5444a406c599628f8b5c1302fe835279d80383be541a [3mreceipt_sha256[0m[2m=[0m8047a6cfb0bd58263a3d3ed7132dd688c5d5d5e4e3c39856af474f8b7d7dfed7
+[  299ms] [kernel] 💥 imperium-net-lightcone crashed: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[  356ms] [spider] 📨 flushed 32 pending on `<pending>` to imperium-net-lightcone
+[  357ms] [spider] 🔄 imperium-net-lightcone restarted (attempt 2)
+[  357ms] [spider] 👁  imperium-net-lightcone is online (in: net.lightcone.frame, out: net.lightcone.receipt)
+[  358ms] [spider] 💥 imperium-net-lightcone crashed: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[  358ms] [spider] 🔄 imperium-net-lightcone sending Restart (attempt 3)
+[  444ms] [kernel] 🕸️  imperium-net-lightcone registered (1 inputs, 1 outputs)
+[2m2026-10-01T14:01:03.323251Z[0m [35mTRACE[0m [2mimperium_net_lightcone::strand[0m[2m:[0m LIGHTCONE_RECEIPT [3msequence[0m[2m=[0m4 [3mdirection[0m[2m=[0m1 [3mframe_format[0m[2m=[0mMeshDatagram [3mobservation_kind[0m[2m=[0m3 [3mpack_sha256[0m[2m=[0m7afb2e711601cd529640e840e57e8dda48bedccc00ebc16000bba7af74d385cf [3mquery_sha256[0m[2m=[0mcb352369ae3c39df48db382556d262da6fc348ec6c409c4014700874eb57120a [3mreceipt_sha256[0m[2m=[0mbfa70c14d2726e41949b7c5d6917374b0e7696b4ed5ba5ae3e387b92db6fd0be
+[  448ms] [kernel] ⚠️  imperium-net-lightcone disconnected mid-deliver
+[  450ms] [kernel] 💥 imperium-net-lightcone crashed: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[  479ms] [spider] 📨 flushed 32 pending on `<pending>` to imperium-net-lightcone
+[  479ms] [spider] 🔄 imperium-net-lightcone restarted (attempt 3)
+[  479ms] [spider] 👁  imperium-net-lightcone is online (in: net.lightcone.frame, out: net.lightcone.receipt)
+[  479ms] [spider] 💥 imperium-net-lightcone crashed: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[  480ms] [spider] 🛑 imperium-net-lightcone sending Quarantine (4th crash)
+[  601ms] [spider] 🛑 imperium-net-lightcone quarantined: 4 crashes: injected fault: crashed after 1 frame(s) (IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES = 1)
+[  733ms] [kernel] ⚠️  imperium-net-lightcone disconnected mid-deliver
+[  782ms] [spider] 🧵 thread 907 born at <external>
+[  783ms] [spider] 🧵 thread 920 born at <external>
+[  783ms] [spider] 🧵 thread 932 born at <external>
+[  783ms] [spider] 🧵 thread 944 born at <external>
+[  783ms] [spider] 🧵 thread 956 born at <external>
+[  784ms] [spider] 🧵 thread 968 born at <external>
+[  784ms] [spider] 🧵 thread 980 born at <external>
+[  784ms] [spider] 🧵 thread 992 born at <external>
+[  845ms] [spider] 🧵 thread 1004 born at <external>
+[  845ms] [spider] 🧵 thread 1016 born at <external>
+[  906ms] [spider] 🧵 thread 1028 born at <external>
+[  966ms] [spider] 🧵 thread 1040 born at <external>
+[  967ms] [spider] 🧵 thread 1052 born at <external>
+[ 1149ms] [spider] 🧵 thread 1064 born at <external>
+[2m2026-10-01T14:01:04.952324Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m27 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m5 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m0 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m5
+[ 2355ms] [spider] 🧵 thread 1076 born at <external>
+[ 2355ms] [spider] 🧵 thread 1088 born at <external>
+[ 2355ms] [spider] 🧵 thread 1100 born at <external>
+[ 2356ms] [spider] 🧵 thread 1112 born at <external>
+[ 2356ms] [spider] 🧵 thread 1124 born at <external>
+[ 2416ms] [spider] 🧵 thread 1136 born at <external>
+[ 2417ms] [spider] 🧵 thread 1148 born at <external>
+[ 2417ms] [spider] 🧵 thread 1160 born at <external>
+[ 2417ms] [spider] 🧵 thread 1172 born at <external>
+[ 2418ms] [spider] 🧵 thread 1184 born at <external>
+[ 2418ms] [spider] 🧵 thread 1196 born at <external>
+[ 2478ms] [spider] 🧵 thread 1208 born at <external>
+[ 2479ms] [spider] 🧵 thread 1220 born at <external>
+[ 2479ms] [spider] 🧵 thread 1232 born at <external>
+[ 2479ms] [spider] 🧵 thread 1244 born at <external>
+[ 2480ms] [spider] 🧵 thread 1256 born at <external>
+[ 2480ms] [spider] 🧵 thread 1268 born at <external>
+[ 2541ms] [spider] 🧵 thread 1280 born at <external>
+[ 2541ms] [spider] 🧵 thread 1292 born at <external>
+[ 2541ms] [spider] 🧵 thread 1304 born at <external>
+[ 3324ms] [spider] 🧵 thread 1316 born at <external>
+[ 3324ms] [spider] 🧵 thread 1328 born at <external>
+[ 3325ms] [spider] 🧵 thread 1340 born at <external>
+[ 3325ms] [spider] 🧵 thread 1352 born at <external>
+[ 3325ms] [spider] 🧵 thread 1364 born at <external>
+[ 3325ms] [spider] 🧵 thread 1376 born at <external>
+[ 3325ms] [spider] 🧵 thread 1388 born at <external>
+[ 3325ms] [spider] 🧵 thread 1400 born at <external>
+[ 3325ms] [spider] 🧵 thread 1412 born at <external>
+[ 3326ms] [spider] 🧵 thread 1424 born at <external>
+[ 3326ms] [spider] 🧵 thread 1436 born at <external>
+[ 3326ms] [spider] 🧵 thread 1448 born at <external>
+[2m2026-10-01T14:01:06.952053Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m53 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m11 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m0 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m11
+[ 4530ms] [spider] 🧵 thread 1460 born at <external>
+[ 4532ms] [spider] 🧵 thread 1472 born at <external>
+[ 5135ms] [spider] 🧵 thread 1484 born at <external>
+[ 5135ms] [spider] 🧵 thread 1496 born at <external>
+[ 5135ms] [spider] 🧵 thread 1508 born at <external>
+[ 5135ms] [spider] 🧵 thread 1520 born at <external>
+[ 5135ms] [spider] 🧵 thread 1532 born at <external>
+[ 5135ms] [spider] 🧵 thread 1544 born at <external>
+[ 5135ms] [spider] 🧵 thread 1556 born at <external>
+[ 5135ms] [spider] 🧵 thread 1568 born at <external>
+[ 5135ms] [spider] 🧵 thread 1580 born at <external>
+[ 5135ms] [spider] 🧵 thread 1592 born at <external>
+[ 5135ms] [spider] 🧵 thread 1604 born at <external>
+[ 5135ms] [spider] 🧵 thread 1616 born at <external>
+[ 5135ms] [spider] 🧵 thread 1628 born at <external>
+[ 5136ms] [spider] 🧵 thread 1640 born at <external>
+[ 5136ms] [spider] 🧵 thread 1652 born at <external>
+[ 5136ms] [spider] 🧵 thread 1664 born at <external>
+[ 5136ms] [spider] 🧵 thread 1676 born at <external>
+[ 5136ms] [spider] 🧵 thread 1688 born at <external>
+[ 5136ms] [spider] 🧵 thread 1700 born at <external>
+[ 5136ms] [spider] 🧵 thread 1712 born at <external>
+[ 5136ms] [spider] 🧵 thread 1724 born at <external>
+[ 5136ms] [spider] 🧵 thread 1736 born at <external>
+[ 5136ms] [spider] 🧵 thread 1748 born at <external>
+[ 5136ms] [spider] 🧵 thread 1760 born at <external>
+[ 5136ms] [spider] 🧵 thread 1772 born at <external>
+[ 5136ms] [spider] 🧵 thread 1784 born at <external>
+[ 5136ms] [spider] 🧵 thread 1796 born at <external>
+[ 5136ms] [spider] 🧵 thread 1808 born at <external>
+[ 5136ms] [spider] 🧵 thread 1820 born at <external>
+[ 5136ms] [spider] 🧵 thread 1832 born at <external>
+[ 5136ms] [spider] 🧵 thread 1844 born at <external>
+[ 5136ms] [spider] 🧵 thread 1856 born at <external>
+[ 5136ms] [spider] 🧵 thread 1868 born at <external>
+[ 5137ms] [spider] 🧵 thread 1880 born at <external>
+[ 5137ms] [spider] 🧵 thread 1892 born at <external>
+[ 5137ms] [spider] 🧵 thread 1904 born at <external>
+[ 5137ms] [spider] 🧵 thread 1916 born at <external>
+[ 5137ms] [spider] 🧵 thread 1928 born at <external>
+[ 5137ms] [spider] 🧵 thread 1940 born at <external>
+[ 5197ms] [spider] 🧵 thread 1952 born at <external>
+[ 5197ms] [spider] 🧵 thread 1964 born at <external>
+[ 5197ms] [spider] 🧵 thread 1976 born at <external>
+[ 5197ms] [spider] 🧵 thread 1988 born at <external>
+[ 5197ms] [spider] 🧵 thread 2000 born at <external>
+[ 5197ms] [spider] 🧵 thread 2012 born at <external>
+[ 5197ms] [spider] 🧵 thread 2024 born at <external>
+[ 5197ms] [spider] 🧵 thread 2036 born at <external>
+[ 5197ms] [spider] 🧵 thread 2048 born at <external>
+[ 5197ms] [spider] 🧵 thread 2060 born at <external>
+[ 5198ms] [spider] 🧵 thread 2072 born at <external>
+[ 5198ms] [spider] 🧵 thread 2084 born at <external>
+[ 5198ms] [spider] 🧵 thread 2096 born at <external>
+[ 5198ms] [spider] 🧵 thread 2108 born at <external>
+[ 5198ms] [spider] 🧵 thread 2120 born at <external>
+[ 5198ms] [spider] 🧵 thread 2132 born at <external>
+[ 5198ms] [spider] 🧵 thread 2144 born at <external>
+[ 5198ms] [spider] 🧵 thread 2156 born at <external>
+[ 5198ms] [spider] 🧵 thread 2168 born at <external>
+[ 5198ms] [spider] 🧵 thread 2180 born at <external>
+[ 5198ms] [spider] 🧵 thread 2192 born at <external>
+[ 5198ms] [spider] 🧵 thread 2204 born at <external>
+[ 5198ms] [spider] 🧵 thread 2216 born at <external>
+[ 5198ms] [spider] 🧵 thread 2228 born at <external>
+[ 5198ms] [spider] 🧵 thread 2240 born at <external>
+[ 5198ms] [spider] 🧵 thread 2252 born at <external>
+[ 5198ms] [spider] 🧵 thread 2264 born at <external>
+[ 5198ms] [spider] 🧵 thread 2276 born at <external>
+[ 5198ms] [spider] 🧵 thread 2288 born at <external>
+[ 5198ms] [spider] 🧵 thread 2300 born at <external>
+[ 5198ms] [spider] 🧵 thread 2312 born at <external>
+[ 5198ms] [spider] 🧵 thread 2324 born at <external>
+[ 5199ms] [spider] 🧵 thread 2336 born at <external>
+[ 5199ms] [spider] 🧵 thread 2348 born at <external>
+[ 5199ms] [spider] 🧵 thread 2360 born at <external>
+[ 5199ms] [spider] 🧵 thread 2372 born at <external>
+[ 5199ms] [spider] 🧵 thread 2384 born at <external>
+[ 5199ms] [spider] 🧵 thread 2396 born at <external>
+[ 5199ms] [spider] 🧵 thread 2408 born at <external>
+[ 5199ms] [spider] 🧵 thread 2420 born at <external>
+[ 5199ms] [spider] 🧵 thread 2432 born at <external>
+[ 5199ms] [spider] 🧵 thread 2444 born at <external>
+[ 5199ms] [spider] 🧵 thread 2456 born at <external>
+[ 5199ms] [spider] 🧵 thread 2468 born at <external>
+[ 5199ms] [spider] 🧵 thread 2480 born at <external>
+[ 5199ms] [spider] 🧵 thread 2492 born at <external>
+[ 5199ms] [spider] 🧵 thread 2504 born at <external>
+[ 5199ms] [spider] 🧵 thread 2516 born at <external>
+[ 5199ms] [spider] 🧵 thread 2528 born at <external>
+[2m2026-10-01T14:01:08.952235Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m74 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m32 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m24 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m32
+[ 6764ms] [spider] 🧵 thread 2540 born at <external>
+[ 6764ms] [spider] 🧵 thread 2552 born at <external>
+[ 6764ms] [spider] 🧵 thread 2564 born at <external>
+[ 6764ms] [spider] 🧵 thread 2576 born at <external>
+[ 6764ms] [spider] 🧵 thread 2588 born at <external>
+[ 6764ms] [spider] 🧵 thread 2600 born at <external>
+[ 6764ms] [spider] 🧵 thread 2612 born at <external>
+[ 6764ms] [spider] 🧵 thread 2624 born at <external>
+[ 6764ms] [spider] 🧵 thread 2636 born at <external>
+[ 6765ms] [spider] 🧵 thread 2648 born at <external>
+[ 6765ms] [spider] 🧵 thread 2660 born at <external>
+[ 6765ms] [spider] 🧵 thread 2672 born at <external>
+[ 6765ms] [spider] 🧵 thread 2684 born at <external>
+[ 6765ms] [spider] 🧵 thread 2696 born at <external>
+[ 6765ms] [spider] 🧵 thread 2708 born at <external>
+[ 6765ms] [spider] 🧵 thread 2720 born at <external>
+[ 6765ms] [spider] 🧵 thread 2732 born at <external>
+[ 6765ms] [spider] 🧵 thread 2744 born at <external>
+[ 6765ms] [spider] 🧵 thread 2756 born at <external>
+[ 6765ms] [spider] 🧵 thread 2768 born at <external>
+[ 6765ms] [spider] 🧵 thread 2780 born at <external>
+[ 6765ms] [spider] 🧵 thread 2792 born at <external>
+[ 6765ms] [spider] 🧵 thread 2804 born at <external>
+[ 6765ms] [spider] 🧵 thread 2816 born at <external>
+[ 6765ms] [spider] 🧵 thread 2828 born at <external>
+[ 6765ms] [spider] 🧵 thread 2840 born at <external>
+[ 6765ms] [spider] 🧵 thread 2852 born at <external>
+[ 6767ms] [spider] 🧵 thread 2864 born at <external>
+[ 6767ms] [spider] 🧵 thread 2876 born at <external>
+[ 6767ms] [spider] 🧵 thread 2888 born at <external>
+[ 6767ms] [spider] 🧵 thread 2900 born at <external>
+[ 6767ms] [spider] 🧵 thread 2912 born at <external>
+[ 6767ms] [spider] 🧵 thread 2924 born at <external>
+[ 6767ms] [spider] 🧵 thread 2936 born at <external>
+[ 6767ms] [spider] 🧵 thread 2948 born at <external>
+[ 6767ms] [spider] 🧵 thread 2960 born at <external>
+[ 6767ms] [spider] 🧵 thread 2972 born at <external>
+[ 6767ms] [spider] 🧵 thread 2984 born at <external>
+[ 6767ms] [spider] 🧵 thread 2996 born at <external>
+[ 6767ms] [spider] 🧵 thread 3008 born at <external>
+[ 6767ms] [spider] 🧵 thread 3020 born at <external>
+[ 6768ms] [spider] 🧵 thread 3032 born at <external>
+[ 6768ms] [spider] 🧵 thread 3044 born at <external>
+[ 6768ms] [spider] 🧵 thread 3056 born at <external>
+[ 6768ms] [spider] 🧵 thread 3068 born at <external>
+[ 6768ms] [spider] 🧵 thread 3080 born at <external>
+[ 6768ms] [spider] 🧵 thread 3092 born at <external>
+[ 6768ms] [spider] 🧵 thread 3104 born at <external>
+[ 6768ms] [spider] 🧵 thread 3116 born at <external>
+[ 6768ms] [spider] 🧵 thread 3128 born at <external>
+[ 6768ms] [spider] 🧵 thread 3140 born at <external>
+[ 6768ms] [spider] 🧵 thread 3152 born at <external>
+[ 6768ms] [spider] 🧵 thread 3164 born at <external>
+[ 6768ms] [spider] 🧵 thread 3176 born at <external>
+[ 6768ms] [spider] 🧵 thread 3188 born at <external>
+[ 6769ms] [spider] 🧵 thread 3200 born at <external>
+[ 6829ms] [spider] 🧵 thread 3212 born at <external>
+[ 6829ms] [spider] 🧵 thread 3224 born at <external>
+[ 6829ms] [spider] 🧵 thread 3236 born at <external>
+[ 6829ms] [spider] 🧵 thread 3248 born at <external>
+[ 6830ms] [spider] 🧵 thread 3260 born at <external>
+[ 6830ms] [spider] 🧵 thread 3272 born at <external>
+[ 6830ms] [spider] 🧵 thread 3284 born at <external>
+[ 6830ms] [spider] 🧵 thread 3296 born at <external>
+[ 6830ms] [spider] 🧵 thread 3308 born at <external>
+[ 6830ms] [spider] 🧵 thread 3320 born at <external>
+[ 6830ms] [spider] 🧵 thread 3332 born at <external>
+[ 6830ms] [spider] 🧵 thread 3344 born at <external>
+[ 6830ms] [spider] 🧵 thread 3356 born at <external>
+[ 6830ms] [spider] 🧵 thread 3368 born at <external>
+[ 6830ms] [spider] 🧵 thread 3380 born at <external>
+[ 6830ms] [spider] 🧵 thread 3392 born at <external>
+[ 6831ms] [spider] 🧵 thread 3404 born at <external>
+[ 6831ms] [spider] 🧵 thread 3416 born at <external>
+[ 6831ms] [spider] 🧵 thread 3428 born at <external>
+[ 6831ms] [spider] 🧵 thread 3440 born at <external>
+[ 6831ms] [spider] 🧵 thread 3452 born at <external>
+[ 6831ms] [spider] 🧵 thread 3464 born at <external>
+[ 6831ms] [spider] 🧵 thread 3476 born at <external>
+[ 6831ms] [spider] 🧵 thread 3488 born at <external>
+[ 6831ms] [spider] 🧵 thread 3500 born at <external>
+[ 6831ms] [spider] 🧵 thread 3512 born at <external>
+[ 6831ms] [spider] 🧵 thread 3524 born at <external>
+[ 6832ms] [spider] 🧵 thread 3536 born at <external>
+[ 6832ms] [spider] 🧵 thread 3548 born at <external>
+[ 6832ms] [spider] 🧵 thread 3560 born at <external>
+[ 6832ms] [spider] 🧵 thread 3572 born at <external>
+[ 6832ms] [spider] 🧵 thread 3584 born at <external>
+[ 6832ms] [spider] 🧵 thread 3596 born at <external>
+[ 6832ms] [spider] 🧵 thread 3608 born at <external>
+[ 6832ms] [spider] 🧵 thread 3620 born at <external>
+[ 6832ms] [spider] 🧵 thread 3632 born at <external>
+[ 6832ms] [spider] 🧵 thread 3644 born at <external>
+[ 6832ms] [spider] 🧵 thread 3656 born at <external>
+[ 6833ms] [spider] 🧵 thread 3668 born at <external>
+[ 6833ms] [spider] 🧵 thread 3680 born at <external>
+[ 6833ms] [spider] 🧵 thread 3692 born at <external>
+[ 6833ms] [spider] 🧵 thread 3704 born at <external>
+[ 6834ms] [spider] 🧵 thread 3716 born at <external>
+[ 6834ms] [spider] 🧵 thread 3728 born at <external>
+[ 6834ms] [spider] 🧵 thread 3740 born at <external>
+[ 6834ms] [spider] 🧵 thread 3752 born at <external>
+[ 6834ms] [spider] 🧵 thread 3764 born at <external>
+[ 6834ms] [spider] 🧵 thread 3776 born at <external>
+[ 6834ms] [spider] 🧵 thread 3788 born at <external>
+[ 6834ms] [spider] 🧵 thread 3800 born at <external>
+[ 6834ms] [spider] 🧵 thread 3812 born at <external>
+[ 6834ms] [spider] 🧵 thread 3824 born at <external>
+[ 6835ms] [spider] 🧵 thread 3836 born at <external>
+[ 6835ms] [spider] 🧵 thread 3848 born at <external>
+[ 6835ms] [spider] 🧵 thread 3860 born at <external>
+[ 6835ms] [spider] 🧵 thread 3872 born at <external>
+[ 6835ms] [spider] 🧵 thread 3884 born at <external>
+[ 6835ms] [spider] 🧵 thread 3896 born at <external>
+[ 6835ms] [spider] 🧵 thread 3908 born at <external>
+[ 6835ms] [spider] 🧵 thread 3920 born at <external>
+[ 6835ms] [spider] 🧵 thread 3932 born at <external>
+[ 6835ms] [spider] 🧵 thread 3944 born at <external>
+[ 6835ms] [spider] 🧵 thread 3956 born at <external>
+[ 6836ms] [spider] 🧵 thread 3968 born at <external>
+[ 6836ms] [spider] 🧵 thread 3980 born at <external>
+[ 6836ms] [spider] 🧵 thread 3992 born at <external>
+[ 6836ms] [spider] 🧵 thread 4004 born at <external>
+[ 6836ms] [spider] 🧵 thread 4016 born at <external>
+[ 6836ms] [spider] 🧵 thread 4028 born at <external>
+[ 6836ms] [spider] 🧵 thread 4040 born at <external>
+[ 6836ms] [spider] 🧵 thread 4052 born at <external>
+[ 6836ms] [spider] 🧵 thread 4064 born at <external>
+[ 6836ms] [spider] 🧵 thread 4076 born at <external>
+[ 6837ms] [spider] 🧵 thread 4088 born at <external>
+[ 6837ms] [spider] 🧵 thread 4100 born at <external>
+[ 6837ms] [spider] 🧵 thread 4112 born at <external>
+[ 6837ms] [spider] 🧵 thread 4124 born at <external>
+[ 6837ms] [spider] 🧵 thread 4136 born at <external>
+[ 6837ms] [spider] 🧵 thread 4148 born at <external>
+[ 6837ms] [spider] 🧵 thread 4160 born at <external>
+[ 6837ms] [spider] 🧵 thread 4172 born at <external>
+[ 6837ms] [spider] 🧵 thread 4184 born at <external>
+[ 6837ms] [spider] 🧵 thread 4196 born at <external>
+[ 6838ms] [spider] 🧵 thread 4208 born at <external>
+[ 6838ms] [spider] 🧵 thread 4220 born at <external>
+[ 6838ms] [spider] 🧵 thread 4232 born at <external>
+[ 6838ms] [spider] 🧵 thread 4244 born at <external>
+[ 6838ms] [spider] 🧵 thread 4256 born at <external>
+[ 6838ms] [spider] 🧵 thread 4268 born at <external>
+[ 6838ms] [spider] 🧵 thread 4280 born at <external>
+[ 6838ms] [spider] 🧵 thread 4292 born at <external>
+[ 6838ms] [spider] 🧵 thread 4304 born at <external>
+[ 6839ms] [spider] 🧵 thread 4316 born at <external>
+[ 6839ms] [spider] 🧵 thread 4328 born at <external>
+[ 6839ms] [spider] 🧵 thread 4340 born at <external>
+[ 6839ms] [spider] 🧵 thread 4352 born at <external>
+[ 6839ms] [spider] 🧵 thread 4364 born at <external>
+[ 6839ms] [spider] 🧵 thread 4376 born at <external>
+[ 6839ms] [spider] 🧵 thread 4388 born at <external>
+[ 6839ms] [spider] 🧵 thread 4400 born at <external>
+[ 6839ms] [spider] 🧵 thread 4412 born at <external>
+[ 6839ms] [spider] 🧵 thread 4424 born at <external>
+[ 6840ms] [spider] 🧵 thread 4436 born at <external>
+[ 6840ms] [spider] 🧵 thread 4448 born at <external>
+[ 6840ms] [spider] 🧵 thread 4460 born at <external>
+[ 6840ms] [spider] 🧵 thread 4472 born at <external>
+[ 6840ms] [spider] 🧵 thread 4484 born at <external>
+[ 6840ms] [spider] 🧵 thread 4496 born at <external>
+[ 6840ms] [spider] 🧵 thread 4508 born at <external>
+[ 6840ms] [spider] 🧵 thread 4520 born at <external>
+[ 6840ms] [spider] 🧵 thread 4532 born at <external>
+[ 6841ms] [spider] 🧵 thread 4544 born at <external>
+[ 6841ms] [spider] 🧵 thread 4556 born at <external>
+[ 6841ms] [spider] 🧵 thread 4568 born at <external>
+[ 6841ms] [spider] 🧵 thread 4580 born at <external>
+[ 6841ms] [spider] 🧵 thread 4592 born at <external>
+[ 6841ms] [spider] 🧵 thread 4604 born at <external>
+[ 6841ms] [spider] 🧵 thread 4616 born at <external>
+[ 6841ms] [spider] 🧵 thread 4628 born at <external>
+[ 6841ms] [spider] 🧵 thread 4640 born at <external>
+[ 6841ms] [spider] 🧵 thread 4652 born at <external>
+[ 6842ms] [spider] 🧵 thread 4664 born at <external>
+[ 6842ms] [spider] 🧵 thread 4676 born at <external>
+[ 6842ms] [spider] 🧵 thread 4688 born at <external>
+[ 6842ms] [spider] 🧵 thread 4700 born at <external>
+[ 6842ms] [spider] 🧵 thread 4712 born at <external>
+[ 6842ms] [spider] 🧵 thread 4724 born at <external>
+[ 6842ms] [spider] 🧵 thread 4736 born at <external>
+[ 6842ms] [spider] 🧵 thread 4748 born at <external>
+[ 6842ms] [spider] 🧵 thread 4760 born at <external>
+[ 6842ms] [spider] 🧵 thread 4772 born at <external>
+[ 6842ms] [spider] 🧵 thread 4784 born at <external>
+[ 6843ms] [spider] 🧵 thread 4796 born at <external>
+[ 6843ms] [spider] 🧵 thread 4808 born at <external>
+[ 6843ms] [spider] 🧵 thread 4820 born at <external>
+[ 6843ms] [spider] 🧵 thread 4832 born at <external>
+[ 6843ms] [spider] 🧵 thread 4844 born at <external>
+[ 6843ms] [spider] 🧵 thread 4856 born at <external>
+[ 6843ms] [spider] 🧵 thread 4868 born at <external>
+[ 6843ms] [spider] 🧵 thread 4880 born at <external>
+[ 6843ms] [spider] 🧵 thread 4892 born at <external>
+[ 6843ms] [spider] 🧵 thread 4904 born at <external>
+[ 6843ms] [spider] 🧵 thread 4916 born at <external>
+[ 6843ms] [spider] 🧵 thread 4928 born at <external>
+[ 6843ms] [spider] 🧵 thread 4940 born at <external>
+[ 6843ms] [spider] 🧵 thread 4952 born at <external>
+[ 6843ms] [spider] 🧵 thread 4964 born at <external>
+[ 6843ms] [spider] 🧵 thread 4976 born at <external>
+[2m2026-10-01T14:01:10.952075Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m124 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m82 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m76 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m82
+[ 8409ms] [spider] 🧵 thread 4988 born at <external>
+[ 8409ms] [spider] 🧵 thread 5000 born at <external>
+[ 8410ms] [spider] 🧵 thread 5012 born at <external>
+[ 8410ms] [spider] 🧵 thread 5024 born at <external>
+[ 8410ms] [spider] 🧵 thread 5036 born at <external>
+[ 8410ms] [spider] 🧵 thread 5048 born at <external>
+[ 8411ms] [spider] 🧵 thread 5060 born at <external>
+[ 8411ms] [spider] 🧵 thread 5072 born at <external>
+[ 8412ms] [spider] 🧵 thread 5084 born at <external>
+[ 8412ms] [spider] 🧵 thread 5096 born at <external>
+[ 8412ms] [spider] 🧵 thread 5108 born at <external>
+[ 8412ms] [spider] 🧵 thread 5120 born at <external>
+[ 9376ms] [spider] 🧵 thread 5132 born at <external>
+[ 9376ms] [spider] 🧵 thread 5144 born at <external>
+[ 9377ms] [spider] 🧵 thread 5156 born at <external>
+[ 9377ms] [spider] 🧵 thread 5168 born at <external>
+[ 9377ms] [spider] 🧵 thread 5180 born at <external>
+[ 9377ms] [spider] 🧵 thread 5192 born at <external>
+[ 9378ms] [spider] 🧵 thread 5204 born at <external>
+[ 9378ms] [spider] 🧵 thread 5216 born at <external>
+[ 9378ms] [spider] 🧵 thread 5228 born at <external>
+[ 9378ms] [spider] 🧵 thread 5240 born at <external>
+[ 9379ms] [spider] 🧵 thread 5252 born at <external>
+[ 9379ms] [spider] 🧵 thread 5264 born at <external>
+[2m2026-10-01T14:01:12.952018Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m128 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m86 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m84 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m86
+[10402ms] [spider] 🧵 thread 5276 born at <external>
+[10403ms] [spider] 🧵 thread 5288 born at <external>
+[10403ms] [spider] 🧵 thread 5300 born at <external>
+[10403ms] [spider] 🧵 thread 5312 born at <external>
+[10403ms] [spider] 🧵 thread 5324 born at <external>
+[10403ms] [spider] 🧵 thread 5336 born at <external>
+[10403ms] [spider] 🧵 thread 5348 born at <external>
+[10403ms] [spider] 🧵 thread 5360 born at <external>
+[10403ms] [spider] 🧵 thread 5372 born at <external>
+[10403ms] [spider] 🧵 thread 5384 born at <external>
+[10403ms] [spider] 🧵 thread 5396 born at <external>
+[10403ms] [spider] 🧵 thread 5408 born at <external>
+[11487ms] [spider] 🧵 thread 5420 born at <external>
+[11488ms] [spider] 🧵 thread 5432 born at <external>
+[2m2026-10-01T14:01:14.951903Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m131 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m89 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m88 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m89
+[12753ms] [spider] 🧵 thread 5444 born at <external>
+[12753ms] [spider] 🧵 thread 5456 born at <external>
+[2m2026-10-01T14:01:16.951858Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m132 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m90 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m88 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m90
+[2m2026-10-01T14:01:18.952759Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m132 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m90 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m88 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m90
+[2m2026-10-01T14:01:20.951930Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m132 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m90 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m88 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m90
+[2m2026-10-01T14:01:22.951846Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m mesh link health [3mestablished[0m[2m=[0mtrue [3mpeers_established[0m[2m=[0m2 [3mkilled[0m[2m=[0mfalse [3mmesh_datagrams[0m[2m=[0m132 [3mhandshakes[0m[2m=[0m2 [3mframes_opened[0m[2m=[0m90 [3mframes_failed[0m[2m=[0m0 [3mnat_rebinds[0m[2m=[0m0 [3mrekeys[0m[2m=[0m0 [3mreassembled[0m[2m=[0m2 [3mfragments_rejected[0m[2m=[0m0 [3mhandshake_verifications[0m[2m=[0m0 [3mhandshake_failures[0m[2m=[0m0 [3mcookies_sent[0m[2m=[0m0 [3mrate_limited[0m[2m=[0m0 [3mcover_sent[0m[2m=[0m0 [3mhost_in[0m[2m=[0m88 [3mhost_in_dropped[0m[2m=[0m5 [3mhost_suppressed[0m[2m=[0m0 [3mhost_out[0m[2m=[0m90
+[2m2026-10-01T14:01:23.141150Z[0m [32m INFO[0m [2mimperium_runtime[0m[2m:[0m received SIGINT/SIGTERM, initiating shutdown
+[2m2026-10-01T14:01:23.141313Z[0m [32m INFO[0m [2mimperium[0m[2m:[0m runtime exited [3mreason[0m[2m=[0mSignal
+[20293ms] [kernel] ⏹  shutdown requested via sys.control
+[20337ms] [kernel] 🧹 joined 13 worker(s); strands dropped
+[2m2026-10-01T14:01:23.214590Z[0m [32m INFO[0m [2mimperium_net_host::route[0m[2m:[0m route removed [3mdestination[0m[2m=[0m10.99.0.0/24
+[2m2026-10-01T14:01:23.214810Z[0m [32m INFO[0m [2mimperium_net_host::route[0m[2m:[0m route removed [3mdestination[0m[2m=[0m10.88.0.0/24
+[20338ms] [kernel] ⚠️  kernel disconnected mid-deliver

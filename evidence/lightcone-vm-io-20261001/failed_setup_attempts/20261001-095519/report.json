@@ -1,0 +1,6 @@
+{
+  "experiment": "input-output-v1",
+  "world_unsealed": true,
+  "execution_error": "capture missing/lost packets in hub/healthy: tcpdump: data link type LINUX_SLL2\ntcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes\n804 packets captured\n1017 packets received by filter\n42 packets dropped by kernel\n",
+  "owned_vms_stopped": true
+}

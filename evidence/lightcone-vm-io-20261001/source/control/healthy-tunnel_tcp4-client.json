@@ -1,0 +1,33 @@
+{
+  "phase": "healthy",
+  "case": "tunnel_tcp4",
+  "attempted": 5,
+  "echoed": 5,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 12753816
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 15396778
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 13033312
+    },
+    {
+      "sequence": 3,
+      "echoed": true,
+      "elapsed_ns": 14642436
+    },
+    {
+      "sequence": 4,
+      "echoed": true,
+      "elapsed_ns": 13933540
+    }
+  ]
+}

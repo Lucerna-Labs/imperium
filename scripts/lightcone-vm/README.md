@@ -21,6 +21,13 @@ application send/receive logs, Lightcone receipt/hash correlation, status,
 capture-loss counts and a readable comparison are retained under
 `target/lightcone-vm/io-runs/<timestamp>/`. See
 `LIGHTCONE-VM-IO-PRECOMMIT-2026-10-01.md` for the exact matrix and limits.
+The IO-mode exit status confirms logging/control completion, not filtering
+acceptance; its comparison must be read for the measured effect. Use
+`export_io_evidence.py <accepted-run> <new-export-dir>` to copy the explicit
+synthetic-data allowlist and verify every exported hash. Capture resource
+repairs and the accepted result are recorded in
+`LIGHTCONE-VM-IO-CAPTURE-REV2-2026-10-01.md` and
+`LIGHTCONE-VM-IO-OUTCOME-2026-10-01.md`.
 
 Requires QEMU/KVM access, Python, curl, Cargo's cached workspace dependencies,
 and host nft/tcpdump executables. The wrapper obtains a pinned official Ubuntu

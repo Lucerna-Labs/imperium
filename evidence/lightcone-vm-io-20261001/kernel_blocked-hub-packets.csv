@@ -1,0 +1,8 @@
+record,time_ns,phase,role,interface,direction,network_protocol,transport,source,destination,source_port,destination_port,captured_bytes,raw_ip_sha256,mesh_datagram_sha256,case_ids
+0,1790863290968428000,kernel_blocked,hub,ens4,in,ipv4,udp,192.0.2.2,198.51.100.2,42879,45998,80,6de7b564a23b51c53ea90b7cad37e78ca496443ec86996bff782056dac6ce8d8,,['blocked_udp4:000']
+1,1790863291976586000,kernel_blocked,hub,ens4,in,ipv4,udp,192.0.2.2,198.51.100.2,58803,45998,80,036b21ca00a125d0b5f768e1f24872f111244989f80af1c76c5db806a8662b7c,,['blocked_udp4:001']
+2,1790863292594790000,kernel_blocked,hub,ens5,out,ipv6,icmp6,fe80::5054:ff:fe78:1,fe80::5054:ff:fe78:2,,,92,e9a29b68bb6015f81a5d641808b7ee9ff99236bba8a512dc6381d8cf7e841d51,,[]
+3,1790863292595496000,kernel_blocked,hub,ens5,in,ipv6,icmp6,fe80::5054:ff:fe78:2,fe80::5054:ff:fe78:1,,,84,11c0cdc0706400e73e91457b97b904f13ff9d64ae34e37016ab239b706586185,,[]
+4,1790863292985409000,kernel_blocked,hub,ens4,in,ipv4,udp,192.0.2.2,198.51.100.2,46458,45998,80,9a091a4e3140538a2e67da0bfaa414332709d6bc0066fceb1ba7eb6820cd29d9,,['blocked_udp4:002']
+5,1790863293995876000,kernel_blocked,hub,ens4,in,ipv4,udp,192.0.2.2,198.51.100.2,57741,45998,80,26154eca91e32dd22868234b8669ac709782ad4db5c45db7a34384adab5e7ab5,,['blocked_udp4:003']
+6,1790863295004923000,kernel_blocked,hub,ens4,in,ipv4,udp,192.0.2.2,198.51.100.2,45930,45998,80,37f87f25da336a8943161bdf10fd13af8d2b9248c282ea49cb7c891310a40f3c,,['blocked_udp4:004']

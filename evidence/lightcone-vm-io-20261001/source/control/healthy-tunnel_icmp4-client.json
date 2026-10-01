@@ -1,0 +1,10 @@
+{
+  "phase": "healthy",
+  "case": "tunnel_icmp4",
+  "attempted": 3,
+  "echoed": 3,
+  "returncode": 0,
+  "stdout": "PING 10.99.0.1 (10.99.0.1) 56(84) bytes of data.\n\n--- 10.99.0.1 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2003ms\nrtt min/avg/max/mdev = 6.448/13.014/19.883/5.488 ms\n",
+  "stderr": "",
+  "elapsed": 2.0192030569999986
+}

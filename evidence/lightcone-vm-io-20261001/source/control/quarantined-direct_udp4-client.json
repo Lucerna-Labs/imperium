@@ -1,0 +1,58 @@
+{
+  "phase": "quarantined",
+  "case": "direct_udp4",
+  "attempted": 10,
+  "echoed": 10,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 2115358
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 1411615
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 1327138
+    },
+    {
+      "sequence": 3,
+      "echoed": true,
+      "elapsed_ns": 1363591
+    },
+    {
+      "sequence": 4,
+      "echoed": true,
+      "elapsed_ns": 1180620
+    },
+    {
+      "sequence": 5,
+      "echoed": true,
+      "elapsed_ns": 1309377
+    },
+    {
+      "sequence": 6,
+      "echoed": true,
+      "elapsed_ns": 2030354
+    },
+    {
+      "sequence": 7,
+      "echoed": true,
+      "elapsed_ns": 1677232
+    },
+    {
+      "sequence": 8,
+      "echoed": true,
+      "elapsed_ns": 1784442
+    },
+    {
+      "sequence": 9,
+      "echoed": true,
+      "elapsed_ns": 1732443
+    }
+  ]
+}

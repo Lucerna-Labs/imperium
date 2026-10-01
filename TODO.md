@@ -69,6 +69,14 @@ diagnostic; `vpn lightcone status` reports `filter_enforced: false`.
 
 ## P0 — all-traffic enforcement and actual delivery tests
 
+- [x] Log actual VM ingress/egress, application bytes and Lightcone query
+  receipts with a matched healthy/quarantined comparison. The accepted run
+  delivered 49/49 probes in both arms, matched 918 healthy receipts to captured
+  hashes/direction, and passed an independent 5-in/0-out block control plus
+  3-in/3-out recovery with zero capture loss. This proves the current causal
+  gate is unenforced in the tested matrix; see
+  `LIGHTCONE-VM-IO-OUTCOME-2026-10-01.md` and its raw evidence directory.
+
 - [x] Establish an isolated three-QEMU/KVM-guest baseline with independent
   receiver captures. The eight IPv4/IPv6 input/output/forward/loopback paths
   passed baseline, no-listener blocking, and recovery controls. Native cluster

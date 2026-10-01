@@ -1,0 +1,33 @@
+{
+  "phase": "quarantined",
+  "case": "tunnel_tcp4",
+  "attempted": 5,
+  "echoed": 5,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 11169322
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 11148382
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 11125668
+    },
+    {
+      "sequence": 3,
+      "echoed": true,
+      "elapsed_ns": 11519678
+    },
+    {
+      "sequence": 4,
+      "echoed": true,
+      "elapsed_ns": 12002868
+    }
+  ]
+}

@@ -1,0 +1,1496 @@
+[
+  {
+    "sequence": 1,
+    "role": "hub",
+    "command": "python3 /lab/traffic_guest.py serve hub >/control/traffic-server.log 2>&1 </dev/null & echo $! >/control/traffic-server.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 2,
+    "role": "hub",
+    "command": "for i in $(seq 1 50); do test -e /control/traffic-ready && exit 0; sleep .1; done; cat /control/traffic-server.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 1,
+    "role": "receiver",
+    "command": "python3 /lab/traffic_guest.py serve receiver >/control/traffic-server.log 2>&1 </dev/null & echo $! >/control/traffic-server.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 2,
+    "role": "receiver",
+    "command": "for i in $(seq 1 50); do test -e /control/traffic-ready && exit 0; sleep .1; done; cat /control/traffic-server.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 3,
+    "role": "hub",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/healthy.pcap >/control/healthy-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 4,
+    "role": "hub",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/healthy-capture.log && exit 0; sleep .1; done; cat /control/healthy-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 1,
+    "role": "source",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/healthy.pcap >/control/healthy-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 2,
+    "role": "source",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/healthy-capture.log && exit 0; sleep .1; done; cat /control/healthy-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 3,
+    "role": "receiver",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/healthy.pcap >/control/healthy-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 4,
+    "role": "receiver",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/healthy-capture.log && exit 0; sleep .1; done; cat /control/healthy-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 3,
+    "role": "source",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 4,
+    "role": "source",
+    "command": " XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info,imperium_net_lightcone=trace /lab/imperium node start --mesh-bind 192.0.2.2:41000 --tunnel-ip 10.88.0.1 --tun impb --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --route 10.77.0.0/24 --route 10.99.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 5,
+    "role": "source",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 5,
+    "role": "receiver",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 6,
+    "role": "receiver",
+    "command": " XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info,imperium_net_lightcone=trace /lab/imperium node start --mesh-bind 198.51.100.2:41000 --tunnel-ip 10.99.0.1 --tun impc --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --route 10.77.0.0/24 --route 10.88.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 7,
+    "role": "receiver",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 5,
+    "role": "hub",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 6,
+    "role": "hub",
+    "command": " XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info,imperium_net_lightcone=trace /lab/imperium node start --mesh-bind 0.0.0.0:41000 --tunnel-ip 10.77.0.1 --tun impa --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --peer 3918c1cf-cd7c-4722-98ef-86e4e587dcd4@192.0.2.2:41000 --peer-route 3918c1cf-cd7c-4722-98ef-86e4e587dcd4=10.88.0.0/24 --peer ffc19cac-dd6c-4e05-bc04-24d3b1aba5a5@198.51.100.2:41000 --peer-route ffc19cac-dd6c-4e05-bc04-24d3b1aba5a5=10.99.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 7,
+    "role": "hub",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 8,
+    "role": "hub",
+    "command": "for i in $(seq 1 150); do sed 's/\\x1b\\[[0-9;]*m//g' /control/node.log | grep -q 'peers_established=2' && exit 0; sleep .2; done; tail -5 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 9,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket,time\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)\nfor i in range(20):\n s.sendto(b'lc-io-control-stimulus',('192.0.2.1',41000));time.sleep(.01)\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 6,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket,time\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)\nfor i in range(20):\n s.sendto(b'lc-io-control-stimulus',('192.0.2.2',41000));time.sleep(.01)\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 8,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket,time\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)\nfor i in range(20):\n s.sendto(b'lc-io-control-stimulus',('198.51.100.2',41000));time.sleep(.01)\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 10,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 7,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 9,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 11,
+    "role": "hub",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 8,
+    "role": "source",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 10,
+    "role": "receiver",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 12,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 11,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 9,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe tunnel_udp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 13,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 10,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 12,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 14,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 13,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 15,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 14,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 11,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe tunnel_tcp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 16,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 12,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 15,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 17,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 16,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 18,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 17,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 13,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 10.99.0.1",
+    "timeout": 10
+  },
+  {
+    "sequence": 19,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 14,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 18,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 20,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 19,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 21,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 20,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 15,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe direct_udp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 22,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 16,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 21,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 23,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 22,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 24,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 23,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 17,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe direct_udp6",
+    "timeout": 30
+  },
+  {
+    "sequence": 25,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 18,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 24,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 26,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 25,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 27,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 26,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 19,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe direct_tcp6",
+    "timeout": 30
+  },
+  {
+    "sequence": 28,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 20,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 27,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 29,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 28,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 30,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 29,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 31,
+    "role": "hub",
+    "command": "python3 /lab/traffic_guest.py probe loopback_udp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 32,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 21,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 30,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 33,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 31,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 34,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 32,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 35,
+    "role": "hub",
+    "command": "python3 /lab/traffic_guest.py probe loopback_udp6",
+    "timeout": 30
+  },
+  {
+    "sequence": 36,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 22,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 33,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 37,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 34,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 38,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 23,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 35,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 39,
+    "role": "hub",
+    "command": "kill -INT $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 24,
+    "role": "source",
+    "command": "kill -INT $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 36,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 40,
+    "role": "hub",
+    "command": "for i in $(seq 1 60); do ip route show | grep -qE '10\\.(88|99)' || exit 0; sleep .2; done; exit 1",
+    "timeout": 15
+  },
+  {
+    "sequence": 41,
+    "role": "hub",
+    "command": "cp /control/node.log /control/healthy-node.log",
+    "timeout": 45
+  },
+  {
+    "sequence": 25,
+    "role": "source",
+    "command": "cp /control/node.log /control/healthy-node.log",
+    "timeout": 45
+  },
+  {
+    "sequence": 37,
+    "role": "receiver",
+    "command": "cp /control/node.log /control/healthy-node.log",
+    "timeout": 45
+  },
+  {
+    "sequence": 42,
+    "role": "hub",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/healthy.pcap /control/healthy.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 26,
+    "role": "source",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/healthy.pcap /control/healthy.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 38,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/healthy.pcap /control/healthy.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 43,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 39,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 44,
+    "role": "hub",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/quarantined.pcap >/control/quarantined-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 45,
+    "role": "hub",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/quarantined-capture.log && exit 0; sleep .1; done; cat /control/quarantined-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 27,
+    "role": "source",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/quarantined.pcap >/control/quarantined-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 28,
+    "role": "source",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/quarantined-capture.log && exit 0; sleep .1; done; cat /control/quarantined-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 40,
+    "role": "receiver",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/quarantined.pcap >/control/quarantined-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 41,
+    "role": "receiver",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/quarantined-capture.log && exit 0; sleep .1; done; cat /control/quarantined-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 29,
+    "role": "source",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 30,
+    "role": "source",
+    "command": "IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES=1 XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info,imperium_net_lightcone=trace /lab/imperium node start --mesh-bind 192.0.2.2:41000 --tunnel-ip 10.88.0.1 --tun impb --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --route 10.77.0.0/24 --route 10.99.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 31,
+    "role": "source",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 42,
+    "role": "receiver",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 43,
+    "role": "receiver",
+    "command": "IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES=1 XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info,imperium_net_lightcone=trace /lab/imperium node start --mesh-bind 198.51.100.2:41000 --tunnel-ip 10.99.0.1 --tun impc --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --route 10.77.0.0/24 --route 10.88.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 44,
+    "role": "receiver",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 46,
+    "role": "hub",
+    "command": "mkdir -p /run/lcnode; chmod 700 /run/lcnode",
+    "timeout": 45
+  },
+  {
+    "sequence": 47,
+    "role": "hub",
+    "command": "IMPERIUM_LIGHTCONE_CRASH_AFTER_FRAMES=1 XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info,imperium_net_lightcone=trace /lab/imperium node start --mesh-bind 0.0.0.0:41000 --tunnel-ip 10.77.0.1 --tun impa --cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 --peer 3918c1cf-cd7c-4722-98ef-86e4e587dcd4@192.0.2.2:41000 --peer-route 3918c1cf-cd7c-4722-98ef-86e4e587dcd4=10.88.0.0/24 --peer ffc19cac-dd6c-4e05-bc04-24d3b1aba5a5@198.51.100.2:41000 --peer-route ffc19cac-dd6c-4e05-bc04-24d3b1aba5a5=10.99.0.0/24 >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 48,
+    "role": "hub",
+    "command": "for i in $(seq 1 150); do grep -q 'mesh link bound' /control/node.log && exit 0; sleep .2; done; tail -20 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 49,
+    "role": "hub",
+    "command": "for i in $(seq 1 150); do sed 's/\\x1b\\[[0-9;]*m//g' /control/node.log | grep -q 'peers_established=2' && exit 0; sleep .2; done; tail -5 /control/node.log; exit 1",
+    "timeout": 35
+  },
+  {
+    "sequence": 50,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket,time\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)\nfor i in range(20):\n s.sendto(b'lc-io-control-stimulus',('192.0.2.1',41000));time.sleep(.01)\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 32,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket,time\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)\nfor i in range(20):\n s.sendto(b'lc-io-control-stimulus',('192.0.2.2',41000));time.sleep(.01)\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 45,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket,time\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)\nfor i in range(20):\n s.sendto(b'lc-io-control-stimulus',('198.51.100.2',41000));time.sleep(.01)\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 51,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 33,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 46,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 52,
+    "role": "hub",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 34,
+    "role": "source",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 47,
+    "role": "receiver",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 53,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 48,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 35,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe tunnel_udp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 54,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 36,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 49,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 55,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 50,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 56,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 51,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 37,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe tunnel_tcp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 57,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 38,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 52,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 58,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 53,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 59,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 54,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 39,
+    "role": "source",
+    "command": "ping -n -q -c 3 -W 1 10.99.0.1",
+    "timeout": 10
+  },
+  {
+    "sequence": 60,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 40,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 55,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 61,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 56,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 62,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 57,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 41,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe direct_udp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 63,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 42,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 58,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 64,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 59,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 65,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 60,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 43,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe direct_udp6",
+    "timeout": 30
+  },
+  {
+    "sequence": 66,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 44,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 61,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 67,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 62,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 68,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 63,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 45,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe direct_tcp6",
+    "timeout": 30
+  },
+  {
+    "sequence": 69,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 46,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 64,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 70,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 65,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 71,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 66,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 72,
+    "role": "hub",
+    "command": "python3 /lab/traffic_guest.py probe loopback_udp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 73,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 47,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 67,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 74,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 68,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 75,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 69,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 76,
+    "role": "hub",
+    "command": "python3 /lab/traffic_guest.py probe loopback_udp6",
+    "timeout": 30
+  },
+  {
+    "sequence": 77,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 48,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 70,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 78,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 71,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 79,
+    "role": "hub",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 49,
+    "role": "source",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 72,
+    "role": "receiver",
+    "command": "python3 - <<'PY'\nimport socket\nwith socket.socket(socket.AF_UNIX) as s:\n s.settimeout(3); s.connect('/run/lcnode/imperium/control.sock'); s.sendall(b'vpn lightcone status\\n'); data=b''\n while not data.endswith(b'\\n'):\n  part=s.recv(65536)\n  if not part: break\n  data+=part\n print(data.decode())\nPY",
+    "timeout": 45
+  },
+  {
+    "sequence": 80,
+    "role": "hub",
+    "command": "kill -INT $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 50,
+    "role": "source",
+    "command": "kill -INT $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 73,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/node.pid)",
+    "timeout": 45
+  },
+  {
+    "sequence": 81,
+    "role": "hub",
+    "command": "for i in $(seq 1 60); do ip route show | grep -qE '10\\.(88|99)' || exit 0; sleep .2; done; exit 1",
+    "timeout": 15
+  },
+  {
+    "sequence": 82,
+    "role": "hub",
+    "command": "cp /control/node.log /control/quarantined-node.log",
+    "timeout": 45
+  },
+  {
+    "sequence": 51,
+    "role": "source",
+    "command": "cp /control/node.log /control/quarantined-node.log",
+    "timeout": 45
+  },
+  {
+    "sequence": 74,
+    "role": "receiver",
+    "command": "cp /control/node.log /control/quarantined-node.log",
+    "timeout": 45
+  },
+  {
+    "sequence": 83,
+    "role": "hub",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/quarantined.pcap /control/quarantined.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 52,
+    "role": "source",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/quarantined.pcap /control/quarantined.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 75,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/quarantined.pcap /control/quarantined.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 84,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 76,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 85,
+    "role": "hub",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/kernel_blocked.pcap >/control/kernel_blocked-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 86,
+    "role": "hub",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/kernel_blocked-capture.log && exit 0; sleep .1; done; cat /control/kernel_blocked-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 53,
+    "role": "source",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/kernel_blocked.pcap >/control/kernel_blocked-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 54,
+    "role": "source",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/kernel_blocked-capture.log && exit 0; sleep .1; done; cat /control/kernel_blocked-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 77,
+    "role": "receiver",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/kernel_blocked.pcap >/control/kernel_blocked-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 78,
+    "role": "receiver",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/kernel_blocked-capture.log && exit 0; sleep .1; done; cat /control/kernel_blocked-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 87,
+    "role": "hub",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 55,
+    "role": "source",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 79,
+    "role": "receiver",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 88,
+    "role": "hub",
+    "command": "/lab/nft -f - <<'NFT'\nadd table inet lc_io_control\nadd chain inet lc_io_control forward { type filter hook forward priority 0; policy accept; }\nadd rule inet lc_io_control forward ip saddr 192.0.2.2 ip daddr 198.51.100.2 udp dport 45998 counter queue num 42778\nNFT",
+    "timeout": 45
+  },
+  {
+    "sequence": 89,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 80,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 56,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe blocked_udp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 90,
+    "role": "hub",
+    "command": "/lab/nft -j list table inet lc_io_control",
+    "timeout": 45
+  },
+  {
+    "sequence": 91,
+    "role": "hub",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/kernel_blocked.pcap /control/kernel_blocked.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 57,
+    "role": "source",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/kernel_blocked.pcap /control/kernel_blocked.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 81,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/kernel_blocked.pcap /control/kernel_blocked.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 92,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 82,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 93,
+    "role": "hub",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/kernel_recovered.pcap >/control/kernel_recovered-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 94,
+    "role": "hub",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/kernel_recovered-capture.log && exit 0; sleep .1; done; cat /control/kernel_recovered-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 58,
+    "role": "source",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/kernel_recovered.pcap >/control/kernel_recovered-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 59,
+    "role": "source",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/kernel_recovered-capture.log && exit 0; sleep .1; done; cat /control/kernel_recovered-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 83,
+    "role": "receiver",
+    "command": "/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/kernel_recovered.pcap >/control/kernel_recovered-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid",
+    "timeout": 45
+  },
+  {
+    "sequence": 84,
+    "role": "receiver",
+    "command": "for i in $(seq 1 40); do grep -q 'listening on' /control/kernel_recovered-capture.log && exit 0; sleep .1; done; cat /control/kernel_recovered-capture.log; exit 1",
+    "timeout": 45
+  },
+  {
+    "sequence": 95,
+    "role": "hub",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 60,
+    "role": "source",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 85,
+    "role": "receiver",
+    "command": "ip -j addr",
+    "timeout": 45
+  },
+  {
+    "sequence": 96,
+    "role": "hub",
+    "command": "/lab/nft delete table inet lc_io_control",
+    "timeout": 45
+  },
+  {
+    "sequence": 97,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 86,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 61,
+    "role": "source",
+    "command": "python3 /lab/traffic_guest.py probe recovered_udp4",
+    "timeout": 30
+  },
+  {
+    "sequence": 98,
+    "role": "hub",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/kernel_recovered.pcap /control/kernel_recovered.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 62,
+    "role": "source",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/kernel_recovered.pcap /control/kernel_recovered.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 87,
+    "role": "receiver",
+    "command": "kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/kernel_recovered.pcap /control/kernel_recovered.pcap",
+    "timeout": 45
+  },
+  {
+    "sequence": 99,
+    "role": "hub",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  },
+  {
+    "sequence": 88,
+    "role": "receiver",
+    "command": "cat /control/traffic-health.json",
+    "timeout": 45
+  }
+]
