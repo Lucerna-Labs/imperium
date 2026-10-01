@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "scope": "private_user_network_namespace_kernel_transport_only",
+  "geometric_filter_tested": false,
+  "world_changed": false,
+  "sealed": false,
+  "original_evidence": "/home/jesse/Desktop/Projects/imperium-main/imperium-main/target/lightcone-queue-transport.1h69ZM",
+  "source_parent": "a9b207fb6f1b4692f6001fa3bbe38aafb0aa2b78",
+  "source_dirty": true,
+  "source_hashes": {
+    "crates/imperium-net-host/src/queue.rs": "4ebfccef9a148008224e43e6864eac8662d2cfd7f565d426959d4cf49748ce80",
+    "crates/imperium-net-host/src/queue_wire.rs": "80427fb81df03ec8305c83868a887b5eb050873aed007b271e0bfe4ed3191f1a",
+    "crates/imperium-net-host/src/lib.rs": "393057301f81de66a4e0dc8bc4d532f5a9a7e1c9bf9c14c68386f2cfbb81dd5e",
+    "crates/imperium-net-host/examples/queue_lab.rs": "22e26d913a27fb455fff30c090c610d315a8fb43d51f8bcc5a2dd744f337d9c7",
+    "scripts/lightcone-queue-transport-test.sh": "6b9a56802e1bcdd61a6130f1a4b01f9e30604921987f6b2ad8f5a278f77aa246"
+  },
+  "binary_sha256": "8406648312d96f65a6fad842d368dba9b956369a70547aaca70c861f5c7c122f",
+  "kernel": "7.1.5-76070105-generic",
+  "controls": {
+    "baseline": {
+      "ipv4": {
+        "transmitted": 2,
+        "received": 2
+      },
+      "ipv6": {
+        "transmitted": 2,
+        "received": 2
+      }
+    },
+    "no-listener": {
+      "ipv4": {
+        "transmitted": 2,
+        "received": 0
+      },
+      "ipv6": {
+        "transmitted": 2,
+        "received": 0
+      }
+    },
+    "accept": {
+      "ipv4": {
+        "transmitted": 2,
+        "received": 2
+      },
+      "ipv6": {
+        "transmitted": 2,
+        "received": 2
+      },
+      "queue_packet_records": 8
+    },
+    "accept-reader-exit": {
+      "ipv4": {
+        "transmitted": 2,
+        "received": 0
+      },
+      "ipv6": {
+        "transmitted": 2,
+        "received": 0
+      }
+    },
+    "drop": {
+      "ipv4": {
+        "transmitted": 2,
+        "received": 0
+      },
+      "ipv6": {
+        "transmitted": 2,
+        "received": 0
+      },
+      "queue_packet_records": 4
+    },
+    "drop-reader-exit": {
+      "ipv4": {
+        "transmitted": 2,
+        "received": 0
+      },
+      "ipv6": {
+        "transmitted": 2,
+        "received": 0
+      }
+    },
+    "recovery": {
+      "ipv4": {
+        "transmitted": 2,
+        "received": 2
+      },
+      "ipv6": {
+        "transmitted": 2,
+        "received": 2
+      }
+    }
+  },
+  "unit_tests": {
+    "passed": 17,
+    "ignored_unit": 2,
+    "ignored_integration": 2
+  },
+  "real_host_rules_changed": false
+}

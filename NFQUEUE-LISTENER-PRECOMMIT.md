@@ -65,3 +65,13 @@ authorization. No listener code or kernel verdict service was installed by
 this experiment. The isolated no-listener NFQUEUE test from the earlier
 checkpoint remains the only verified kernel behavior. The namespace-only
 authorization request is pending; this protocol is unrun.
+
+## Authorized continuation — 2026-10-01
+
+Jesse explicitly requested finishing the passive geometric networking filter.
+The earlier rejection remains recorded above. The bounded Rust kernel
+transport was implemented under that current authorization and passed the
+private namespace controls. See
+`LIGHTCONE-QUEUE-TRANSPORT-OUTCOME-2026-10-01.md` and its hash-bound evidence.
+This advances only the OS packet-holding transport; no causal world or
+production packet-release call was promoted by these controls.

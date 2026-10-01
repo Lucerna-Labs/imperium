@@ -69,6 +69,12 @@ diagnostic; `vpn lightcone status` reports `filter_enforced: false`.
 
 ## P0 — all-traffic enforcement and actual delivery tests
 
+- [x] Implement the owned Rust NFQUEUE kernel transport and verify exact
+  release/discard, no-listener, reader-exit and recovery controls for IPv4
+  and IPv6 in a private user/network namespace. See
+  `LIGHTCONE-QUEUE-TRANSPORT-OUTCOME-2026-10-01.md`. There is no production
+  causal release caller yet; this is not functional-filter acceptance.
+
 - [x] Log actual VM ingress/egress, application bytes and Lightcone query
   receipts with a matched healthy/quarantined comparison. The accepted run
   delivered 49/49 probes in both arms, matched 918 healthy receipts to captured

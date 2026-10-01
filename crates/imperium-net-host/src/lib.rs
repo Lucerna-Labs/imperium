@@ -32,12 +32,16 @@
 
 pub mod bridge;
 pub mod firewall;
+pub mod queue;
+mod queue_wire;
 pub mod route;
 pub mod tun;
 
 pub use bridge::{BridgeHandle, BridgeStats, HostBridge, HostError};
 pub use firewall::{HostGuardError, HostGuardMode, HostKillSwitch};
 pub use imperium_net_mesh::{Destination, DestinationError};
+pub use queue::{KernelDisposition, PacketQueue};
+pub use queue_wire::HeldPacket;
 pub use route::{Ipv4Route, RouteError, RouteGuard};
 pub use tun::{TunDevice, TunError};
 
