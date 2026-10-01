@@ -1,0 +1,7 @@
+{
+  "source_head": "765da8957d69bd75916d29931cd081c5848722ca",
+  "command": "cargo run --offline --quiet --manifest-path target/adversarial-review-20260930/store-probe/Cargo.toml --target-dir target",
+  "exit_code": 0,
+  "stdout": "file_created=false recovered_after_reopen=false",
+  "source": "crates/imperium-store/src/lib.rs:29-31"
+}

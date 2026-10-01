@@ -1,0 +1,11 @@
+{
+  "source_head": "765da8957d69bd75916d29931cd081c5848722ca",
+  "cargo_test_offline_workspace_quiet_exit": 0,
+  "cargo_fmt_all_check_exit": 0,
+  "known_ignored_tests": [
+    "crates/imperium-net-host/tests/host_guard_namespace.rs",
+    "crates/imperium-net-guard/tests/bypass_scan.rs:236"
+  ],
+  "real_vm_phase1": "existing evidence/lightcone-vm-20260930-phase1; no fresh VM rerun in this review",
+  "source_status_before": "clean"
+}

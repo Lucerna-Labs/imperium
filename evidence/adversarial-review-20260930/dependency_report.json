@@ -1,0 +1,95 @@
+{
+  "method": "RustSec advisory-db main ZIP version range match only; feature and API reachability require separate review",
+  "cargo_lock_sha256": "7d0ba47c1a6de1ba648f7463dd18c46f8625e3b3d613d8e620d63e7515dc2ba8",
+  "advisory_archive_sha256": "b1c45e8bd4908b9a941fd70c7d92d175cb0fe95780f90466fd80daa0afbf8f09",
+  "registry_package_entries": 658,
+  "advisory_version_pairs_checked": 138,
+  "potentially_affected": [
+    {
+      "package": "anyhow",
+      "version": "1.0.102",
+      "id": "RUSTSEC-2026-0190",
+      "title": "Unsoundness in `Error::downcast_mut()`",
+      "categories": [
+        "memory-corruption"
+      ],
+      "cvss": null,
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2026-0190.html"
+    },
+    {
+      "package": "bincode",
+      "version": "2.0.1",
+      "id": "RUSTSEC-2025-0141",
+      "title": "Bincode is unmaintained",
+      "categories": [],
+      "cvss": null,
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2025-0141.html"
+    },
+    {
+      "package": "crossbeam-epoch",
+      "version": "0.9.18",
+      "id": "RUSTSEC-2026-0204",
+      "title": "Invalid pointer dereference in `fmt::Pointer` impl for `Atomic` and `Shared` when the underlying pointer is invalid",
+      "categories": [],
+      "cvss": null,
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2026-0204.html"
+    },
+    {
+      "package": "memmap2",
+      "version": "0.9.10",
+      "id": "RUSTSEC-2026-0186",
+      "title": "Unchecked pointer offset in crate `memmap2`",
+      "categories": [],
+      "cvss": null,
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2026-0186.html"
+    },
+    {
+      "package": "rsa",
+      "version": "0.9.10",
+      "id": "RUSTSEC-2023-0071",
+      "title": "Marvin Attack: potential key recovery through timing sidechannels",
+      "categories": [
+        "crypto-failure"
+      ],
+      "cvss": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2023-0071.html"
+    },
+    {
+      "package": "ttf-parser",
+      "version": "0.25.1",
+      "id": "RUSTSEC-2026-0192",
+      "title": "`ttf-parser` is unmaintained",
+      "categories": [],
+      "cvss": null,
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2026-0192.html"
+    },
+    {
+      "package": "wasmtime",
+      "version": "43.0.2",
+      "id": "RUSTSEC-2026-0222",
+      "title": "Stores can mix up type indices between engines",
+      "categories": [],
+      "cvss": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:L/I:L/A:L",
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2026-0222.html"
+    },
+    {
+      "package": "wasmtime",
+      "version": "43.0.2",
+      "id": "RUSTSEC-2026-0269",
+      "title": "Filesystem sandbox escape when paths or symlinks contain trailing slashes",
+      "categories": [],
+      "cvss": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:P/VC:H/VI:H/VA:L/SC:H/SI:H/SA:L",
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2026-0269.html"
+    },
+    {
+      "package": "wasmtime",
+      "version": "43.0.2",
+      "id": "RUSTSEC-2026-0316",
+      "title": "Dynamic record lifting can allocate beyond the hostcall fuel limit",
+      "categories": [],
+      "cvss": "CVSS:4.0/AV:A/AC:H/AT:P/PR:L/UI:P/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "advisory": "https://rustsec.org/advisories/RUSTSEC-2026-0316.html"
+    }
+  ],
+  "manual_range_checks": []
+}

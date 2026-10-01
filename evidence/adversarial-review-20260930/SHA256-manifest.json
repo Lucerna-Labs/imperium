@@ -1,0 +1,26 @@
+{
+  "cluster_approve.txt": {
+    "sha256": "9f757f899fe39236e31913833f2455bd1bfe97fb714fed2ca816b818292536a7",
+    "bytes": 77
+  },
+  "dependency_report.json": {
+    "sha256": "b1fdd053fdf7c6308e4abef8e2c6959ae8700d25614381fe5a8e68593498d23e",
+    "bytes": 3372
+  },
+  "signatures_approve.txt": {
+    "sha256": "06711ad5b43ed3a8cd85057eec7173a33910ec132358a2363ae61dcbd0b6210a",
+    "bytes": 81
+  },
+  "checks.json": {
+    "sha256": "67266631e428be986a3729f98ef73a40599a00aac66f23a2a14335b193de2d8f",
+    "bytes": 435
+  },
+  "duplicate_control_result.json": {
+    "sha256": "099289c09f07f6a50e13997e76f8d1cb9606a228a9fbfcabbee6f52f79e0cd88",
+    "bytes": 1473
+  },
+  "store_probe_result.json": {
+    "sha256": "0eeb30c5a88f2c00d811ba9929c61b393a729bc1f33802e0988a10d1aa1644f3",
+    "bytes": 337
+  }
+}
