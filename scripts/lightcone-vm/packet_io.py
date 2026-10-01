@@ -49,7 +49,7 @@ def captures(lab, name, start):
         time.sleep(1.2)
     for role in ("hub", "source", "receiver"):
         if start:
-            required(lab, role, f"/lab/tcpdump --immediate-mode -U -n -s 0 -B 4096 -i any -w /tmp/{name}.pcap >/control/{name}-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid")
+            required(lab, role, f"/lab/tcpdump --immediate-mode -U -n -s 0 -B 65536 -i any -w /tmp/{name}.pcap >/control/{name}-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid")
             required(lab, role, f"for i in $(seq 1 40); do grep -q 'listening on' /control/{name}-capture.log && exit 0; sleep .1; done; cat /control/{name}-capture.log; exit 1")
         else:
             required(lab, role, f"kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/{name}.pcap /control/{name}.pcap")
