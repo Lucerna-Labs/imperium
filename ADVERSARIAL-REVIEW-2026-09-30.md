@@ -18,6 +18,14 @@ frequency claims can be widened. This report identifies current ownership
 and repair order; it does not substitute a conventional rule engine for the
 passive Lightcone.
 
+**Follow-up:** The internal S1 session ownership collision was fixed after
+this review. `SESSION-OWNERSHIP-FIX-2026-09-30.md` records the code change,
+before/after in-memory probe, focused and full mesh tests, and an ordinary
+three-node live tunnel check. The S1 row below describes the original
+`c2bb612` finding; a live adversarial plaintext-transfer test remains unrun.
+The overall release decision above is unchanged because the other blockers
+remain.
+
 ## Fresh checks and prior measured evidence
 
 | Boundary | Result and claim limit |
@@ -46,7 +54,7 @@ into Git evidence.
 
 | ID | Finding and evidence | Required repair and acceptance |
 | --- | --- | --- |
-| S1 | **An admitted malicious peer can collide with another peer's session ID.** `crates/imperium-net-mesh/src/session.rs:275-288` checks duplicate peer IDs but overwrites `sessions[session_id]`. An isolated in-memory API probe measured two peer indexes pointing at the same ID while the stored owner and address belonged to the second peer (`evidence/adversarial-review-20260930/session_consistency_result.json`). Live responder adoption uses the Hello's ID (`daemon.rs:1415-1444`), and send resolves the original peer through that ID (`daemon.rs:1937-1945`). A network scenario would require an admitted peer able to choose/observe the ID. Plaintext delivery was not tested. | Atomically reject a session ID already owned by another peer; verify peer/session ownership at seal and address lookup. Add a three-peer isolated regression with no attacker receipt of a victim frame. |
+| S1 | **At the reviewed `c2bb612` baseline, an admitted malicious peer could collide with another peer's session ID.** The old `session.rs:275-288` checked duplicate peer IDs but overwrote `sessions[session_id]`. An in-memory API probe measured two peer indexes pointing at one ID while the stored owner/address belonged to the second peer. The current follow-up fix rejects this condition and checks ownership before send; see `SESSION-OWNERSHIP-FIX-2026-09-30.md`. Plaintext delivery was not tested. | **Internal map fixed and locally verified.** Keep the full three-peer adversarial receiver test open under the prior automatic review restriction, and preserve the pre-fix counterexample. |
 | S2 | **A replayed or delayed valid Hello replaces an established session before key confirmation.** `daemon.rs:1415-1444` removes the incumbent before validating that the new initiator can use its key. Normal duplicate delivery can also do this. | Bind fresh attempts to a responder challenge, make retransmission idempotent, and preserve the incumbent until a confirmed new session exists. Test duplicate and replay after establishment. |
 | S3 | **The shared operator signing key sits on every mesh node.** `imperium-cli/src/main.rs:837-889` loads and passes it into every daemon, which mints its own operator binding. Live admission at `net-mesh/src/daemon.rs:1347-1366` reads configured peers; it does not consult `MembershipManager` or revocation. A compromised node compromises the issuing trust root. | Separate issuer custody from node runtime: provision certified per-node identities and distribute only the operator verification key. Enforce current membership and revocation in the live handshake. |
 | S4 | **The requested causal filter is absent.** Mesh UDP and inbound TUN packets are observed after I/O (`net-mesh/src/daemon.rs`, `net-host/src/bridge.rs:312-320`). The active Lightcone returns receipts but never owns a packet verdict. V4 gives identical neighborhoods to matched different endpoints and ACK progressions and lacks a positive packet-to-authorized-flow path (`net-lightcone/tests/filter_feasibility.rs:77-141`). The receiving VM's undeclared UDP arrival independently confirms non-enforcement. | Train and validate a new condition-sensitive, packet-bound world with real host facts; hold packets at a separately owned synchronous host boundary. Unknown, unsupported, late and unexamined traffic must fail closed. Preserve passive geometry and keep the world unsealed while expanding it. |

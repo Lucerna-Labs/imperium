@@ -1,0 +1,23 @@
+{
+  "before_fix_commit": "90bddf43998be2d01524528b4409e9ab7bdd4bb4",
+  "source_hashes_after_fix": {
+    "session_rs_sha256": "ea3fc7297fad96852fa812dca25c7501dbee19d90d3474d710edebd4f38b3ff1",
+    "daemon_rs_sha256": "1d36cfd843b272964b5dbeceecc194ab14a853d39113632922cadcc796821958",
+    "cli_binary_sha256": "19c7b0bbafa3cc584c92f51626956557883ba450da038ee4403846cf354be369"
+  },
+  "command": "cargo run --offline --locked --quiet --manifest-path evidence/adversarial-review-20260930/session-consistency-probe/Cargo.toml --target-dir target",
+  "exit_code": 0,
+  "after_fix_observations": {
+    "duplicate_accepted": false,
+    "first_mapping_retained": true,
+    "second_mapping_created": false,
+    "stored_owner_is_second": false,
+    "stored_address_is_second": false
+  },
+  "focused_session_tests": "9 passed before final send-time ownership check and concurrent-create test; final full mesh library suite passed 94 including all current session tests",
+  "full_mesh_package_tests": "94 library tests plus 17, 3, 11, 10, 14, 2, 1 and 1 integration/doc groups passed",
+  "cli_build": "cargo build --offline -p imperium-cli: exit 0",
+  "format": "cargo fmt --all -- --check: exit 0",
+  "live_cluster": "Isolated unprivileged user/network namespace: two hub peers established, both routed ICMP paths 3/3, unsupported route unreachable, routes removed, three v4 unsealed passive receipt checks passed",
+  "claim_limit": "Internal ownership-map collision rejected and ordinary live cluster transport still functions. Previously rejected live adversarial plaintext-transfer reproduction remains unrun; unrelated handshake replay and causal filter issues remain open."
+}

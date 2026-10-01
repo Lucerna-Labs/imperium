@@ -20,6 +20,8 @@ pub enum SessionError {
     KexFailed(String),
     #[error("peer already has an active session")]
     DuplicateSession,
+    #[error("session id already belongs to another peer: {0:?}")]
+    SessionIdInUse(SessionId),
     #[error("session not established: {0:?}")]
     NotEstablished(SessionId),
     #[error("session has no key material: {0:?}")]
@@ -253,19 +255,21 @@ impl SessionManager {
         remote_addr: SocketAddr,
         initiator: bool,
     ) -> Result<SessionId, SessionError> {
-        let peer_map = self.peer_sessions.read();
-        if peer_map.contains_key(&peer_id) {
+        let session_id = SessionId::new();
+        // Keep the two indexes under write locks from validation through
+        // insertion. Otherwise concurrent handshakes can both pass a read
+        // check and leave an orphaned or wrongly owned session.
+        let mut sessions = self.sessions.write();
+        let mut peer_sessions = self.peer_sessions.write();
+        if peer_sessions.contains_key(&peer_id) {
             return Err(SessionError::DuplicateSession);
         }
-        drop(peer_map);
-
-        let session_id = SessionId::new();
+        if sessions.contains_key(&session_id) {
+            return Err(SessionError::SessionIdInUse(session_id));
+        }
         let session = PeerSession::new(session_id.clone(), peer_id.clone(), remote_addr, initiator);
-
-        self.sessions.write().insert(session_id.clone(), session);
-        self.peer_sessions
-            .write()
-            .insert(peer_id, session_id.clone());
+        sessions.insert(session_id.clone(), session);
+        peer_sessions.insert(peer_id, session_id.clone());
 
         Ok(session_id)
     }
@@ -279,12 +283,17 @@ impl SessionManager {
         remote_addr: SocketAddr,
         initiator: bool,
     ) -> Result<(), SessionError> {
-        if self.peer_sessions.read().contains_key(&peer_id) {
+        let mut sessions = self.sessions.write();
+        let mut peer_sessions = self.peer_sessions.write();
+        if peer_sessions.contains_key(&peer_id) {
             return Err(SessionError::DuplicateSession);
         }
+        if sessions.contains_key(&session_id) {
+            return Err(SessionError::SessionIdInUse(session_id));
+        }
         let session = PeerSession::new(session_id.clone(), peer_id.clone(), remote_addr, initiator);
-        self.sessions.write().insert(session_id.clone(), session);
-        self.peer_sessions.write().insert(peer_id, session_id);
+        sessions.insert(session_id.clone(), session);
+        peer_sessions.insert(peer_id, session_id);
         Ok(())
     }
 
@@ -359,6 +368,16 @@ impl SessionManager {
         self.peer_sessions.read().get(peer_id).cloned()
     }
 
+    /// Require both indexes to agree before a peer's session can be used.
+    pub fn session_belongs_to_peer(&self, session_id: &SessionId, peer_id: &PeerId) -> bool {
+        let sessions = self.sessions.read();
+        let peer_sessions = self.peer_sessions.read();
+        sessions
+            .get(session_id)
+            .is_some_and(|session| &session.peer_id == peer_id)
+            && peer_sessions.get(peer_id) == Some(session_id)
+    }
+
     /// Reverse index: the session whose recorded remote address matches
     /// `addr`, in any handshake state. The receive loop needs this because an
     /// inbound datagram arrives with nothing but a source address, and
@@ -417,8 +436,12 @@ impl SessionManager {
     }
 
     pub fn remove_session(&self, session_id: &SessionId) {
-        if let Some(session) = self.sessions.write().remove(session_id) {
-            self.peer_sessions.write().remove(&session.peer_id);
+        let mut sessions = self.sessions.write();
+        let mut peer_sessions = self.peer_sessions.write();
+        if let Some(session) = sessions.remove(session_id) {
+            if peer_sessions.get(&session.peer_id) == Some(session_id) {
+                peer_sessions.remove(&session.peer_id);
+            }
         }
     }
 
@@ -503,6 +526,96 @@ mod tests {
         let peer = PeerId::new();
         mgr.create_session(peer.clone(), test_addr(), true).unwrap();
         assert!(mgr.create_session(peer, test_addr(), true).is_err());
+    }
+
+    #[test]
+    fn adopted_id_cannot_replace_another_peers_session() {
+        let mgr = SessionManager::new();
+        let first = PeerId::new();
+        let second = PeerId::new();
+        let session_id = SessionId::new();
+        let other_addr: SocketAddr = "127.0.0.1:9001".parse().unwrap();
+        mgr.adopt_session(session_id.clone(), first.clone(), test_addr(), false)
+            .unwrap();
+
+        let error = mgr
+            .adopt_session(session_id.clone(), second.clone(), other_addr, false)
+            .unwrap_err();
+        assert!(matches!(error, SessionError::SessionIdInUse(id) if id == session_id));
+        assert_eq!(mgr.get_session_for_peer(&first), Some(session_id.clone()));
+        assert_eq!(mgr.get_session_for_peer(&second), None);
+        assert!(mgr.session_belongs_to_peer(&session_id, &first));
+        assert!(!mgr.session_belongs_to_peer(&session_id, &second));
+        assert_eq!(mgr.session_peer_id(&session_id), Some(first));
+        assert_eq!(mgr.session_remote_addr(&session_id), Some(test_addr()));
+        assert_eq!(mgr.all_session_ids(), vec![session_id]);
+    }
+
+    #[test]
+    fn concurrent_adoption_of_one_id_has_one_owner() {
+        use std::sync::{Arc, Barrier};
+        use std::thread;
+
+        let mgr = Arc::new(SessionManager::new());
+        let session_id = SessionId::new();
+        let peers = [PeerId::new(), PeerId::new()];
+        let barrier = Arc::new(Barrier::new(3));
+        let handles: Vec<_> = peers
+            .iter()
+            .cloned()
+            .map(|peer| {
+                let mgr = Arc::clone(&mgr);
+                let barrier = Arc::clone(&barrier);
+                let id = session_id.clone();
+                thread::spawn(move || {
+                    barrier.wait();
+                    mgr.adopt_session(id, peer, test_addr(), false)
+                })
+            })
+            .collect();
+        barrier.wait();
+        let outcomes: Vec<_> = handles
+            .into_iter()
+            .map(|handle| handle.join().unwrap())
+            .collect();
+
+        assert_eq!(outcomes.iter().filter(|result| result.is_ok()).count(), 1);
+        assert_eq!(mgr.all_session_ids(), vec![session_id.clone()]);
+        let owner = mgr.session_peer_id(&session_id).unwrap();
+        assert_eq!(mgr.get_session_for_peer(&owner), Some(session_id));
+        let other = peers.into_iter().find(|peer| peer != &owner).unwrap();
+        assert_eq!(mgr.get_session_for_peer(&other), None);
+    }
+
+    #[test]
+    fn concurrent_creation_for_one_peer_has_one_session() {
+        use std::sync::{Arc, Barrier};
+        use std::thread;
+
+        let mgr = Arc::new(SessionManager::new());
+        let peer = PeerId::new();
+        let barrier = Arc::new(Barrier::new(3));
+        let handles: Vec<_> = (0..2)
+            .map(|_| {
+                let mgr = Arc::clone(&mgr);
+                let barrier = Arc::clone(&barrier);
+                let peer = peer.clone();
+                thread::spawn(move || {
+                    barrier.wait();
+                    mgr.create_session(peer, test_addr(), true)
+                })
+            })
+            .collect();
+        barrier.wait();
+        let outcomes: Vec<_> = handles
+            .into_iter()
+            .map(|handle| handle.join().unwrap())
+            .collect();
+
+        assert_eq!(outcomes.iter().filter(|result| result.is_ok()).count(), 1);
+        let session_id = mgr.get_session_for_peer(&peer).unwrap();
+        assert_eq!(mgr.all_session_ids(), vec![session_id.clone()]);
+        assert!(mgr.session_belongs_to_peer(&session_id, &peer));
     }
 
     #[test]

@@ -1884,6 +1884,7 @@ impl MeshDaemon {
         let session_manager = self.transport.session_manager();
         let session_id = session_manager
             .get_session_for_peer(peer_id)
+            .filter(|session_id| session_manager.session_belongs_to_peer(session_id, peer_id))
             .filter(|_| self.is_peer_established(peer_id))
             .ok_or(DaemonError::NoSession)?;
         let (counter, ciphertext) = match session_manager.seal_for_session(
@@ -1937,6 +1938,7 @@ impl MeshDaemon {
         let session_manager = self.transport.session_manager();
         let session_id = session_manager
             .get_session_for_peer(peer_id)
+            .filter(|session_id| session_manager.session_belongs_to_peer(session_id, peer_id))
             .ok_or(DaemonError::NoSession)?;
         let Some(peer_addr) = session_manager.session_remote_addr(&session_id) else {
             return Err(DaemonError::NoPeerAddress);

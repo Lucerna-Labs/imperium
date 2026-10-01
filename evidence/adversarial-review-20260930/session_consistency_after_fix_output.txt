@@ -1,0 +1,5 @@
+duplicate_accepted=false
+first_mapping_retained=true
+second_mapping_created=false
+stored_owner_is_second=false
+stored_address_is_second=false

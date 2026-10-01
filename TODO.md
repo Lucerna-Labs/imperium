@@ -1,5 +1,18 @@
 # Imperium follow-up work
 
+## Security review follow-up
+
+- [x] Reject duplicate mesh session IDs and hold both peer/session indexes
+  under one ownership check. Add matching send-time checks and concurrent
+  regressions. The before/after in-memory probe, full mesh tests and isolated
+  three-node routing run are recorded in `SESSION-OWNERSHIP-FIX-2026-09-30.md`.
+- [ ] Preserve the separate S1 on-wire adversarial receiver acceptance as an
+  unrun gate; automatic cybersecurity review rejected that live packet attack
+  reproduction. Do not label the map fix as a measured plaintext-leak test.
+- [ ] Repair replayed Hello session replacement, issuer-key distribution,
+  inbound pin/source checks and the other prioritized security findings in
+  `ADVERSARIAL-REVIEW-2026-09-30.md`. Keep their evidence limits explicit.
+
 Status at the 2026-09-29 stopping checkpoint. This is a work list, not a
 release or seal claim. The current v4 network Lightcone is passive and
 diagnostic; `vpn lightcone status` reports `filter_enforced: false`.
