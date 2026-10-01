@@ -1,5 +1,0 @@
-READY
-PACKET id=1 family=2 hook=3 bytes=84
-PACKET id=2 family=2 hook=3 bytes=84
-PACKET id=3 family=10 hook=3 bytes=104
-PACKET id=4 family=10 hook=3 bytes=104

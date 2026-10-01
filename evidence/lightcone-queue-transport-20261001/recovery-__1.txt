@@ -1,5 +1,0 @@
-PING ::1 (::1) 56 data bytes
-
---- ::1 ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1018ms
-rtt min/avg/max/mdev = 0.036/0.038/0.041/0.002 ms

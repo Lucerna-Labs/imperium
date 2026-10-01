@@ -19,18 +19,14 @@ diagnostic; `vpn lightcone status` reports `filter_enforced: false`.
 
 ## Decisions needed before a release rule can be frozen
 
-The assistant's v6 static-rule substitution was rejected and removed from
-the active build. `LIGHTCONE-ARCHITECTURE-CORRECTION-2026-10-01.md` governs
-further work; historical plans are not authority to replace causal geometry.
-
 - [ ] Confirm whether **all traffic** means every host network path, including
   direct applications, inbound and forwarded packets, mesh underlay, link
   traffic, other network namespaces, and local loopback. The working safety
   assumption is host-wide coverage; loopback and namespace handling still
   need an explicit answer.
-- [ ] Establish the actual packet/flow representation and admission supplied
-  by Lightcone's trained geometry. Do not substitute a separately invented
-  endpoint/service permission list or ask for one as a prerequisite.
+- [ ] Decide whether an unseen endpoint/service can pass when its protocol and
+  flow behavior match training, or whether that exact endpoint/service must
+  be represented and approved. Standards cannot supply this host's policy.
 - [ ] Define the trusted host/operator boundary, managed interfaces and
   namespaces, and what privileged `CAP_NET_ADMIN` / `CAP_NET_RAW` processes
   may do. An absolute guarantee against a hostile host administrator or
@@ -49,10 +45,10 @@ further work; historical plans are not authority to replace causal geometry.
   Keep every unknown or unsupported form explicit. The separate
   `ipv6_flow_evidence` Rust test now covers supported IPv6 parser/tracker
   behavior, but the condition catalog and trained pack do not yet include it.
-- [ ] Bind actual packet and flow observations to their bytes, producer,
-  namespace, interface and current session where applicable. Inspect how
-  the existing causal geometry represents and admits those observations.
-  Do not add a separate permission policy to supply the admission result.
+- [ ] Obtain versioned host policy facts for services, endpoints, zones,
+  direction, process/peer identity, freshness, and flow state. Bind each fact
+  to the exact packet, network namespace, interface, policy revision, and
+  producer. A parser success, graph path, or receipt alone is not permission.
 - [ ] Verify source sections for existence **and** claim relevance. Preserve
   source rights, original factual paraphrases, negative/unknown controls,
   mechanism-level splits, and the original v4 source/provenance gap. The
@@ -73,12 +69,6 @@ further work; historical plans are not authority to replace causal geometry.
 
 ## P0 — all-traffic enforcement and actual delivery tests
 
-- [x] Implement the owned Rust NFQUEUE kernel transport and verify exact
-  release/discard, no-listener, reader-exit and recovery controls for IPv4
-  and IPv6 in a private user/network namespace. See
-  `LIGHTCONE-QUEUE-TRANSPORT-OUTCOME-2026-10-01.md`. There is no production
-  causal release caller yet; this is not functional-filter acceptance.
-
 - [x] Log actual VM ingress/egress, application bytes and Lightcone query
   receipts with a matched healthy/quarantined comparison. The accepted run
   delivered 49/49 probes in both arms, matched 918 healthy receipts to captured
@@ -90,9 +80,8 @@ further work; historical plans are not authority to replace causal geometry.
 - [x] Establish an isolated three-QEMU/KVM-guest baseline with independent
   receiver captures. The eight IPv4/IPv6 input/output/forward/loopback paths
   passed baseline, no-listener blocking, and recovery controls. Native cluster
-  receipts passed and the undeclared UDP flow arrived. That arrival alone
-  does not establish causal unrelatedness under the user's architecture.
-  See `LIGHTCONE-VM-OUTCOME.md` and the architecture correction above.
+  receipts passed, but the undeclared UDP flow arrived: filter acceptance
+  failed. See `LIGHTCONE-VM-OUTCOME.md` and `scripts/lightcone-vm-test.sh`.
 - [ ] Run the guest-only accept/drop/hold/crash/overflow matrix frozen in
   `LIGHTCONE-VM-QUEUE-PRECOMMIT.md`. Automatic approval review rejected the
   listener source edit; explicit VM-only packet-verdict authorization is
@@ -117,16 +106,16 @@ further work; historical plans are not authority to replace causal geometry.
   the bounded observer queue is post-I/O telemetry; loss of its events does
   not stop traffic. Authenticated peer/session and replay facts must be
   checked at the owner boundary.
-- [ ] Connect the actual geometry's admission to packet passage. Supply the
-  flow observations needed by that geometry without replacing its mechanism
-  with a flow-policy engine or a hand-authored terminal-node test. Verify
-  that unsupported observations cannot create a transferable packet.
-- [ ] Run an isolated multi-node positive/negative matrix: traffic admitted
-  by the trained causal geometry delivered in both directions; matched
-  causally unrelated or unsupported traffic,
+- [ ] Wire the host-owned flow policy and flow-behavior tracker to the verified
+  trained world and packet-bound facts. They currently have no forwarding
+  call site. Do not treat a reverse tuple, a suspicious TCP `FlowFact`, an
+  embedding neighbor, or backward traversal of a prerequisite edge as a
+  release condition. A denied packet must not update flow state.
+- [ ] Run an isolated multi-node positive/negative matrix: declared traffic
+  delivered in both directions; matched undeclared or unsupported traffic,
   orphan/out-of-window flows, malformed packets, fragments without valid
   reassembly, invalid mesh sessions, queue loss, stalled Lightcone, and
-  unavailable geometry **not delivered**. Measure false passes, false rejects,
+  missing policy **not delivered**. Measure false passes, false rejects,
   latency, capacity, and actual receiver results. Then repeat on the intended
   host boundary before any real-host enablement or seal decision.
 
