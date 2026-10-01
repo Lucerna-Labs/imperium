@@ -43,9 +43,13 @@ def server_health(lab):
 
 def captures(lab, name, start):
     metadata = {}
+    if not start:
+        # Allow pending capture delivery before interrupting readers. The
+        # previous buffered reader could exit with packets still in its ring.
+        time.sleep(1.2)
     for role in ("hub", "source", "receiver"):
         if start:
-            required(lab, role, f"/lab/tcpdump -U -n -s 0 -B 4096 -i any -w /tmp/{name}.pcap >/control/{name}-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid")
+            required(lab, role, f"/lab/tcpdump --immediate-mode -U -n -s 0 -B 4096 -i any -w /tmp/{name}.pcap >/control/{name}-capture.log 2>&1 </dev/null & echo $! >/control/capture.pid")
             required(lab, role, f"for i in $(seq 1 40); do grep -q 'listening on' /control/{name}-capture.log && exit 0; sleep .1; done; cat /control/{name}-capture.log; exit 1")
         else:
             required(lab, role, f"kill -INT $(cat /control/capture.pid); sleep .5; cp /tmp/{name}.pcap /control/{name}.pcap")
@@ -53,7 +57,12 @@ def captures(lab, name, start):
             match = re.search(r"(\d+) packets dropped by kernel", log)
             if not match or int(match.group(1)) != 0:
                 raise RuntimeError(f"capture missing/lost packets in {role}/{name}: {log}")
-            metadata[role] = {"dropped_by_kernel": int(match.group(1)), "log": log}
+            captured = re.search(r"(\d+) packets captured", log)
+            filtered = re.search(r"(\d+) packets received by filter", log)
+            metadata[role] = {"dropped_by_kernel": int(match.group(1)),
+                              "packets_captured": int(captured.group(1)) if captured else None,
+                              "packets_received_by_filter": int(filtered.group(1)) if filtered else None,
+                              "log": log}
     return metadata
 
 
