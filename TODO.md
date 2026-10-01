@@ -24,9 +24,12 @@ diagnostic; `vpn lightcone status` reports `filter_enforced: false`.
   traffic, other network namespaces, and local loopback. The working safety
   assumption is host-wide coverage; loopback and namespace handling still
   need an explicit answer.
-- [ ] Decide whether an unseen endpoint/service can pass when its protocol and
-  flow behavior match training, or whether that exact endpoint/service must
-  be represented and approved. Standards cannot supply this host's policy.
+- [x] Resolve new-flow semantics using static world patterns: new instances
+  may pass within explicit trained variable/range relationships; constrained
+  endpoint/service fields must match their represented relationship. No
+  implicit wildcard or runtime learning. See
+  `LIGHTCONE-STATIC-WORLD-CONTRACT-2026-10-01.md`. Physical-host service
+  declarations remain distinct from synthetic lab training records.
 - [ ] Define the trusted host/operator boundary, managed interfaces and
   namespaces, and what privileged `CAP_NET_ADMIN` / `CAP_NET_RAW` processes
   may do. An absolute guarantee against a hostile host administrator or
