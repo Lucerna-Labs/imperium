@@ -6,6 +6,22 @@ Run from the Imperium checkout as the ordinary user:
 bash scripts/lightcone-vm-test.sh
 ```
 
+For the frozen input/output effect comparison, use:
+
+```bash
+bash scripts/lightcone-vm-test.sh --io
+```
+
+This mode captures all three guests' attached interfaces, generates bounded
+synthetic UDP/TCP/ICMP and loopback traffic, and compares the same cases with
+healthy and deliberately quarantined Lightcone strands. It also proves that
+the independent ingress/egress measurement can detect a guest-only no-listener
+blocking control. Raw pcaps, full captured bytes as packet JSONL, compact CSV,
+application send/receive logs, Lightcone receipt/hash correlation, status,
+capture-loss counts and a readable comparison are retained under
+`target/lightcone-vm/io-runs/<timestamp>/`. See
+`LIGHTCONE-VM-IO-PRECOMMIT-2026-10-01.md` for the exact matrix and limits.
+
 Requires QEMU/KVM access, Python, curl, Cargo's cached workspace dependencies,
 and host nft/tcpdump executables. The wrapper obtains a pinned official Ubuntu
 24.04 cloud image and a local extracted genisoimage package if absent. It does

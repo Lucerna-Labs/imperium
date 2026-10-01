@@ -59,10 +59,10 @@ def probes(lab, name, blocked=False):
     return evidence
 
 
-def start_node(lab, role, bind, tunnel, tun, extra=""):
+def start_node(lab, role, bind, tunnel, tun, extra="", environment="", log_filter="info"):
     required(lab, role, "mkdir -p /run/lcnode; chmod 700 /run/lcnode")
-    command = ("XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key "
-               "IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG=info /lab/imperium node start "
+    command = (f"{environment} XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key "
+               f"IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG={log_filter} /lab/imperium node start "
                f"--mesh-bind {bind}:41000 --tunnel-ip {tunnel} --tun {tun} "
                "--cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 "
                f"{extra} >/control/node.log 2>&1 </dev/null & echo $! >/control/node.pid")

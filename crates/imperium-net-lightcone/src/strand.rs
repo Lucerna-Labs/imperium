@@ -287,6 +287,20 @@ impl Strand for LightconeStrand {
                     if let Err(err) = bus.publish(topics::RECEIPT, event) {
                         self.service.note_delivery_failure();
                         tracing::warn!(error = %err, "lightcone receipt publish failed");
+                    } else {
+                        // Opt-in metadata for correlating a computed receipt
+                        // with an independent wire capture. Packet bytes and
+                        // key material remain outside this trace and the bus.
+                        tracing::trace!(
+                            sequence = record.sequence,
+                            direction = record.direction as u8,
+                            frame_format = ?record.format,
+                            observation_kind = record.kind as u8,
+                            pack_sha256 = %crate::hex(&record.receipt.world),
+                            query_sha256 = %crate::hex(&record.receipt.query),
+                            receipt_sha256 = %crate::hex(&record.receipt.digest),
+                            "LIGHTCONE_RECEIPT"
+                        );
                     }
                 }
                 Err(err) => {

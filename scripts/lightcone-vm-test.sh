@@ -9,6 +9,11 @@ if test "$(id -u)" -eq 0; then
 fi
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_dir"
+experiment_script=phase1.py
+if test "${1:-}" = --io; then
+    experiment_script=packet_io.py
+    shift
+fi
 for tool in qemu-system-x86_64 qemu-img curl python3 cargo dpkg-deb; do
     command -v "$tool" >/dev/null
 done
@@ -31,4 +36,4 @@ if ! test -x "$deps_dir/usr/bin/genisoimage"; then
 fi
 cargo build --offline -p imperium-cli --example lab_operator_key
 cargo build --offline -p imperium-cli
-python3 scripts/lightcone-vm/phase1.py "$@"
+python3 "scripts/lightcone-vm/$experiment_script" "$@"
