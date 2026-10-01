@@ -35,6 +35,7 @@
 //! changes when entries are evicted.
 
 mod ledger;
+pub mod passage;
 mod strand;
 
 pub use ledger::{Ledger, LightconeInfo, LightconeReceiptRecord, SLOTS};
