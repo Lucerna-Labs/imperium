@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = ["qclink-function", "qclink-engine"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+authors = ["Lucerna Labs"]
+version = "0.1.0"

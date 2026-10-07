@@ -1,0 +1,10 @@
+[package]
+name = "qclink-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Orchestrator crate: fixed execution, observation, and return for the quantum-classical link"
+
+[dependencies]
+qclink-function = { path = "../qclink-function" }
