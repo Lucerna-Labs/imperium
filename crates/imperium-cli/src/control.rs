@@ -521,6 +521,13 @@ async fn read_bounded_line<R: AsyncBufRead + Unpin>(
         .map_err(|_| std::io::Error::new(std::io::ErrorKind::InvalidData, "command is not UTF-8"))
 }
 
+// Windows support was dropped; the control surface is Unix-socket only.
+#[cfg(not(unix))]
+compile_error!(
+    "imperium-cli requires a Unix platform: the control surface is a Unix domain socket"
+);
+
+#[cfg(unix)]
 mod unix {
     use super::*;
     use std::fs::{self, DirBuilder, Permissions};

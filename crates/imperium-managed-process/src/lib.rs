@@ -187,6 +187,7 @@ impl ManagedProcess {
         let timeout = self.config.graceful_stop_timeout;
 
         // SIGTERM first; the timeout below escalates to kill().
+        #[cfg(unix)]
         {
             if let Some(id) = child.id() {
                 unsafe {
