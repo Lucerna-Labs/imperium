@@ -161,3 +161,34 @@ host) commits immediately, no corroboration.
   unaffected.
 
 Workspace after this step: **958 passed, 0 failed**; frozen crypto diff **0 lines**.
+
+---
+
+# LIVE-BRAIN-1: door two running inside live Imperium nodes
+
+**Status: PRECOMMITTED, 2026-10-21, before the code below.**
+
+**Two gaps found by reading the code before the run, fixed first:**
+1. **The brain never learned its own addresses** (`set_own_addresses` had no caller), so outbound
+   `own_address` learning could not happen live. **Fix:** the brain strand re-reads this host's
+   addresses from the kernel every second (`/proc/net/if_inet6` for IPv6; the `LOCAL` /32 entries
+   of `/proc/net/fib_trie` for IPv4). That way a fresh TUN address is known as soon as it exists.
+2. **The brain forgot on restart.** Its evidence lived in memory, so it could never collect
+   addresses across restarts. **Fix:** with `IMPERIUM_BRAIN_STATE=<dir>`, the evidence is kept in
+   `<dir>/<role>.evidence.pathpack` (a `path-pack`). It is rewritten when evidence grows, and
+   reloaded at start. The file holds evidence only, never a rule; corroboration still applies to
+   new inbound shapes.
+
+**The run:** Imperium's three-VM lab (`scripts/lightcone-vm/brain_live.py`). 3 episodes, each a
+fresh node start (fresh TUNs), with the trained cases. After each episode the driver reads each
+node's `vpn brain status` through its control socket.
+
+**Predictions:**
+- **L1:** every node reports the brain active with its role.
+- **L2:** the hub's `self_caused` > 0 from corroborated inbound tunnel traffic.
+- **L3:** source and receiver have `self_caused` > 0 via `own_address` (their fresh TUN
+  link-local housekeeping).
+- **L4:** evidence persists and grows across episodes on every role.
+- **L5:** after episode 3, every role's review is `add_only`, `deny_clean` and
+  `admits_all_evidence`, and `reseal_ready` is true.
+- **L6:** delivery is unaffected: every case echoes every attempt in every episode.
