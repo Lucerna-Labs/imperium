@@ -47,28 +47,54 @@ pub fn cause(path: &Path, hook: u8, in_if: u32, readings: &SelfReadings, allow: 
     }
 }
 
-/// CONSOLIDATE-1 / door two in Imperium: the same self/non-self law, but identity comes from
-/// address-set membership (the mesh's own knowledge) rather than the interface. A drop is self
-/// only when the machine explains its *novelty*: the path matches a trained path everywhere except
-/// its source, and that source is this host's (outbound) or an authenticated peer's (inbound).
-pub fn cause_by_identity(
+/// CONSOLIDATE-1 / door two: the self/non-self law with identity supplied by the **channel**, the
+/// cleanest in-repo signal. `inbound_authenticated` means the caller vouches this inbound packet
+/// arrived through an already-authenticated channel (e.g. a decapsulated tunnel packet, post-AEAD)
+/// — a signal an outside attacker cannot forge. A drop is self only when the path matches a trained
+/// path everywhere except its source and either it is outbound from one of the host's own
+/// addresses, or it is inbound through that authenticated channel.
+pub fn cause_vouched(
     path: &Path,
     outbound: bool,
     own_addresses: &HashSet<u128>,
-    authenticated_sources: &HashSet<u128>,
+    inbound_authenticated: bool,
     allow: &World,
 ) -> Cause {
     let Some(src_at) = path.iter().position(|s| s.field == F_SRC) else { return Cause::Unexplained };
     if !allow.matches_except(path, &[src_at]) {
         return Cause::Unexplained;
     }
-    let src = path[src_at].value;
-    if outbound && own_addresses.contains(&src) {
+    if outbound && own_addresses.contains(&path[src_at].value) {
         Cause::OwnAddress
-    } else if !outbound && authenticated_sources.contains(&src) {
+    } else if !outbound && inbound_authenticated {
         Cause::AuthenticatedTunnel
     } else {
         Cause::Unexplained
+    }
+}
+
+#[cfg(test)]
+mod vouched_tests {
+    use super::*;
+    use path_sense::Sym;
+
+    fn p(dir: u128, src: u128, dport: u128) -> Path {
+        [(0u8, dir), (1, 0x0800), (2, 17), (3, src), (4, 0xc633_6402), (5, 51000), (6, dport)].iter().map(|&(f, v)| Sym { field: f, value: v }).collect()
+    }
+
+    #[test]
+    fn channel_identity_classifies_self_and_refuses_forgery() {
+        let own = 0xc000_0202u128;
+        let allow = World::train(&[p(0, 0xc000_0201, 45998), p(1, own, 45998)]);
+        let owns: HashSet<u128> = [own].into_iter().collect();
+        // Inbound through the authenticated channel, novel source, trained otherwise: self.
+        assert_eq!(cause_vouched(&p(0, 0xdead, 45998), false, &owns, true, &allow), Cause::AuthenticatedTunnel);
+        // Same shape but NOT vouched (e.g. an un-authenticated inbound datagram): unexplained.
+        assert_eq!(cause_vouched(&p(0, 0xdead, 45998), false, &owns, false, &allow), Cause::Unexplained);
+        // Outbound from our own address: self.
+        assert_eq!(cause_vouched(&p(1, own, 45998), true, &owns, false, &allow), Cause::OwnAddress);
+        // Novelty beyond the source, even vouched: unexplained.
+        assert_eq!(cause_vouched(&p(0, 0xdead, 45996), false, &owns, true, &allow), Cause::Unexplained);
     }
 }
 
@@ -96,32 +122,5 @@ mod tests {
         let mut novel = mld(1, fresh);
         novel[4].value = 0xff02_0000_0000_0000_0000_0000_0000_0099;
         assert_eq!(cause(&novel, 3, 0, &r, &allow), Cause::Unexplained, "novelty beyond the address");
-    }
-}
-
-#[cfg(test)]
-mod identity_tests {
-    use super::*;
-    use path_sense::Sym;
-
-    fn path(dir: u128, src: u128, dport: u128) -> Path {
-        [(0, dir), (1, 0x0800), (2, 17), (3, src), (4, 0xc633_6402), (5, 51000), (6, dport)].iter().map(|&(field, value)| Sym { field, value }).collect()
-    }
-
-    #[test]
-    fn identity_classifies_self_and_refuses_spoof_and_novelty() {
-        let own = 0xc000_0202u128;
-        let peer = 0xc000_0201u128;
-        let allow = World::train(&[path(0, peer, 45998), path(1, own, 45998)]);
-        let owns: HashSet<u128> = [own].into_iter().collect();
-        let auth: HashSet<u128> = [peer].into_iter().collect();
-        // Outbound from our own address, novelty only in the (folded-away) source position.
-        assert_eq!(cause_by_identity(&path(1, own, 45998), true, &owns, &auth, &allow), Cause::OwnAddress);
-        // Inbound from an authenticated peer.
-        assert_eq!(cause_by_identity(&path(0, peer, 45998), false, &owns, &auth, &allow), Cause::AuthenticatedTunnel);
-        // Inbound claiming OUR address is not an authenticated source -> Unexplained (spoof).
-        assert_eq!(cause_by_identity(&path(0, own, 45998), false, &owns, &auth, &allow), Cause::Unexplained);
-        // Novelty beyond the source (untrained port) -> Unexplained.
-        assert_eq!(cause_by_identity(&path(1, own, 45996), true, &owns, &auth, &allow), Cause::Unexplained);
     }
 }

@@ -106,3 +106,32 @@ lab. Recorded, not faked.
 **Also deferred (low-risk):** `vpn brain status` (evidence count, candidate size, review flags).
 The service handle is held; the strand already runs. Threading the read-only surface through the
 command dispatch is a follow-up.
+
+## Continuation (2026-10-21): channel identity, the reseal gate, and the status surface
+
+Finishing the three steps that were left after the first increment:
+
+1. **`authenticated_tunnel` now works in-repo, with no new protocol field.** An **inbound `RawIp`**
+   receipt is only ever a packet the mesh decapsulated and wrote to the host TUN *after* the frozen
+   AEAD authenticated the peer (`imperium-net-host/src/bridge.rs:320`). An outside attacker cannot
+   produce one — their traffic is an unvouched `MeshDatagram` that fails AEAD. So "inbound + RawIp"
+   is the authenticated-tunnel signal, already on the receipt. `path-self::cause_vouched` takes an
+   `inbound_authenticated` flag; the brain sets it from `direction == inbound && frame_format ==
+   RawIp`. The host's own TUN link-local ND is outbound `RawIp` from an own address, already
+   `own_address`. (Limit unchanged: an authenticated-but-compromised peer is trusted — now explicit
+   in the test: an inbound `RawIp` claiming our own address is vouched, because only a peer could
+   have sent it.)
+2. **The reseal gate** (`BrainService::reseal_to(path, approved)`): writes the candidate pack
+   **only when** the review passes (add-only, deny-clean, admits all evidence) **and** the operator
+   approves. The TPU seal and the swap at door one's single loader stay external. Unit-tested:
+   refuses without approval (writes nothing), writes a decodable pack with approval.
+3. **`vpn brain status`** on the control surface: role, observed / self-caused / unexplained
+   counts, evidence size, candidate size, the review flags, and `reseal_ready`. Read-only;
+   `passive: true`, `changes_door_one: false`. `BrainService` is threaded through `initialize_node`
+   and `ControlState`.
+
+**Measured:** workspace **958 passed, 0 failed** (12 ignored); frozen crypto diff **0 lines**.
+
+**Still open (door two, continued):** the full reseal ceremony beyond the gate (a candidate VM run
++ the TPU seal + the swap), and tightening the authenticated-but-compromised-peer trust. Both are
+recorded, neither faked.

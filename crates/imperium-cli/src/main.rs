@@ -610,7 +610,7 @@ async fn cmd_node_start(
     let kernel = coordinator
         .take_bus()
         .expect("the coordinator's kernel, taken by the process root exactly once");
-    let (kernel, _runtime_tasks, lightcone) =
+    let (kernel, _runtime_tasks, lightcone, brain) =
         initialize_node(kernel, Arc::clone(&publisher), Arc::clone(&staging)).await;
 
     // Install the observer and other queued strands before the mesh can send
@@ -672,6 +672,7 @@ async fn cmd_node_start(
             .as_ref()
             .map(|(runtime, _worker)| Arc::clone(runtime)),
         host_guard.as_ref().map(Arc::clone),
+        brain,
     ));
 
     if gui {
@@ -1070,6 +1071,7 @@ async fn initialize_node(
     Bus,
     Vec<JoinHandle<()>>,
     Option<Arc<imperium_net_lightcone::LightconeService>>,
+    Option<Arc<imperium_net_brain::BrainService>>,
 ) {
     let mut tasks = Vec::new();
 
@@ -1133,7 +1135,7 @@ async fn initialize_node(
             None
         }
     };
-    let _brain = brain; // held for the future `vpn brain status` surface; the strand already runs
+    // Held for the `vpn brain status` surface; the strand already runs.
 
     let store = Arc::new(Store::in_memory());
     let memory_log = Arc::new(MemoryLog::default());
@@ -1210,7 +1212,7 @@ async fn initialize_node(
                 task_count = tasks.len(),
                 "node wiring complete (signatures refused)"
             );
-            return (kernel, tasks, lightcone);
+            return (kernel, tasks, lightcone, brain);
         }
     };
     let operator_id = operator.peer_id;
@@ -1239,7 +1241,7 @@ async fn initialize_node(
     imperium_net_sensors::register_strands(&mut kernel, &signature_engine);
 
     tracing::info!(task_count = tasks.len(), "node wiring complete");
-    (kernel, tasks, lightcone)
+    (kernel, tasks, lightcone, brain)
 }
 
 fn register_default_tools(toolkit: &ToolManager) {

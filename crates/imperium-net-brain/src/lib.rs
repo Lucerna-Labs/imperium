@@ -19,7 +19,8 @@ use std::collections::HashSet;
 use imperium_net_pathworld::PathWorld;
 use imperium_protocol::{LightconeReceipt, LightconeSymbol};
 use parking_lot::Mutex;
-use path_self::{cause_by_identity, Cause};
+use imperium_protocol::LightconeFrameFormat;
+use path_self::{cause_vouched, Cause};
 use path_sense::{Path, Sym};
 use path_world::World;
 
@@ -47,7 +48,6 @@ pub struct CandidateReview {
 
 struct Inner {
     own_addresses: HashSet<u128>,
-    authenticated_sources: HashSet<u128>,
     evidence: Vec<Path>,
     evidence_seen: HashSet<Path>,
     observed: u64,
@@ -77,7 +77,6 @@ impl BrainService {
             deny,
             inner: Mutex::new(Inner {
                 own_addresses: HashSet::new(),
-                authenticated_sources: HashSet::new(),
                 evidence: Vec::new(),
                 evidence_seen: HashSet::new(),
                 observed: 0,
@@ -96,11 +95,6 @@ impl BrainService {
         self.inner.lock().own_addresses = addrs;
     }
 
-    /// The addresses of peers the mesh has authenticated, replaced wholesale.
-    pub fn set_authenticated_sources(&self, addrs: HashSet<u128>) {
-        self.inner.lock().authenticated_sources = addrs;
-    }
-
     /// Read one door-one receipt. A drop whose novelty the machine explains becomes evidence.
     /// Returns the cause. Never changes door one.
     pub fn observe(&self, receipt: &LightconeReceipt) -> Cause {
@@ -111,7 +105,11 @@ impl BrainService {
         }
         let path = to_path(&receipt.path);
         let outbound = receipt.direction == 1;
-        let cause = cause_by_identity(&path, outbound, &inner.own_addresses, &inner.authenticated_sources, &self.allow);
+        // Channel identity: an inbound RawIp receipt is a decapsulated packet the mesh wrote to the
+        // host TUN only AFTER the frozen AEAD authenticated the peer. An outside attacker cannot
+        // produce one, so it is the authenticated-tunnel signal. (Outbound self is by own address.)
+        let inbound_authenticated = !outbound && receipt.frame_format == LightconeFrameFormat::RawIp;
+        let cause = cause_vouched(&path, outbound, &inner.own_addresses, inbound_authenticated, &self.allow);
         match cause {
             Cause::Unexplained => inner.unexplained += 1,
             _ => {
@@ -150,6 +148,29 @@ impl BrainService {
             deny_clean: c.refused_by_deny == 0,
             admits_all_evidence,
         }
+    }
+
+    /// The reseal gate (the mechanical part of the ceremony). Writes the candidate training pack to
+    /// `path` as a `path-pack` **only when** the review passes (add-only, deny-clean, admits all
+    /// evidence) **and** the operator explicitly approves. The TPU seal and the swap at door one's
+    /// single loader stay external. Refuses (writes nothing) otherwise, with the reason.
+    pub fn reseal_to(&self, path: &std::path::Path, approved: bool) -> Result<CandidateReview, String> {
+        let review = self.review();
+        if !approved {
+            return Err("reseal not approved by the operator".into());
+        }
+        if !review.deny_clean {
+            return Err(format!("review refused: {} evidence paths matched the deny world", review.refused_by_deny));
+        }
+        if !review.add_only {
+            return Err("review refused: candidate is not add-only".into());
+        }
+        if !review.admits_all_evidence {
+            return Err("review refused: candidate does not admit all self-caused evidence".into());
+        }
+        let text = path_pack::encode(&self.role, &self.candidate());
+        std::fs::write(path, text).map_err(|e| format!("writing candidate pack: {e}"))?;
+        Ok(review)
     }
 
     /// Counters for the operator surface: (observed, self_caused, unexplained, evidence).
@@ -205,6 +226,12 @@ mod tests {
         }
     }
 
+    fn mesh_receipt(dir: u8, admitted: bool, src: u128, dport: u128) -> LightconeReceipt {
+        let mut r = receipt(dir, admitted, src, dport);
+        r.frame_format = imperium_protocol::LightconeFrameFormat::MeshDatagram;
+        r
+    }
+
     fn train(dir: u8, src: u128, dport: u128) -> Path {
         [(0u8, dir as u128), (1, 0x0800), (2, 17), (3, src), (4, 0xc633_6402), (5, 51000), (6, dport)].iter().map(|&(f, v)| Sym { field: f, value: v }).collect()
     }
@@ -218,29 +245,58 @@ mod tests {
         let brain = BrainService::from_world(&world, old.clone());
         let fresh = 0xc000_02aau128; // a new address this host owns this episode
         brain.set_own_addresses([own, fresh].into_iter().collect());
-        brain.set_authenticated_sources([peer].into_iter().collect());
 
-        // Door one admitted this one: ignored.
+        // Door one admitted this one: ignored (not a drop).
         assert_eq!(brain.observe(&receipt(0, true, peer, 45998)), Cause::Unexplained);
-        // A dropped OUTBOUND from a FRESH address this host owns, novelty only in the source: self.
+        // Outbound from a FRESH address this host owns, trained otherwise: self (own_address).
         assert_eq!(brain.observe(&receipt(1, false, fresh, 45998)), Cause::OwnAddress);
-        // A spoof of our own address arriving INBOUND is not an authenticated source: unexplained.
-        assert_eq!(brain.observe(&receipt(0, false, own, 45998)), Cause::Unexplained);
-        // Novelty beyond the source (untrained port): unexplained.
+        // Inbound RawIp claiming our OWN address: only an authenticated peer could produce a
+        // decapsulated inbound RawIp, so it is vouched (AuthenticatedTunnel) — the documented
+        // compromised-peer trust limit, not an outside spoof.
+        assert_eq!(brain.observe(&receipt(0, false, own, 45998)), Cause::AuthenticatedTunnel);
+        // Outbound own address but untrained port: novelty beyond the source -> unexplained.
         assert_eq!(brain.observe(&receipt(1, false, own, 45996)), Cause::Unexplained);
-        // An inbound novel-source drop cannot be identity-confirmed on the bus (its source is new,
-        // not a known peer): unexplained here, pending interface telemetry (see precommit).
-        assert_eq!(brain.observe(&receipt(0, false, 0xc000_02ff, 45998)), Cause::Unexplained);
+        // Inbound RawIp, a peer's fresh tunnel address: vouched -> self.
+        assert_eq!(brain.observe(&receipt(0, false, 0xc000_02ff, 45998)), Cause::AuthenticatedTunnel);
+        // Inbound MeshDatagram (NOT authenticated at observe time) claiming our own address is an
+        // outside spoof -> unexplained. Only the decapsulated RawIp channel is vouched.
+        assert_eq!(brain.observe(&mesh_receipt(0, false, own, 45998)), Cause::Unexplained);
 
         let (observed, self_caused, unexplained, evidence) = brain.counters();
-        assert_eq!((observed, self_caused, unexplained, evidence), (5, 1, 3, 1));
+        assert_eq!((observed, self_caused, unexplained, evidence), (6, 3, 2, 3));
 
         let review = brain.review();
         assert!(review.add_only && review.deny_clean && review.admits_all_evidence);
-        assert_eq!(review.added, 1);
+        assert_eq!(review.added, 3);
         assert_eq!(review.refused_by_deny, 0);
-        // Add-only: the candidate keeps both old paths and adds the one self-caused one.
         let cand = brain.candidate();
-        assert!(old.iter().all(|p| cand.contains(p)) && cand.len() == old.len() + 1);
+        assert!(old.iter().all(|p| cand.contains(p)) && cand.len() == old.len() + 3);
+    }
+}
+
+#[cfg(test)]
+mod reseal_tests {
+    use super::*;
+    use imperium_net_pathworld::PathWorld;
+    use path_sense::Sym;
+
+    fn train(dir: u8, src: u128, dport: u128) -> Path {
+        [(0u8, dir as u128), (1, 0x0800), (2, 17), (3, src), (4, 0xc633_6402), (5, 51000), (6, dport)].iter().map(|&(f, v)| Sym { field: f, value: v }).collect()
+    }
+
+    #[test]
+    fn reseal_refuses_without_approval_and_writes_only_when_approved() {
+        let old = vec![train(0, 0xc000_0201, 45998), train(1, 0xc000_0202, 45998)];
+        let brain = BrainService::from_world(&PathWorld::untrained(), old);
+        let dir = std::env::temp_dir().join(format!("pathgate-reseal-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let out = dir.join("candidate.pathpack");
+        assert!(brain.reseal_to(&out, false).is_err(), "no approval");
+        assert!(!out.exists());
+        let review = brain.reseal_to(&out, true).expect("approved reseal writes");
+        assert!(review.add_only && review.deny_clean);
+        let text = std::fs::read_to_string(&out).unwrap();
+        assert!(path_pack::decode(&text).is_some(), "the written pack decodes");
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

@@ -6,6 +6,7 @@ use std::sync::{
 use std::time::Duration;
 
 use imperium_net_host::{HostGuardMode, HostKillSwitch};
+use imperium_net_brain::BrainService;
 use imperium_net_lightcone::LightconeService;
 use imperium_net_mesh::MeshDaemon;
 use imperium_net_signatures::{CandidateStatus, StagingArea};
@@ -192,6 +193,7 @@ struct ControlState {
     lightcone_lifecycle: LightconeLifecycleMonitor,
     transport: Option<Arc<LiveTransportRuntime>>,
     host_guard: Option<HostGuardHandle>,
+    brain: Option<Arc<BrainService>>,
 }
 
 impl ControlState {
@@ -203,6 +205,7 @@ impl ControlState {
         lightcone_lifecycle: LightconeLifecycleMonitor,
         transport: Option<Arc<LiveTransportRuntime>>,
         host_guard: Option<HostGuardHandle>,
+        brain: Option<Arc<BrainService>>,
     ) -> Self {
         Self {
             bus,
@@ -212,6 +215,7 @@ impl ControlState {
             lightcone_lifecycle,
             transport,
             host_guard,
+            brain,
         }
     }
 }
@@ -224,6 +228,7 @@ pub async fn serve_with_staging(
     lightcone_lifecycle: LightconeLifecycleMonitor,
     transport: Option<Arc<LiveTransportRuntime>>,
     host_guard: Option<HostGuardHandle>,
+    brain: Option<Arc<BrainService>>,
 ) {
     serve_inner(Arc::new(ControlState::new(
         bus,
@@ -233,6 +238,7 @@ pub async fn serve_with_staging(
         lightcone_lifecycle,
         transport,
         host_guard,
+        brain,
     )))
     .await;
 }
@@ -322,6 +328,7 @@ async fn dispatch_connection_command(line: &str, state: &ControlState) -> String
                 Err(error) => reply("error", format!("active transport rejected: {error}")),
             }
         }
+        ["vpn", "brain", "status"] => render_brain_status(state.brain.as_deref()),
         ["vpn", "health"] => render_node_health(state).await,
         ["vpn", "killswitch", mode, reason @ ..] => {
             let reason = if reason.is_empty() {
@@ -340,6 +347,41 @@ async fn dispatch_connection_command(line: &str, state: &ControlState) -> String
             Some(&state.lightcone_lifecycle),
         ),
     }
+}
+
+fn render_brain_status(brain: Option<&BrainService>) -> String {
+    let Some(brain) = brain else {
+        return serde_json::json!({
+            "status": "unavailable",
+            "message": "door two (brain) is not active (no lightcone role set)",
+            "active": false,
+            "passive": true,
+            "changes_door_one": false,
+        })
+        .to_string();
+    };
+    let (observed, self_caused, unexplained, evidence) = brain.counters();
+    let r = brain.review();
+    serde_json::json!({
+        "status": "ok",
+        "active": true,
+        "world": brain.role(),
+        "observed": observed,
+        "self_caused": self_caused,
+        "unexplained": unexplained,
+        "evidence": evidence,
+        "candidate_paths": r.candidate_paths,
+        "old_paths": r.old_paths,
+        "added": r.added,
+        "refused_by_deny": r.refused_by_deny,
+        "review_add_only": r.add_only,
+        "review_deny_clean": r.deny_clean,
+        "review_admits_all_evidence": r.admits_all_evidence,
+        "reseal_ready": r.add_only && r.deny_clean && r.admits_all_evidence && r.added > 0,
+        "passive": true,
+        "changes_door_one": false,
+    })
+    .to_string()
 }
 
 async fn render_node_health(state: &ControlState) -> String {
@@ -1207,7 +1249,7 @@ mod tests {
     async fn dispatch_vpn_profile_rotate_requires_live_profiles() {
         let bus = Arc::new(spiderweb::Bus::open().publisher());
         let lifecycle = LightconeLifecycleMonitor::subscribe(&bus);
-        let state = ControlState::new(bus, None, None, None, lifecycle, None, None);
+        let state = ControlState::new(bus, None, None, None, lifecycle, None, None, None);
         let resp = dispatch_connection_command("vpn profile rotate xray", &state).await;
         let value: serde_json::Value = serde_json::from_str(&resp).unwrap();
         assert_eq!(value["status"], "error");
@@ -1230,7 +1272,7 @@ mod tests {
     async fn dispatch_vpn_transport_set_active_requires_live_profiles() {
         let bus = Arc::new(spiderweb::Bus::open().publisher());
         let lifecycle = LightconeLifecycleMonitor::subscribe(&bus);
-        let state = ControlState::new(bus, None, None, None, lifecycle, None, None);
+        let state = ControlState::new(bus, None, None, None, lifecycle, None, None, None);
         let resp = dispatch_connection_command("vpn transport set-active masque", &state).await;
         let value: serde_json::Value = serde_json::from_str(&resp).unwrap();
         assert_eq!(value["status"], "error");
@@ -1405,7 +1447,7 @@ mod tests {
     async fn dispatch_vpn_killswitch_without_mesh_or_host_guard_reports_unavailable() {
         let bus = Arc::new(spiderweb::Bus::open().publisher());
         let lifecycle = LightconeLifecycleMonitor::subscribe(&bus);
-        let state = ControlState::new(bus, None, None, None, lifecycle, None, None);
+        let state = ControlState::new(bus, None, None, None, lifecycle, None, None, None);
         let resp = dispatch_connection_command("vpn killswitch engage dns leak", &state).await;
         let value: serde_json::Value = serde_json::from_str(&resp).unwrap();
         assert_eq!(value["status"], "error");
