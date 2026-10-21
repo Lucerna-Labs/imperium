@@ -97,3 +97,16 @@ STATUS). They never decide anything: every use of them is a receipt, a display, 
 that was already stale before this change (pinned `3b36fcf5…`, actual `f9daa7d2…`). Jesse rejects
 hash pinning as the integrity mechanism. The doc's hash table is left for him to retire or rewrite.
 This change alters only the protocol file's lightcone types, not crypto semantics.
+
+## The seal, later (Jesse, 2026-10-21)
+
+> "Because the lightcone will eventually be sealed by the TPUs, once everything is proven to work,
+> the seal makes it immutable, so hackers can't get around it."
+
+**This change keeps the world `sealed: false`.** It is shaped so that sealing slots in later
+without another rewrite:
+- the world comes only from a pack, through one loader;
+- it has no mutating API after load;
+- a TPU-trained, sealed pack can replace the lab packs at that single point.
+
+No sealing mechanism is built or claimed here.
