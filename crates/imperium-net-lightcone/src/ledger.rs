@@ -5,14 +5,26 @@
 //! by that sequence returns `None` rather than a neighbouring record. An
 //! eviction therefore reads as an explicit absence, never as a wrong answer.
 
-use imperium_net_world::Receipt;
+use imperium_net_pathworld::Admission;
 use imperium_protocol::LightconeFrameFormat;
+use path_sense::Path;
 
 use crate::WireDirection;
 
 /// How many receipts the ring retains. Older entries are evicted and their
 /// sequence numbers become explicit gaps.
 pub const SLOTS: usize = 32;
+
+/// What the trained-path world admitted for one observed frame.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PathReceipt {
+    /// The world's role, or "untrained".
+    pub world: String,
+    /// SHA-256 of the observed bytes.
+    pub query: [u8; 32],
+    pub path: Path,
+    pub admission: Admission,
+}
 
 /// One recorded admission.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -21,29 +33,28 @@ pub struct LightconeReceiptRecord {
     pub format: LightconeFrameFormat,
     pub direction: WireDirection,
     pub kind: imperium_net_observer::ObservationKind,
-    pub receipt: Receipt,
+    pub receipt: PathReceipt,
 }
 
 /// World identity and counters, for the operator's read surface.
 #[derive(Clone, Debug)]
 pub struct LightconeInfo {
-    pub world_version: u16,
-    pub nodes: usize,
-    pub edges: usize,
-    pub dimensions: usize,
+    pub world: String,
+    pub trained: bool,
+    pub trained_paths: usize,
+    pub deny_paths: usize,
+    pub folds: usize,
     pub rx: u64,
     pub tx: u64,
     pub raw_ip_rx: u64,
     pub raw_ip_tx: u64,
     pub mesh_rx: u64,
     pub mesh_tx: u64,
+    /// Receipts whose path the world admitted.
+    pub admitted: u64,
     pub failures: u64,
     pub latest: u64,
     pub oldest: u64,
-    pub pack_sha256: String,
-    pub source_sha256: String,
-    pub training_sha256: String,
-    pub training_platform: &'static str,
     pub sealed: bool,
     pub passive: bool,
     pub holds_verdict: bool,
@@ -59,6 +70,7 @@ pub struct Ledger {
     pub raw_ip_tx: u64,
     pub mesh_rx: u64,
     pub mesh_tx: u64,
+    pub admitted: u64,
     pub failures: u64,
 }
 
@@ -73,6 +85,7 @@ impl Ledger {
             raw_ip_tx: 0,
             mesh_rx: 0,
             mesh_tx: 0,
+            admitted: 0,
             failures: 0,
         }
     }
@@ -83,8 +96,11 @@ impl Ledger {
         format: LightconeFrameFormat,
         direction: WireDirection,
         kind: imperium_net_observer::ObservationKind,
-        receipt: Receipt,
+        receipt: PathReceipt,
     ) -> LightconeReceiptRecord {
+        if receipt.admission.admitted {
+            self.admitted = self.admitted.saturating_add(1);
+        }
         match direction {
             WireDirection::Inbound => self.rx = self.rx.saturating_add(1),
             WireDirection::Outbound => self.tx = self.tx.saturating_add(1),
@@ -157,20 +173,14 @@ mod tests {
     use super::*;
     use imperium_net_observer::ObservationKind;
 
-    /// A minimal valid receipt for ledger-only tests.
-    fn receipt() -> Receipt {
-        let world = imperium_net_world::World::load(
-            imperium_net_world::embedded::PACK,
-            imperium_net_world::embedded::HASH,
-        )
-        .unwrap();
-        world
-            .admit(
-                [0u64; imperium_net_world::NODE_WORDS],
-                imperium_net_world::Policy::NETWORK,
-                [0; 32],
-            )
-            .unwrap()
+    /// A minimal receipt for ledger-only tests.
+    fn receipt() -> PathReceipt {
+        PathReceipt {
+            world: "untrained".into(),
+            query: [0; 32],
+            path: Vec::new(),
+            admission: Admission { admitted: false, denied: false, learned_positions: Vec::new() },
+        }
     }
 
     #[test]

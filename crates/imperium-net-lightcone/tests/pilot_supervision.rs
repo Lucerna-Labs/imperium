@@ -352,6 +352,7 @@ fn offer_frame(publisher: &BusPublisher, direction: u8, payload: &[u8]) {
         direction,
         LightconeFrameFormat::Ethernet,
         &bytes,
+        None,
     ));
     publisher
         .publish(topics::FRAME, BusEvent::new(topics::FRAME, frame))
@@ -379,7 +380,7 @@ async fn pilot_strand_serves_frames_and_publishes_receipts_to_named_subscribers(
 
     // A second strand on the same web, consuming the pilot's output by TypeId;
     // plus the pilot itself, with no injected fault (the production policy).
-    let service = Arc::new(LightconeService::new().expect("embedded world verifies"));
+    let service = Arc::new(LightconeService::new().expect("the world loads (untrained with no role set)"));
     let mut supervisor = Supervisor::engage(
         bus,
         [
@@ -427,8 +428,8 @@ async fn pilot_strand_serves_frames_and_publishes_receipts_to_named_subscribers(
     assert_eq!(delivered[1].direction, 1);
     assert!(delivered.iter().all(|r| r.passive && !r.holds_verdict));
     assert!(
-        delivered.iter().all(|r| !r.nodes.is_empty()),
-        "a decoded UDP frame must admit real structure"
+        delivered.iter().all(|r| !r.path.is_empty()),
+        "a decoded UDP frame must carry its real path"
     );
 
     // And the strand-side observer saw the same receipts in the same order.
@@ -438,7 +439,8 @@ async fn pilot_strand_serves_frames_and_publishes_receipts_to_named_subscribers(
         vec![1, 2, 3]
     );
     assert_eq!(
-        seen[0].receipt_sha256, delivered[0].receipt_sha256,
+        (&seen[0].query_sha256, &seen[0].path, seen[0].admitted),
+        (&delivered[0].query_sha256, &delivered[0].path, delivered[0].admitted),
         "both observers must see the identical receipt"
     );
 }
@@ -468,7 +470,7 @@ fn crashed_pilot_is_restarted_three_times_then_quarantined() {
     // The pilot, armed to crash after the first frame each instance observes.
     // The fault is per instance, so every restart crashes again — which is what
     // drives the whole restart-then-quarantine sequence.
-    let service = Arc::new(LightconeService::new().expect("embedded world verifies"));
+    let service = Arc::new(LightconeService::new().expect("the world loads (untrained with no role set)"));
     bus.register_spec(LightconeStrand::spec(
         Arc::clone(&service),
         FaultPolicy::CrashAfterFrames(1),
@@ -632,7 +634,7 @@ fn pilot_ledger_continues_across_a_restart() {
     bus.register_spec(lifecycle_recorder_spec(Arc::clone(&lifecycle)));
     bus.register_spec(receipt_recorder_spec(Arc::clone(&receipts)));
 
-    let service = Arc::new(LightconeService::new().expect("embedded world verifies"));
+    let service = Arc::new(LightconeService::new().expect("the world loads (untrained with no role set)"));
     bus.register_spec(LightconeStrand::spec(
         Arc::clone(&service),
         FaultPolicy::CrashAfterFrames(1),
@@ -681,7 +683,7 @@ fn pilot_ledger_continues_across_a_restart() {
 
     // `info()` agrees: the shared service counted both generations' observations.
     let info = service.info();
-    assert_eq!(info.world_version, 4);
+    assert_eq!(info.world, "untrained");
     assert_eq!(
         info.rx,
         sequences.len() as u64,

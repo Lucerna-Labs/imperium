@@ -4,11 +4,14 @@ version = "0.1.0"
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
-description = "Passive network Lightcone service: structural observation into the v4 causal world with sequenced receipts"
+description = "Passive network Lightcone service (door one): each packet's path judged by the trained-path world, with sequenced receipts"
 
 [dependencies]
 imperium-protocol = { path = "../imperium-protocol" }
-imperium-net-world = { path = "../imperium-net-world" }
+imperium-net-pathworld = { path = "../imperium-net-pathworld" }
+path-sense = { path = "../path-sense" }
+path-frame = { path = "../path-frame" }
+sha2 = { workspace = true }
 imperium-net-observer = { path = "../imperium-net-observer" }
 # The bus is Spiderweb-Bus-Next, vendored at `vendor/spiderweb-bus/`. There is
 # no Imperium bus crate: this is a direct dependency on the kernel.

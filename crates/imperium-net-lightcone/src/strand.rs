@@ -272,7 +272,7 @@ impl Strand for LightconeStrand {
                 direction,
                 observation.format,
                 observation.observation_kind,
-                observation.seeds,
+                observation.path,
                 observation.query_hash,
             ) {
                 Ok(record) => {
@@ -296,9 +296,11 @@ impl Strand for LightconeStrand {
                             direction = record.direction as u8,
                             frame_format = ?record.format,
                             observation_kind = record.kind as u8,
-                            pack_sha256 = %crate::hex(&record.receipt.world),
+                            world = %record.receipt.world,
+                            admitted = record.receipt.admission.admitted,
+                            denied = record.receipt.admission.denied,
+                            learned = record.receipt.admission.learned_positions.len(),
                             query_sha256 = %crate::hex(&record.receipt.query),
-                            receipt_sha256 = %crate::hex(&record.receipt.digest),
                             "LIGHTCONE_RECEIPT"
                         );
                     }

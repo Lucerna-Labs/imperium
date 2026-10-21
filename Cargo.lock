@@ -2835,9 +2835,12 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "imperium-net-observer",
- "imperium-net-world",
+ "imperium-net-pathworld",
  "imperium-protocol",
  "parking_lot",
+ "path-frame",
+ "path-sense",
+ "sha2",
  "spider",
  "spiderweb",
  "thiserror 2.0.18",
@@ -2881,9 +2884,6 @@ dependencies = [
 [[package]]
 name = "imperium-net-observer"
 version = "0.1.0"
-dependencies = [
- "imperium-net-world",
-]
 
 [[package]]
 name = "imperium-net-pathworld"
