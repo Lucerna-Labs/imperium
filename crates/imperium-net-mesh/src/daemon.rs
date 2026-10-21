@@ -52,10 +52,10 @@ use imperium_net_crypto::{
     HybridEd25519Mldsa, HybridEncapsulation, HybridKexPublicKey, HybridKexSecretKey,
     HybridSigningKey, HybridVerifyingKey, HybridX25519Mlkem,
 };
-use imperium_net_observer::{decode, decode_mesh_datagram, decode_raw_ip};
+use imperium_net_lightcone::LightconeService;
 use imperium_protocol::BusEvent;
 use imperium_protocol::{
-    ClusterId, KillSwitchState, LeakGuardStatus, LightconeFrameFormat, LightconeStructure,
+    ClusterId, KillSwitchState, LeakGuardStatus, LightconeFrameFormat,
     MeshHello, MeshHelloResponse, Message, PeerId, SessionId,
 };
 use parking_lot::Mutex;
@@ -76,7 +76,7 @@ use crate::peer::PeerManager;
 use crate::session::{SessionError, SessionManager};
 use crate::transport::{MeshTransport, TransportError};
 use crate::wire::{self, DatagramKind, HandshakeKind, Reassembler, WireError};
-use crate::world_lightcone::WireDirection;
+use crate::wire_direction::WireDirection;
 
 /// Exact bytes are retained only until this daemon's bounded observer worker
 /// has derived structural context and a digest. They never enter the bus.
@@ -84,6 +84,30 @@ struct LightconeWireFrame {
     direction: u8,
     format: LightconeFrameFormat,
     bytes: Vec<u8>,
+    /// The far end of a mesh datagram (its path is read from the socket addresses).
+    peer: Option<SocketAddr>,
+}
+
+/// Bound on the cached local addresses the kernel routes to each peer (setting).
+const ROUTE_LOCAL_CACHE: usize = 1024;
+
+/// The local address the kernel would use to reach `peer`, for a mesh socket bound to an
+/// unspecified address. A UDP connect probe selects the route and sends no packet.
+fn route_local(local: SocketAddr, peer: SocketAddr, cache: &mut HashMap<std::net::IpAddr, std::net::IpAddr>) -> SocketAddr {
+    if !local.ip().is_unspecified() {
+        return local;
+    }
+    if cache.len() >= ROUTE_LOCAL_CACHE {
+        cache.clear();
+    }
+    let ip = *cache.entry(peer.ip()).or_insert_with(|| {
+        let any: SocketAddr = if peer.is_ipv4() { "0.0.0.0:0".parse().unwrap() } else { "[::]:0".parse().unwrap() };
+        std::net::UdpSocket::bind(any)
+            .and_then(|probe| probe.connect(peer).and_then(|()| probe.local_addr()))
+            .map(|a| a.ip())
+            .unwrap_or(local.ip())
+    });
+    SocketAddr::new(ip, local.port())
 }
 
 /// Rejected HelloResponses tolerated for one handshake attempt before it is
@@ -486,20 +510,16 @@ impl MeshDaemon {
             mpsc::channel::<LightconeWireFrame>(LIGHTCONE_OBSERVER_QUEUE);
         let observer_bus = Arc::clone(&bus);
         let observer_stats = Arc::clone(&stats);
+        let mesh_local = socket.local_addr().ok();
         tokio::spawn(async move {
+            let mut routes = HashMap::new();
             while let Some(frame) = observer_rx.recv().await {
-                let observation = match frame.format {
-                    LightconeFrameFormat::Ethernet => decode(&frame.bytes),
-                    LightconeFrameFormat::RawIp => decode_raw_ip(&frame.bytes),
-                    LightconeFrameFormat::MeshDatagram => decode_mesh_datagram(&frame.bytes),
+                // Door one reads each frame's path; a mesh datagram's comes from its sockets.
+                let sockets = match (frame.peer, mesh_local) {
+                    (Some(peer), Some(local)) => Some((route_local(local, peer, &mut routes), peer)),
+                    _ => None,
                 };
-                let structure = LightconeStructure {
-                    direction: frame.direction,
-                    format: frame.format,
-                    observation_kind: observation.kind as u8,
-                    seeds: observation.seeds.to_vec(),
-                    query_hash: imperium_net_world::hash(&frame.bytes),
-                };
+                let structure = LightconeService::structure_from_frame(frame.direction, frame.format, &frame.bytes, sockets);
                 drop(frame);
                 match BusEvent::publish(
                     &observer_bus,
@@ -553,6 +573,7 @@ impl MeshDaemon {
         format: LightconeFrameFormat,
         direction: u8,
         bytes: &[u8],
+        peer: Option<SocketAddr>,
     ) -> bool {
         match self.observer_tx.try_reserve() {
             Ok(permit) => {
@@ -560,6 +581,7 @@ impl MeshDaemon {
                     format,
                     direction,
                     bytes: bytes.to_vec(),
+                    peer,
                 });
                 self.stats
                     .lightcone_observations_queued
@@ -583,7 +605,7 @@ impl MeshDaemon {
             WireDirection::Inbound => LIGHTCONE_INBOUND,
             WireDirection::Outbound => LIGHTCONE_OUTBOUND,
         };
-        self.queue_lightcone_frame(LightconeFrameFormat::RawIp, direction, bytes)
+        self.queue_lightcone_frame(LightconeFrameFormat::RawIp, direction, bytes, None)
     }
 
     /// A successful socket send is the observation boundary. Preparation of
@@ -594,6 +616,7 @@ impl MeshDaemon {
             LightconeFrameFormat::MeshDatagram,
             LIGHTCONE_OUTBOUND,
             &bytes[..sent],
+            Some(target),
         );
         Ok(sent)
     }
@@ -604,6 +627,7 @@ impl MeshDaemon {
             LightconeFrameFormat::MeshDatagram,
             LIGHTCONE_OUTBOUND,
             &bytes[..sent],
+            Some(target),
         );
         Ok(sent)
     }
@@ -945,6 +969,7 @@ impl MeshDaemon {
                                 LightconeFrameFormat::MeshDatagram,
                                 LIGHTCONE_INBOUND,
                                 &buf[..len],
+                                Some(source),
                             );
                             self.handle_datagram(source, &buf[..len]).await;
                         }

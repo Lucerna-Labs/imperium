@@ -2,7 +2,6 @@ mod crypto;
 mod daemon;
 mod destination;
 pub mod flow_behavior;
-pub mod flow_policy;
 mod gate;
 mod handshake;
 mod hardening;
@@ -14,7 +13,7 @@ mod stun;
 mod transport;
 mod traversal;
 pub mod wire;
-mod world_lightcone;
+mod wire_direction;
 
 pub use crypto::{CryptoError, DirectionKeys, ReplayWindow};
 pub use daemon::{DaemonError, DaemonStats, MeshDaemon, MeshInbound, MeshNodeConfig, PeerConfig};
@@ -52,24 +51,15 @@ pub mod topics {
     pub const READY: &str = "net.mesh.ready";
 }
 
-pub use world_lightcone::{NetworkWorldObservation, NetworkWorldTap, WireDirection};
+pub use wire_direction::WireDirection;
 
 use imperium_protocol::{BusEvent, Message};
 use spiderweb::BusPublisher;
 
-/// Verify the embedded RTX world and announce readiness on the shared
-/// publisher. NAT traversal policies remain planner inputs; the live mesh
+/// Announce readiness on the shared publisher. NAT traversal policies remain planner inputs; the live mesh
 /// daemon does not run those probe plans, so startup must not announce one as
 /// an applied runtime policy.
 pub async fn init(publisher: &BusPublisher) -> Result<(), spiderweb::BusError> {
-    let network_world =
-        NetworkWorldTap::embedded().expect("embedded RTX network world must verify at startup");
-    tracing::info!(
-        world_sha256 = %network_world.world_hash_hex(),
-        training_platform = imperium_net_world::embedded::TRAINING_PLATFORM,
-        sealed = false,
-        "RTX network causal world verified"
-    );
     BusEvent::publish(
         publisher,
         topics::READY,

@@ -12,7 +12,7 @@ use imperium_net_crypto::HybridEd25519Mldsa;
 use imperium_net_lightcone::{topics, FaultPolicy, LightconeService, LightconeStrand};
 use imperium_net_mesh::{encode_hello, DaemonError, MeshDaemon, MeshNodeConfig, PeerConfig};
 use imperium_net_observer::decode_mesh_datagram;
-use imperium_net_world::{embedded, hash};
+use imperium_net_lightcone::hash;
 use imperium_protocol::{
     BusEvent, ClusterId, LightconeFrameFormat, LightconeReceipt, LightconeStructure, MeshHello,
     Message, PeerId, SessionId,
@@ -48,7 +48,7 @@ impl SupervisedBus {
     ) {
         let mut bus = Bus::open();
         let publisher = Arc::new(bus.publisher());
-        let service = Arc::new(LightconeService::new().expect("embedded v4 world verifies"));
+        let service = Arc::new(LightconeService::new().expect("the world loads (untrained with no role set)"));
         let (structure_tx, structure_rx) = mpsc::channel(32);
         let (receipt_tx, receipt_rx) = mpsc::channel(32);
 
@@ -143,13 +143,6 @@ fn ungated_hello() -> Vec<u8> {
     .expect("test Hello encodes")
 }
 
-fn digest_hex(bytes: &[u8]) -> String {
-    hash(bytes)
-        .iter()
-        .map(|byte| format!("{byte:02x}"))
-        .collect()
-}
-
 async fn matching_structure(
     structures: &mut mpsc::Receiver<LightconeStructure>,
     direction: u8,
@@ -164,7 +157,9 @@ async fn matching_structure(
             assert_eq!(structure.format, LightconeFrameFormat::MeshDatagram);
             let expected = decode_mesh_datagram(datagram);
             assert_eq!(structure.observation_kind, expected.kind as u8);
-            assert_eq!(structure.seeds, expected.seeds.to_vec());
+            // Door one: a mesh datagram's path is read from its socket addresses (UDP).
+            assert!(structure.path.iter().any(|s| s.field == 2 && s.value == 17), "{:?}", structure.path);
+            assert_eq!(structure.path.first().map(|s| s.value), Some(direction as u128));
             return;
         }
     }
@@ -176,7 +171,7 @@ async fn matching_receipt(
     direction: u8,
     datagram: &[u8],
 ) -> LightconeReceipt {
-    let query = digest_hex(datagram);
+    let query = imperium_net_lightcone::hex(&hash(datagram));
     for _ in 0..8 {
         let receipt = tokio::time::timeout(WAIT, receipts.recv())
             .await
@@ -238,15 +233,15 @@ fn real_daemon_udp_datagrams_reach_supervised_passive_receipts() {
             let inbound = matching_receipt(&mut receipts, 0, &hello).await;
             let outbound = matching_receipt(&mut receipts, 1, cookie).await;
             for receipt in [&inbound, &outbound] {
-                assert_eq!(receipt.pack_sha256, digest_hex(embedded::PACK));
+                assert_eq!(receipt.world, "untrained");
                 assert_eq!(receipt.frame_format, LightconeFrameFormat::MeshDatagram);
                 assert_eq!(receipt.observation_kind, 0, "recognized mesh datagram");
-                assert!(receipt.seeds.iter().any(|word| *word != 0));
-                assert!(receipt.nodes.iter().any(|word| *word != 0));
+                assert!(!receipt.path.is_empty(), "the socket path reached the receipt");
+                assert!(!receipt.admitted, "an untrained world admits nothing");
                 assert!(receipt.passive);
                 assert!(!receipt.holds_verdict);
             }
-            assert_eq!(service.info().training_platform, "local_diagnostic");
+            assert_eq!(service.info().world, "untrained");
             assert!(!service.info().sealed);
             assert_eq!(service.info().rx, 1);
             assert_eq!(service.info().tx, 1);

@@ -13,7 +13,6 @@ use crate::handshake::{verify_hello, HandshakeError, IdentityBinding};
 use crate::hardening::{fallback_frame, HardenedPayload, MeshHardener, RecoveredFrame};
 use crate::peer::PeerManager;
 use crate::session::SessionManager;
-use crate::world_lightcone::{NetworkWorldObservation, NetworkWorldTap, WireDirection};
 
 /// Depth of a consumer-owned subscription queue.
 ///
@@ -47,7 +46,6 @@ pub struct MeshTransport {
     session_manager: Arc<SessionManager>,
     local_peer_id: PeerId,
     hardener: Arc<RwLock<Option<MeshHardener>>>,
-    network_world: Arc<RwLock<NetworkWorldTap>>,
 }
 
 impl MeshTransport {
@@ -57,15 +55,12 @@ impl MeshTransport {
         session_manager: Arc<SessionManager>,
         local_peer_id: PeerId,
     ) -> Self {
-        let network_world =
-            NetworkWorldTap::embedded().expect("embedded RTX network world must verify");
         Self {
             bus,
             peer_manager,
             session_manager,
             local_peer_id,
             hardener: Arc::new(RwLock::new(None)),
-            network_world: Arc::new(RwLock::new(network_world)),
         }
     }
 
@@ -105,7 +100,6 @@ impl MeshTransport {
             .seal_for_session(session_id, &[], None)
             .ok()?;
         let frame = hardener.harden_payload(counter, ciphertext, true);
-        self.observe_wire(WireDirection::Outbound, &frame.bytes);
         Some(frame)
     }
 
@@ -117,7 +111,6 @@ impl MeshTransport {
         session_id: &imperium_protocol::SessionId,
         bytes: &[u8],
     ) -> Result<RecoveredFrame, TransportError> {
-        self.observe_wire(WireDirection::Inbound, bytes);
         let frame = MeshHardener::recover_frame(bytes)
             .ok_or_else(|| TransportError::Serialization("not a v3 frame".to_string()))?;
         let payload = self
@@ -144,22 +137,7 @@ impl MeshTransport {
                 cover: false,
             }
         };
-        self.observe_wire(WireDirection::Outbound, &frame.bytes);
         frame
-    }
-
-    fn observe_wire(&self, direction: WireDirection, bytes: &[u8]) {
-        if let Err(error) = self.network_world.write().observe(direction, bytes) {
-            tracing::error!(?error, "passive network-world observation failed");
-        }
-    }
-
-    pub fn network_world_snapshot(&self) -> Vec<NetworkWorldObservation> {
-        self.network_world.read().snapshot()
-    }
-
-    pub fn network_world_hash(&self) -> [u8; 32] {
-        self.network_world.read().world().digest
     }
 
     /// Best-effort cover frame emission: same shape as real frames, empty
