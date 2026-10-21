@@ -135,3 +135,29 @@ Finishing the three steps that were left after the first increment:
 **Still open (door two, continued):** the full reseal ceremony beyond the gate (a candidate VM run
 + the TPU seal + the swap), and tightening the authenticated-but-compromised-peer trust. Both are
 recorded, neither faked.
+
+## Tightening the compromised-peer trust (2026-10-21): corroboration
+
+The `authenticated_tunnel` trust accepts any inbound decapsulated packet, so a compromised peer
+could present self-shaped novelty. Added a **corroboration** guard (the continuation-count idea
+again): an inbound-tunnel **shape** (a trained template with its source position freed) becomes
+evidence only after **`CORROBORATION_MIN = 2` distinct sources** have presented it. Buffered until
+then; a single peer presenting one shape — even repeatedly — never enters the candidate
+(`corroboration_tests::one_peer_cannot_inject_a_shape_alone`). Outbound `own_address` (our own
+host) commits immediately, no corroboration.
+
+**What it does and does not stop (honest):**
+- **Stops:** a single compromised peer that does not vary its source, and a passive injector on one
+  tunnel, from filling the candidate with a novel shape alone.
+- **Does not fully stop:** a compromised peer that varies the source address inside its own
+  decapsulated packets can corroborate itself, because the receipt carries the source address, not
+  the authenticated *peer identity* (that lives in the mesh session, off the receipt). The full fix
+  needs the peer identity threaded onto the lightcone receipt, then corroboration keyed by distinct
+  *peers*. Recorded, not faked.
+- **Backstop regardless:** nothing reaches door one without the operator-approved, deny-checked
+  reseal gate, and door one's own context law still needs ≥ 3 distinct values to fold.
+- **Tradeoff:** in a single-peer mesh, inbound-tunnel shapes from the lone peer are never
+  corroborated, so that learning falls to the operator's review; outbound own-host learning is
+  unaffected.
+
+Workspace after this step: **958 passed, 0 failed**; frozen crypto diff **0 lines**.

@@ -26,6 +26,10 @@ use path_world::World;
 
 /// Bound on retained evidence paths (setting). Oldest-dropped when full.
 pub const EVIDENCE_CAP: usize = 4096;
+/// Corroboration: an inbound-tunnel shape (a trained template with its source free) becomes
+/// evidence only after this many DISTINCT sources have presented it, so a single peer cannot inject
+/// a shape alone. Outbound `own_address` (our own host) needs no corroboration. (Setting.)
+pub const CORROBORATION_MIN: usize = 2;
 
 fn to_path(symbols: &[LightconeSymbol]) -> Path {
     symbols.iter().map(|s| Sym { field: s.field, value: s.value }).collect()
@@ -50,6 +54,9 @@ struct Inner {
     own_addresses: HashSet<u128>,
     evidence: Vec<Path>,
     evidence_seen: HashSet<Path>,
+    /// Inbound-tunnel paths awaiting corroboration, keyed by shape (source position freed):
+    /// (distinct sources seen, buffered paths). Flushed to evidence at CORROBORATION_MIN.
+    inbound_pending: std::collections::HashMap<Vec<Sym>, (HashSet<u128>, Vec<Path>)>,
     observed: u64,
     self_caused: u64,
     unexplained: u64,
@@ -79,6 +86,7 @@ impl BrainService {
                 own_addresses: HashSet::new(),
                 evidence: Vec::new(),
                 evidence_seen: HashSet::new(),
+                inbound_pending: std::collections::HashMap::new(),
                 observed: 0,
                 self_caused: 0,
                 unexplained: 0,
@@ -112,14 +120,27 @@ impl BrainService {
         let cause = cause_vouched(&path, outbound, &inner.own_addresses, inbound_authenticated, &self.allow);
         match cause {
             Cause::Unexplained => inner.unexplained += 1,
-            _ => {
+            Cause::OwnAddress => {
+                // Our own host: committed immediately, no corroboration needed.
                 inner.self_caused += 1;
-                if inner.evidence_seen.insert(path.clone()) {
-                    if inner.evidence.len() >= EVIDENCE_CAP {
-                        let old = inner.evidence.remove(0);
-                        inner.evidence_seen.remove(&old);
+                commit_evidence(&mut inner, path);
+            }
+            Cause::AuthenticatedTunnel => {
+                inner.self_caused += 1;
+                // Corroboration: buffer by shape (the source position freed) until CORROBORATION_MIN
+                // distinct sources have presented it; a single peer cannot inject a shape alone.
+                let Some(src_at) = path.iter().position(|s| s.field == path_sense::F_SRC) else { return cause };
+                let src = path[src_at].value;
+                let mut key = path.clone();
+                key[src_at].value = path_world::WILD;
+                let entry = inner.inbound_pending.entry(key.clone()).or_default();
+                entry.0.insert(src);
+                entry.1.push(path);
+                if entry.0.len() >= CORROBORATION_MIN {
+                    let (_, buffered) = inner.inbound_pending.remove(&key).unwrap();
+                    for p in buffered {
+                        commit_evidence(&mut inner, p);
                     }
-                    inner.evidence.push(path);
                 }
             }
         }
@@ -180,6 +201,16 @@ impl BrainService {
     }
 }
 
+fn commit_evidence(inner: &mut Inner, path: Path) {
+    if inner.evidence_seen.insert(path.clone()) {
+        if inner.evidence.len() >= EVIDENCE_CAP {
+            let old = inner.evidence.remove(0);
+            inner.evidence_seen.remove(&old);
+        }
+        inner.evidence.push(path);
+    }
+}
+
 /// The deny world: each trained path with its exactly-matched service port changed to an untrained
 /// one (PATHCONE-1 class a) — the same construction as `imperium-net-pathworld`.
 fn rebuild_deny(paths: &[Path], allow: &World) -> World {
@@ -206,6 +237,10 @@ mod tests {
 
     fn sym(field: u8, value: u128) -> LightconeSymbol {
         LightconeSymbol { field, value }
+    }
+
+    pub(super) fn receipt_pub(dir: u8, admitted: bool, src: u128, dport: u128) -> LightconeReceipt {
+        receipt(dir, admitted, src, dport)
     }
 
     fn receipt(dir: u8, admitted: bool, src: u128, dport: u128) -> LightconeReceipt {
@@ -298,5 +333,36 @@ mod reseal_tests {
         let text = std::fs::read_to_string(&out).unwrap();
         assert!(path_pack::decode(&text).is_some(), "the written pack decodes");
         let _ = std::fs::remove_dir_all(&dir);
+    }
+}
+
+#[cfg(test)]
+mod corroboration_tests {
+    use super::*;
+    use imperium_net_pathworld::PathWorld;
+    use path_sense::Sym;
+
+    fn train(dir: u8, src: u128, dport: u128) -> Path {
+        [(0u8, dir as u128), (1, 0x0800), (2, 17), (3, src), (4, 0xc633_6402), (5, 51000), (6, dport)].iter().map(|&(f, v)| Sym { field: f, value: v }).collect()
+    }
+    fn raw_inbound(src: u128, dport: u128) -> LightconeReceipt {
+        let mut r = tests::receipt_pub(0, false, src, dport);
+        r.frame_format = imperium_protocol::LightconeFrameFormat::RawIp;
+        r
+    }
+
+    #[test]
+    fn one_peer_cannot_inject_a_shape_alone() {
+        let old = vec![train(0, 0xc000_0201, 45998), train(1, 0xc000_0202, 45998)];
+        let brain = BrainService::from_world(&PathWorld::untrained(), old);
+        // One source presents a novel inbound-tunnel shape repeatedly: never corroborated.
+        for _ in 0..5 {
+            assert_eq!(brain.observe(&raw_inbound(0xaaaa_0001, 45998)), Cause::AuthenticatedTunnel);
+        }
+        assert_eq!(brain.counters().3, 0, "a single source stays pending, never evidence");
+        assert!(brain.candidate().len() == 2, "candidate unchanged: nothing injected");
+        // A second distinct source for the same shape flushes both into evidence.
+        assert_eq!(brain.observe(&raw_inbound(0xaaaa_0002, 45998)), Cause::AuthenticatedTunnel);
+        assert_eq!(brain.counters().3, 2, "corroborated: both sources' paths committed");
     }
 }
