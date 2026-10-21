@@ -21,12 +21,18 @@ pub mod topics {
 
 pub struct BrainStrand {
     service: Arc<BrainService>,
+    last_refresh: Option<std::time::Instant>,
 }
+
+/// How often the brain re-reads this host's own addresses from the kernel (setting).
+pub const OWN_ADDRESS_REFRESH: std::time::Duration = std::time::Duration::from_secs(1);
+/// The directory where door two keeps evidence across restarts (setting).
+pub const STATE_ENV: &str = "IMPERIUM_BRAIN_STATE";
 
 impl BrainStrand {
     pub fn spec(service: Arc<BrainService>) -> StrandSpec {
         StrandSpec::new(NAME, move || -> Box<dyn Strand> {
-            Box::new(BrainStrand { service: Arc::clone(&service) })
+            Box::new(BrainStrand { service: Arc::clone(&service), last_refresh: None })
         })
     }
 }
@@ -48,6 +54,11 @@ impl Strand for BrainStrand {
     fn run(&mut self, bus: &mut BusHandle) -> Result<(), StrandError> {
         if bus.is_shutting_down() {
             return Ok(());
+        }
+        // Keep the host's own addresses current: a fresh TUN address is known as soon as it exists.
+        if self.last_refresh.map_or(true, |t| t.elapsed() >= OWN_ADDRESS_REFRESH) {
+            self.service.set_own_addresses(crate::own_addresses_from_proc());
+            self.last_refresh = Some(std::time::Instant::now());
         }
         for (socket, event) in bus.recv_all::<BusEvent>()? {
             if socket != topics::RECEIPT || event.topic.as_ref() != topics::RECEIPT {
@@ -81,7 +92,15 @@ pub fn init_with_service(
             return Ok(None);
         }
     };
-    let service = Arc::new(BrainService::from_world(&world, paths));
+    let mut service = BrainService::from_world(&world, paths);
+    if let Ok(dir) = std::env::var(STATE_ENV) {
+        if !dir.is_empty() {
+            let _ = std::fs::create_dir_all(&dir);
+            service = service.with_state(std::path::Path::new(&dir).join(format!("{role}.evidence.pathpack")));
+        }
+    }
+    service.set_own_addresses(crate::own_addresses_from_proc());
+    let service = Arc::new(service);
     let ready = BusEvent::new(topics::READY, Message::SubsystemReady { name: NAME.into() });
     publisher.publish(topics::READY, ready)?;
     tracing::info!(%role, "door two (brain) initialized");

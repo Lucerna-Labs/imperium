@@ -65,6 +65,8 @@ struct Inner {
 /// Door two's service. Thread-safe; `observe` is called from the receipt strand.
 pub struct BrainService {
     role: String,
+    /// Where door two keeps its evidence across restarts (`IMPERIUM_BRAIN_STATE`), if set.
+    state_file: Option<std::path::PathBuf>,
     old_paths: Vec<Path>,
     allow: World,
     deny: World,
@@ -79,6 +81,7 @@ impl BrainService {
         let _ = world;
         BrainService {
             role: world.role().to_string(),
+            state_file: None,
             old_paths,
             allow,
             deny,
@@ -98,6 +101,32 @@ impl BrainService {
         &self.role
     }
 
+    /// Keep evidence in `file` across restarts, reloading what is already there. A malformed file
+    /// is ignored (fail-closed: no partial evidence), never trusted.
+    pub fn with_state(mut self, file: std::path::PathBuf) -> BrainService {
+        if let Ok(text) = std::fs::read_to_string(&file) {
+            if let Some(pack) = path_pack::decode(&text) {
+                if pack.role == self.role {
+                    let mut inner = self.inner.lock();
+                    for p in pack.paths {
+                        commit_evidence(&mut inner, p);
+                    }
+                }
+            }
+        }
+        self.state_file = Some(file);
+        self
+    }
+
+    fn persist(&self, evidence: &[Path]) {
+        if let Some(file) = &self.state_file {
+            let tmp = file.with_extension("tmp");
+            if std::fs::write(&tmp, path_pack::encode(&self.role, evidence)).is_ok() {
+                let _ = std::fs::rename(&tmp, file);
+            }
+        }
+    }
+
     /// The host's own addresses (path-value form), replaced wholesale.
     pub fn set_own_addresses(&self, addrs: HashSet<u128>) {
         self.inner.lock().own_addresses = addrs;
@@ -106,7 +135,22 @@ impl BrainService {
     /// Read one door-one receipt. A drop whose novelty the machine explains becomes evidence.
     /// Returns the cause. Never changes door one.
     pub fn observe(&self, receipt: &LightconeReceipt) -> Cause {
+        let (cause, grown) = self.observe_inner(receipt);
+        if let Some(evidence) = grown {
+            self.persist(&evidence);
+        }
+        cause
+    }
+
+    fn observe_inner(&self, receipt: &LightconeReceipt) -> (Cause, Option<Vec<Path>>) {
         let mut inner = self.inner.lock();
+        let before = inner.evidence.len();
+        let cause = self.observe_locked(&mut inner, receipt);
+        let grown = (inner.evidence.len() != before).then(|| inner.evidence.clone());
+        (cause, grown)
+    }
+
+    fn observe_locked(&self, inner: &mut Inner, receipt: &LightconeReceipt) -> Cause {
         inner.observed += 1;
         if receipt.admitted || receipt.path.is_empty() {
             return Cause::Unexplained;
@@ -123,7 +167,7 @@ impl BrainService {
             Cause::OwnAddress => {
                 // Our own host: committed immediately, no corroboration needed.
                 inner.self_caused += 1;
-                commit_evidence(&mut inner, path);
+                commit_evidence(inner, path);
             }
             Cause::AuthenticatedTunnel => {
                 inner.self_caused += 1;
@@ -139,7 +183,7 @@ impl BrainService {
                 if entry.0.len() >= CORROBORATION_MIN {
                     let (_, buffered) = inner.inbound_pending.remove(&key).unwrap();
                     for p in buffered {
-                        commit_evidence(&mut inner, p);
+                        commit_evidence(inner, p);
                     }
                 }
             }
@@ -199,6 +243,36 @@ impl BrainService {
         let inner = self.inner.lock();
         (inner.observed, inner.self_caused, inner.unexplained, inner.evidence.len())
     }
+}
+
+/// This host's own addresses, read from the kernel (path-value form): IPv6 from
+/// `/proc/net/if_inet6`, IPv4 from the `/32 host LOCAL` entries of `/proc/net/fib_trie`.
+/// A reading; missing files give an empty set.
+pub fn own_addresses_from_proc() -> HashSet<u128> {
+    let mut out = HashSet::new();
+    if let Ok(text) = std::fs::read_to_string("/proc/net/if_inet6") {
+        for line in text.lines() {
+            if let Some(hex) = line.split_whitespace().next() {
+                if let Ok(v) = u128::from_str_radix(hex, 16) {
+                    out.insert(v);
+                }
+            }
+        }
+    }
+    if let Ok(text) = std::fs::read_to_string("/proc/net/fib_trie") {
+        let mut last: Option<u128> = None;
+        for line in text.lines() {
+            let t = line.trim_start_matches(|c: char| c == ' ' || c == '|' || c == '+' || c == '-').trim();
+            if let Ok(a) = t.parse::<std::net::Ipv4Addr>() {
+                last = Some(u32::from(a) as u128);
+            } else if t.starts_with("/32 host LOCAL") {
+                if let Some(a) = last {
+                    out.insert(a);
+                }
+            }
+        }
+    }
+    out
 }
 
 fn commit_evidence(inner: &mut Inner, path: Path) {
@@ -364,5 +438,45 @@ mod corroboration_tests {
         // A second distinct source for the same shape flushes both into evidence.
         assert_eq!(brain.observe(&raw_inbound(0xaaaa_0002, 45998)), Cause::AuthenticatedTunnel);
         assert_eq!(brain.counters().3, 2, "corroborated: both sources' paths committed");
+    }
+}
+
+#[cfg(test)]
+mod persistence_tests {
+    use super::*;
+    use imperium_net_pathworld::PathWorld;
+    use path_sense::Sym;
+
+    fn train(dir: u8, src: u128, dport: u128) -> Path {
+        [(0u8, dir as u128), (1, 0x0800), (2, 17), (3, src), (4, 0xc633_6402), (5, 51000), (6, dport)].iter().map(|&(f, v)| Sym { field: f, value: v }).collect()
+    }
+
+    #[test]
+    fn evidence_survives_a_restart_and_a_bad_file_is_ignored() {
+        let own = 0xc000_0202u128;
+        let old = vec![train(0, 0xc000_0201, 45998), train(1, own, 45998)];
+        let dir = std::env::temp_dir().join(format!("brain-state-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let file = dir.join("untrained.evidence.pathpack");
+        let a = BrainService::from_world(&PathWorld::untrained(), old.clone()).with_state(file.clone());
+        let fresh = 0xc000_02aau128;
+        a.set_own_addresses([own, fresh].into_iter().collect());
+        assert_eq!(a.observe(&tests::receipt_pub(1, false, fresh, 45998)), Cause::OwnAddress);
+        assert_eq!(a.counters().3, 1);
+        // "Restart": a new service over the same file starts with the evidence.
+        let b = BrainService::from_world(&PathWorld::untrained(), old.clone()).with_state(file.clone());
+        assert_eq!(b.counters().3, 1, "evidence reloaded");
+        // A malformed file is ignored, never trusted.
+        std::fs::write(&file, "PATHPACK 1\nrole untrained\npaths 9\n").unwrap();
+        let c = BrainService::from_world(&PathWorld::untrained(), old).with_state(file);
+        assert_eq!(c.counters().3, 0);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn reads_this_hosts_addresses() {
+        // Every Linux test host has loopback.
+        let own = own_addresses_from_proc();
+        assert!(own.contains(&0x7f00_0001), "127.0.0.1 from fib_trie");
     }
 }

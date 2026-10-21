@@ -192,3 +192,37 @@ node's `vpn brain status` through its control socket.
 - **L5:** after episode 3, every role's review is `add_only`, `deny_clean` and
   `admits_all_evidence`, and `reseal_ready` is true.
 - **L6:** delivery is unaffected: every case echoes every attempt in every episode.
+
+## LIVE-BRAIN-1 results (2026-10-21, `evidence/live-brain-1-20261021/`): all six hold
+
+Imperium's three-VM lab (`scripts/lightcone-vm/brain_live.py`): three fresh node starts, door one
+and door two running inside every node.
+
+| episode | role | observed | self-caused | unexplained | evidence (persisted) | review | reseal_ready |
+|---|---|---|---|---|---|---|---|
+| 1 | hub | 424 | 16 | 2 | 5 | add-only, deny-clean, admits all | true |
+| 1 | source | 209 | 2 | 5 | 1 | all true | true |
+| 1 | receiver | 209 | 2 | 5 | 1 | all true | true |
+| 2 | hub | 414 | 14 | 3 | **10** | all true | true |
+| 2 | source | 205 | 4 | 3 | **3** | all true | true |
+| 2 | receiver | 205 | 2 | 5 | **2** | all true | true |
+| 3 | hub | 412 | 14 | 4 | **14** | all true | true |
+| 3 | source | 203 | 3 | 4 | **5** | all true | true |
+| 3 | receiver | 203 | 4 | 3 | **4** | all true | true |
+
+- **L1** the brain is active on every node with its role. **HOLDS.**
+- **L2** the hub learns from corroborated inbound tunnel traffic (`self_caused` 16, 14, 14).
+  **HOLDS.**
+- **L3** source and receiver learn their own outbound housekeeping via `own_address`
+  (`self_caused` 2–4 per episode). **HOLDS.**
+- **L4** evidence persists and grows across restarts: hub 5→10→14, source 1→3→5,
+  receiver 1→2→4. (The counters reset at each restart; the evidence file carries over.) **HOLDS.**
+- **L5** after episode 3, every review is add-only, deny-clean and admits all evidence, with
+  `reseal_ready: true`. **HOLDS.**
+- **L6** delivery is unaffected: 49/49 echoed in every episode. **HOLDS.**
+
+The small `unexplained` count is not consolidated, correctly: it is traffic with no identity-linked
+cause, such as the lab's own `lo` control stimulus, seen as an un-vouched mesh datagram.
+
+**Door two now runs live inside Imperium.** It reads door one, learns self-caused new normal
+across restarts, and keeps a reseal-ready candidate. It never changes door one or delivery.

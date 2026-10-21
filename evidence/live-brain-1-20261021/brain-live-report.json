@@ -1,0 +1,291 @@
+{
+  "experiment": "LIVE-BRAIN-1",
+  "episodes": {
+    "1": {
+      "echoes": {
+        "tunnel_udp4": [
+          10,
+          10
+        ],
+        "tunnel_tcp4": [
+          5,
+          5
+        ],
+        "tunnel_icmp4": [
+          3,
+          3
+        ],
+        "direct_udp4": [
+          10,
+          10
+        ],
+        "direct_udp6": [
+          10,
+          10
+        ],
+        "direct_tcp6": [
+          5,
+          5
+        ],
+        "loopback_udp4": [
+          3,
+          3
+        ],
+        "loopback_udp6": [
+          3,
+          3
+        ]
+      },
+      "brain": {
+        "hub": {
+          "status": "ok",
+          "active": true,
+          "world": "hub",
+          "observed": 424,
+          "self_caused": 16,
+          "unexplained": 2,
+          "evidence": 5,
+          "candidate_paths": 782,
+          "old_paths": 777,
+          "added": 5,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        },
+        "source": {
+          "status": "ok",
+          "active": true,
+          "world": "source",
+          "observed": 209,
+          "self_caused": 2,
+          "unexplained": 5,
+          "evidence": 1,
+          "candidate_paths": 469,
+          "old_paths": 468,
+          "added": 1,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        },
+        "receiver": {
+          "status": "ok",
+          "active": true,
+          "world": "receiver",
+          "observed": 209,
+          "self_caused": 2,
+          "unexplained": 5,
+          "evidence": 1,
+          "candidate_paths": 473,
+          "old_paths": 472,
+          "added": 1,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        }
+      }
+    },
+    "2": {
+      "echoes": {
+        "tunnel_udp4": [
+          10,
+          10
+        ],
+        "tunnel_tcp4": [
+          5,
+          5
+        ],
+        "tunnel_icmp4": [
+          3,
+          3
+        ],
+        "direct_udp4": [
+          10,
+          10
+        ],
+        "direct_udp6": [
+          10,
+          10
+        ],
+        "direct_tcp6": [
+          5,
+          5
+        ],
+        "loopback_udp4": [
+          3,
+          3
+        ],
+        "loopback_udp6": [
+          3,
+          3
+        ]
+      },
+      "brain": {
+        "hub": {
+          "status": "ok",
+          "active": true,
+          "world": "hub",
+          "observed": 414,
+          "self_caused": 14,
+          "unexplained": 3,
+          "evidence": 10,
+          "candidate_paths": 787,
+          "old_paths": 777,
+          "added": 10,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        },
+        "source": {
+          "status": "ok",
+          "active": true,
+          "world": "source",
+          "observed": 205,
+          "self_caused": 4,
+          "unexplained": 3,
+          "evidence": 3,
+          "candidate_paths": 471,
+          "old_paths": 468,
+          "added": 3,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        },
+        "receiver": {
+          "status": "ok",
+          "active": true,
+          "world": "receiver",
+          "observed": 205,
+          "self_caused": 2,
+          "unexplained": 5,
+          "evidence": 2,
+          "candidate_paths": 474,
+          "old_paths": 472,
+          "added": 2,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        }
+      }
+    },
+    "3": {
+      "echoes": {
+        "tunnel_udp4": [
+          10,
+          10
+        ],
+        "tunnel_tcp4": [
+          5,
+          5
+        ],
+        "tunnel_icmp4": [
+          3,
+          3
+        ],
+        "direct_udp4": [
+          10,
+          10
+        ],
+        "direct_udp6": [
+          10,
+          10
+        ],
+        "direct_tcp6": [
+          5,
+          5
+        ],
+        "loopback_udp4": [
+          3,
+          3
+        ],
+        "loopback_udp6": [
+          3,
+          3
+        ]
+      },
+      "brain": {
+        "hub": {
+          "status": "ok",
+          "active": true,
+          "world": "hub",
+          "observed": 412,
+          "self_caused": 14,
+          "unexplained": 4,
+          "evidence": 14,
+          "candidate_paths": 791,
+          "old_paths": 777,
+          "added": 14,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        },
+        "source": {
+          "status": "ok",
+          "active": true,
+          "world": "source",
+          "observed": 203,
+          "self_caused": 3,
+          "unexplained": 4,
+          "evidence": 5,
+          "candidate_paths": 473,
+          "old_paths": 468,
+          "added": 5,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        },
+        "receiver": {
+          "status": "ok",
+          "active": true,
+          "world": "receiver",
+          "observed": 203,
+          "self_caused": 4,
+          "unexplained": 3,
+          "evidence": 4,
+          "candidate_paths": 476,
+          "old_paths": 472,
+          "added": 4,
+          "refused_by_deny": 0,
+          "review_add_only": true,
+          "review_deny_clean": true,
+          "review_admits_all_evidence": true,
+          "reseal_ready": true,
+          "passive": true,
+          "changes_door_one": false
+        }
+      }
+    }
+  },
+  "owned_vms_stopped": true
+}
