@@ -1043,11 +1043,21 @@ pub struct ToolBudget {
     pub remaining_activations: u32,
 }
 
+/// One structural symbol of a packet's path (network lightcone, door one): which field, and its
+/// value. Fields: direction 0, link 1, L4 protocol 2, source 3, destination 4, source port 5,
+/// destination port 6, TCP flags 7, ICMP type/code 8, ARP operation 9, fragment 10.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LightconeSymbol {
+    pub field: u8,
+    pub value: u128,
+}
+
 /// A passive Lightcone admission receipt, published for observation only.
 ///
-/// Every field records what the geometry admitted. It carries no authority:
-/// `passive` and `holds_verdict` are self-attesting doctrine flags, and the
-/// Lightcone never scores, judges, authorizes or blocks.
+/// It records what the trained-path world admitted for one observed packet: whether the allow
+/// world matched and the deny world did not, and which positions matched through learning rather
+/// than an exact trained value. It carries no authority: `passive` and `holds_verdict` are
+/// self-attesting doctrine flags, and this receipt never blocks or releases anything.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct LightconeReceipt {
     /// Monotonic sequence number. Entries are evicted from a bounded ring, so a
@@ -1055,19 +1065,22 @@ pub struct LightconeReceipt {
     pub sequence: u64,
     /// 0 = inbound observation, 1 = outbound.
     pub direction: u8,
-    /// Framing boundary used to derive the graph seeds.
+    /// Framing boundary the path was read from.
     #[serde(default)]
     pub frame_format: LightconeFrameFormat,
     /// Structural observation kind (0 decoded, 1 unknown, 2 malformed, 3 fragment).
     pub observation_kind: u8,
-    pub pack_sha256: String,
+    /// The world that judged it: its role, or "untrained".
+    pub world: String,
+    /// SHA-256 of the observed bytes: the identity that correlates a receipt with captures.
     pub query_sha256: String,
-    pub receipt_sha256: String,
-    pub seeds: Vec<u64>,
-    pub nodes: Vec<u64>,
-    pub edges: Vec<u64>,
-    pub excluded: Vec<u64>,
-    pub hop_frontier: Vec<u64>,
+    pub path: Vec<LightconeSymbol>,
+    /// The allow world matched the path and the deny world did not.
+    pub admitted: bool,
+    /// The deny world matched the path.
+    pub denied: bool,
+    /// Path positions matched through a learned wildcard.
+    pub learned_positions: Vec<u8>,
     /// Self-attesting doctrine flags — every receipt proves it judged nothing.
     pub passive: bool,
     pub holds_verdict: bool,
@@ -1096,8 +1109,8 @@ pub struct LightconeStructure {
     pub format: LightconeFrameFormat,
     /// Structural observation kind (0 decoded, 1 unknown, 2 malformed, 3 fragment).
     pub observation_kind: u8,
-    /// Versioned world node bitmap words selected only by structural decoding.
-    pub seeds: Vec<u64>,
+    /// The packet's path, read only from bounded structural fields (never payload).
+    pub path: Vec<LightconeSymbol>,
     /// SHA-256 of the complete original packet/datagram bytes.
     pub query_hash: [u8; 32],
 }
@@ -2107,5 +2120,19 @@ mod tests {
             context: HashMap::new(),
             timestamp: Utc::now(),
         }));
+    }
+}
+
+#[cfg(test)]
+mod lightcone_symbol_tests {
+    use super::LightconeSymbol;
+
+    #[test]
+    fn a_full_ipv6_value_survives_json() {
+        let s = LightconeSymbol { field: 3, value: 0xfe80_0000_0000_0000_5054_00ff_fe78_0001 };
+        let text = serde_json::to_string(&s).unwrap();
+        assert_eq!(serde_json::from_str::<LightconeSymbol>(&text).unwrap(), s);
+        let max = LightconeSymbol { field: 4, value: u128::MAX };
+        assert_eq!(serde_json::from_str::<LightconeSymbol>(&serde_json::to_string(&max).unwrap()).unwrap(), max);
     }
 }
