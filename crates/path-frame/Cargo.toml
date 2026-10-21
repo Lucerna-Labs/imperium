@@ -1,0 +1,8 @@
+[package]
+name = "path-frame"
+version = "0.1.0"
+edition = "2021"
+description = "PATHGATE adapter: a kernel-held IP packet plus its hook becomes the path path-sense reads."
+
+[dependencies]
+path-sense = { path = "../path-sense" }

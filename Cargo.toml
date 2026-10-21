@@ -1,6 +1,12 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/path-sense",
+    "crates/path-world",
+    "crates/path-admit",
+    "crates/path-frame",
+    "crates/path-pack",
+    "crates/imperium-net-pathworld",
     "crates/imperium-protocol",
     "crates/imperium-store",
     "crates/imperium-runtime",

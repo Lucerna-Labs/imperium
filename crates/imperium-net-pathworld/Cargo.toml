@@ -1,0 +1,11 @@
+[package]
+name = "imperium-net-pathworld"
+version = "0.1.0"
+edition = "2021"
+description = "Door one: Imperium's network lightcone world — the trained-path allow world and the reverse deny world, built from a training pack."
+
+[dependencies]
+path-sense = { path = "../path-sense" }
+path-world = { path = "../path-world" }
+path-admit = { path = "../path-admit" }
+path-pack = { path = "../path-pack" }

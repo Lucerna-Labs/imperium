@@ -1,0 +1,8 @@
+[package]
+name = "path-sense"
+version = "0.1.0"
+edition = "2021"
+description = "PATHCONE: sense a captured frame into its structural symbol path (no payload bytes)."
+
+[dependencies]
+

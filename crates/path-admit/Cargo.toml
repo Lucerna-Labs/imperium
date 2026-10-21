@@ -1,0 +1,9 @@
+[package]
+name = "path-admit"
+version = "0.1.0"
+edition = "2021"
+description = "PATHCONE: the gate law - pass iff the allow world matches and the deny world does not; no path, no pass."
+
+[dependencies]
+path-sense = { path = "../path-sense" }
+path-world = { path = "../path-world" }

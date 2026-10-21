@@ -1,0 +1,8 @@
+[package]
+name = "path-world"
+version = "0.1.0"
+edition = "2021"
+description = "PATHCONE: a trie world of trained paths with learned folding of volatile positions."
+
+[dependencies]
+path-sense = { path = "../path-sense" }

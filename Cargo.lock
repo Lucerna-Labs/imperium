@@ -2886,6 +2886,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "imperium-net-pathworld"
+version = "0.1.0"
+dependencies = [
+ "path-admit",
+ "path-pack",
+ "path-sense",
+ "path-world",
+]
+
+[[package]]
 name = "imperium-net-sensors"
 version = "0.1.0"
 dependencies = [
@@ -4238,6 +4248,39 @@ dependencies = [
  "redox_syscall 0.5.18",
  "smallvec",
  "windows-link",
+]
+
+[[package]]
+name = "path-admit"
+version = "0.1.0"
+dependencies = [
+ "path-sense",
+ "path-world",
+]
+
+[[package]]
+name = "path-frame"
+version = "0.1.0"
+dependencies = [
+ "path-sense",
+]
+
+[[package]]
+name = "path-pack"
+version = "0.1.0"
+dependencies = [
+ "path-sense",
+]
+
+[[package]]
+name = "path-sense"
+version = "0.1.0"
+
+[[package]]
+name = "path-world"
+version = "0.1.0"
+dependencies = [
+ "path-sense",
 ]
 
 [[package]]

@@ -1,0 +1,8 @@
+[package]
+name = "path-pack"
+version = "0.1.0"
+edition = "2021"
+description = "PATHCONE: a text codec for a list of trained paths (a world's training pack); fail-closed."
+
+[dependencies]
+path-sense = { path = "../path-sense" }
