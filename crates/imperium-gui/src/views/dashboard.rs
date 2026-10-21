@@ -118,7 +118,7 @@ fn stat_card(ui: &mut egui::Ui, label: &str, value: &str, sub: &str, color: egui
 fn lightcone_card(ui: &mut egui::Ui, state: &UiState) {
     let content_width = (ui.available_width() - 30.0).max(158.0);
     let v4_confirmed =
-        state.subsystems.contains_key("imperium-net-lightcone") || state.lightcone_v4_receipt_seen;
+        state.subsystems.contains_key("imperium-net-lightcone") || state.lightcone_receipt_seen;
     let (value, status, color) = match state.lightcone_latest_sequence {
         Some(sequence) => (
             format!(

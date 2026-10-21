@@ -966,15 +966,14 @@ fn render_lightcone_status(
         "mesh_runner_active": mesh_runner_active,
         "has_receipts": info.latest > 0,
         "pending_observations": pending_observations,
-        "world_version": info.world_version,
-        "pack_sha256": info.pack_sha256,
-        "source_sha256": info.source_sha256,
-        "training_sha256": info.training_sha256,
-        "nodes": info.nodes,
-        "edges": info.edges,
-        "dimensions": info.dimensions,
-        "training_platform": info.training_platform,
-        "local_diagnostic": info.training_platform == "local_diagnostic",
+        "world": info.world,
+        "world_kind": "trained_path_lightcone",
+        "trained": info.trained,
+        "trained_paths": info.trained_paths,
+        "deny_paths": info.deny_paths,
+        "folds": info.folds,
+        "admitted": info.admitted,
+        "local_diagnostic": true,
         "sealed": info.sealed,
         "unsealed": !info.sealed,
         "passive": info.passive,
@@ -1310,10 +1309,10 @@ mod tests {
         assert_eq!(value["status"], "incomplete");
         assert_eq!(value["installed"], true);
         assert_eq!(value["working"], false); // no mesh handoff evidence
-        assert_eq!(value["world_version"], 4);
-        assert_eq!(value["pack_sha256"], before.pack_sha256);
-        assert_eq!(value["source_sha256"], before.source_sha256);
-        assert_eq!(value["training_sha256"], before.training_sha256);
+        assert_eq!(value["world"], before.world);
+        assert_eq!(value["world_kind"], "trained_path_lightcone");
+        assert_eq!(value["trained_paths"], before.trained_paths);
+        assert_eq!(value["admitted"], before.admitted);
         assert_eq!(value["local_diagnostic"], true);
         assert_eq!(value["unsealed"], true);
         assert_eq!(value["passive"], true);

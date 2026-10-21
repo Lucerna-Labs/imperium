@@ -61,7 +61,8 @@ def probes(lab, name, blocked=False):
 
 def start_node(lab, role, bind, tunnel, tun, extra="", environment="", log_filter="info"):
     required(lab, role, "mkdir -p /run/lcnode; chmod 700 /run/lcnode")
-    command = (f"{environment} XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key "
+    # Door one: each guest judges with its own role's trained-path world.
+    command = (f"{environment} IMPERIUM_LIGHTCONE_ROLE={role} XDG_RUNTIME_DIR=/run/lcnode IMPERIUM_OPERATOR_KEY=/lab/operator-key "
                f"IMPERIUM_MESH_IDENTITY=/control/identity RUST_LOG={log_filter} /lab/imperium node start "
                f"--mesh-bind {bind}:41000 --tunnel-ip {tunnel} --tun {tun} "
                "--cluster-id 44444444-4444-4444-8444-444444444444 --report-secs 2 "

@@ -503,6 +503,7 @@ impl Harness {
                 0,
                 LightconeFrameFormat::Ethernet,
                 &udp_frame(format!("{tag}-{serial}").as_bytes()),
+                None,
             )),
         )
         .expect("publish is fire-and-forget and never fails on an idle topic");

@@ -6,7 +6,7 @@
 
 use std::collections::{BTreeMap, HashMap, VecDeque};
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, OnceLock};
+use std::sync::Arc;
 
 use chrono::{DateTime, Utc};
 use imperium_net_transport::HardeningController;
@@ -33,17 +33,6 @@ const THREAT_HISTORY: usize = 400;
 const ACTIVITY_HISTORY: usize = 250;
 /// One bucket per second, two minutes of rate telemetry.
 const RATE_WINDOW: usize = 120;
-
-fn embedded_lightcone_pack_hash() -> &'static str {
-    static HASH: OnceLock<String> = OnceLock::new();
-    HASH.get_or_init(|| {
-        imperium_net_world::embedded::HASH
-            .iter()
-            .map(|byte| format!("{byte:02x}"))
-            .collect()
-    })
-    .as_str()
-}
 
 #[derive(Clone, Debug)]
 pub struct ThreatRow {
@@ -85,7 +74,7 @@ pub struct UiState {
     pub lightcone_inbound_receipts: u64,
     pub lightcone_outbound_receipts: u64,
     pub lightcone_latest_sequence: Option<u64>,
-    pub lightcone_v4_receipt_seen: bool,
+    pub lightcone_receipt_seen: bool,
 }
 
 impl Default for UiState {
@@ -116,7 +105,7 @@ impl UiState {
             lightcone_inbound_receipts: 0,
             lightcone_outbound_receipts: 0,
             lightcone_latest_sequence: None,
-            lightcone_v4_receipt_seen: false,
+            lightcone_receipt_seen: false,
         }
     }
 
@@ -213,11 +202,9 @@ impl UiState {
                     if receipt.sequence > 0
                         && receipt.passive
                         && !receipt.holds_verdict
-                        && receipt
-                            .pack_sha256
-                            .eq_ignore_ascii_case(embedded_lightcone_pack_hash())
+                        && !receipt.world.is_empty()
                     {
-                        self.lightcone_v4_receipt_seen = true;
+                        self.lightcone_receipt_seen = true;
                     }
                 }
             }
@@ -537,21 +524,19 @@ mod tests {
     fn lightcone_receipt(
         sequence: u64,
         direction: u8,
-        pack_sha256: &str,
+        world: &str,
     ) -> imperium_protocol::LightconeReceipt {
         imperium_protocol::LightconeReceipt {
             sequence,
             direction,
             frame_format: imperium_protocol::LightconeFrameFormat::MeshDatagram,
             observation_kind: 0,
-            pack_sha256: pack_sha256.into(),
+            world: world.into(),
             query_sha256: "test-query".into(),
-            receipt_sha256: "test-receipt".into(),
-            seeds: Vec::new(),
-            nodes: Vec::new(),
-            edges: Vec::new(),
-            excluded: Vec::new(),
-            hop_frontier: Vec::new(),
+            path: Vec::new(),
+            admitted: false,
+            denied: false,
+            learned_positions: Vec::new(),
             passive: true,
             holds_verdict: false,
             timestamp: Utc::now(),
@@ -616,22 +601,22 @@ mod tests {
         for (sequence, direction) in [(4, 0), (5, 1), (3, 0), (6, 9)] {
             state.apply(event(
                 "net.lightcone.receipt",
-                Message::LightconeReceipt(lightcone_receipt(sequence, direction, "test-pack")),
+                Message::LightconeReceipt(lightcone_receipt(sequence, direction, "")),
             ));
         }
 
         assert_eq!(state.lightcone_inbound_receipts, 2);
         assert_eq!(state.lightcone_outbound_receipts, 1);
         assert_eq!(state.lightcone_latest_sequence, Some(5));
-        assert!(!state.lightcone_v4_receipt_seen);
+        assert!(!state.lightcone_receipt_seen);
 
         state.apply(event(
             "net.lightcone.receipt",
-            Message::LightconeReceipt(lightcone_receipt(7, 0, embedded_lightcone_pack_hash())),
+            Message::LightconeReceipt(lightcone_receipt(7, 0, "receiver")),
         ));
         assert_eq!(state.lightcone_inbound_receipts, 3);
         assert_eq!(state.lightcone_latest_sequence, Some(7));
-        assert!(state.lightcone_v4_receipt_seen);
+        assert!(state.lightcone_receipt_seen);
     }
 
     #[test]

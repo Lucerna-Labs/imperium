@@ -68,7 +68,8 @@ class Lab:
             "source_head": execute(["git", "rev-parse", "HEAD"], cwd=ROOT).stdout.strip(),
             "source_status": execute(["git", "status", "--porcelain"], cwd=ROOT).stdout,
             "binary_sha256": digest(ROOT / "target/debug/imperium"),
-            "world_sha256": digest(ROOT / "crates/imperium-net-world/src/world.bin"),
+            "world_packs_sha256": {role: digest(ROOT / f"crates/imperium-net-pathworld/packs/{role}.pathpack")
+                                   for role in ("hub", "source", "receiver")},
         })
         shutil.copy2(Path(__file__).with_name("guest.py"), self.input / "guest.py")
         runtime = self.input / "runtime"

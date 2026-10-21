@@ -2710,7 +2710,6 @@ dependencies = [
  "eframe",
  "imperium-net-signatures",
  "imperium-net-transport",
- "imperium-net-world",
  "imperium-protocol",
  "parking_lot",
  "serde_json",
@@ -2991,13 +2990,6 @@ dependencies = [
  "thiserror 2.0.18",
  "tokio",
  "tracing",
-]
-
-[[package]]
-name = "imperium-net-world"
-version = "0.1.0"
-dependencies = [
- "sha2",
 ]
 
 [[package]]

@@ -20,7 +20,6 @@ members = [
     "crates/imperium-net-crypto",
     "crates/imperium-net-mesh",
     "crates/imperium-net-host",
-    "crates/imperium-net-world",
     "crates/imperium-net-observer",
     "crates/imperium-net-lightcone",
     "crates/imperium-net-cluster",

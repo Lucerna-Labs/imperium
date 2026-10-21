@@ -14,7 +14,6 @@ spiderweb = { workspace = true }
 imperium-protocol = { path = "../imperium-protocol" }
 imperium-net-signatures = { path = "../imperium-net-signatures" }
 imperium-net-transport = { path = "../imperium-net-transport" }
-imperium-net-world = { path = "../imperium-net-world" }
 eframe = "0.36"
 tokio = { workspace = true }
 parking_lot = { workspace = true }
