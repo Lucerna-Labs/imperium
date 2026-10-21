@@ -1,0 +1,38 @@
+{
+  "phase": "kernel_blocked",
+  "case": "blocked_udp4",
+  "attempted": 5,
+  "echoed": 0,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": false,
+      "error": "timed out",
+      "elapsed_ns": 1007630405
+    },
+    {
+      "sequence": 1,
+      "echoed": false,
+      "error": "timed out",
+      "elapsed_ns": 1010751170
+    },
+    {
+      "sequence": 2,
+      "echoed": false,
+      "error": "timed out",
+      "elapsed_ns": 1010219898
+    },
+    {
+      "sequence": 3,
+      "echoed": false,
+      "error": "timed out",
+      "elapsed_ns": 1011478161
+    },
+    {
+      "sequence": 4,
+      "echoed": false,
+      "error": "timed out",
+      "elapsed_ns": 1011673491
+    }
+  ]
+}

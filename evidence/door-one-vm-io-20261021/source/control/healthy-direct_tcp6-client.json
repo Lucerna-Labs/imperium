@@ -1,0 +1,33 @@
+{
+  "phase": "healthy",
+  "case": "direct_tcp6",
+  "attempted": 5,
+  "echoed": 5,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 2671833
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 2497580
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 1977160
+    },
+    {
+      "sequence": 3,
+      "echoed": true,
+      "elapsed_ns": 1904617
+    },
+    {
+      "sequence": 4,
+      "echoed": true,
+      "elapsed_ns": 1943283
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "phase": "healthy",
+  "case": "loopback_udp6",
+  "attempted": 3,
+  "echoed": 3,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 2652371
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 1802178
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 1372186
+    }
+  ]
+}

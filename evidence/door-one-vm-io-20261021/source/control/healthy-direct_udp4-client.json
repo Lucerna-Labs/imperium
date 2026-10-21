@@ -1,0 +1,58 @@
+{
+  "phase": "healthy",
+  "case": "direct_udp4",
+  "attempted": 10,
+  "echoed": 10,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 2613446
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 2420980
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 2052611
+    },
+    {
+      "sequence": 3,
+      "echoed": true,
+      "elapsed_ns": 2022211
+    },
+    {
+      "sequence": 4,
+      "echoed": true,
+      "elapsed_ns": 1902870
+    },
+    {
+      "sequence": 5,
+      "echoed": true,
+      "elapsed_ns": 1929492
+    },
+    {
+      "sequence": 6,
+      "echoed": true,
+      "elapsed_ns": 1795901
+    },
+    {
+      "sequence": 7,
+      "echoed": true,
+      "elapsed_ns": 1831435
+    },
+    {
+      "sequence": 8,
+      "echoed": true,
+      "elapsed_ns": 1755376
+    },
+    {
+      "sequence": 9,
+      "echoed": true,
+      "elapsed_ns": 1758595
+    }
+  ]
+}

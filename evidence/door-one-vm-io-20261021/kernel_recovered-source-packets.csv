@@ -1,0 +1,7 @@
+record,time_ns,phase,role,interface,direction,network_protocol,transport,source,destination,source_port,destination_port,captured_bytes,raw_ip_sha256,mesh_datagram_sha256,case_ids
+0,1792612679403019000,kernel_recovered,source,ens4,out,ipv4,udp,192.0.2.2,198.51.100.2,53894,45998,82,22ea391f9c1f832fb56093d0207657d27213bce6d541f247ad8a9aee9e4b4c37,,['recovered_udp4:000']
+1,1792612679404871000,kernel_recovered,source,ens4,in,ipv4,udp,198.51.100.2,192.0.2.2,45998,53894,82,9ff65f95cd3be1ca043202e64a2767480bec58cbc4b1abf6687721fa26ce1405,,['recovered_udp4:000']
+2,1792612679406200000,kernel_recovered,source,ens4,out,ipv4,udp,192.0.2.2,198.51.100.2,57106,45998,82,2583a08a1135cd4bce8f1d0465543088b0927de38aa4a5faf9504063d7e25d9b,,['recovered_udp4:001']
+3,1792612679406964000,kernel_recovered,source,ens4,in,ipv4,udp,198.51.100.2,192.0.2.2,45998,57106,82,75bb0b637ac050e1ad7b2dc4197048513d00fe3bea33f5bbddc20d8fc6fd3158,,['recovered_udp4:001']
+4,1792612679408054000,kernel_recovered,source,ens4,out,ipv4,udp,192.0.2.2,198.51.100.2,51109,45998,82,a8b017a740b68113b18cbc3a97324068f2796bdef5731df2add95800ab1b0f79,,['recovered_udp4:002']
+5,1792612679408702000,kernel_recovered,source,ens4,in,ipv4,udp,198.51.100.2,192.0.2.2,45998,51109,82,e161968f08876e5493e31bd694b52d74745f9faffeb4f7b48bd4888f4799db59,,['recovered_udp4:002']

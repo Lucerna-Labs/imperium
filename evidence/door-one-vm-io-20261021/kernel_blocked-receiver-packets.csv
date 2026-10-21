@@ -1,0 +1,3 @@
+record,time_ns,phase,role,interface,direction,network_protocol,transport,source,destination,source_port,destination_port,captured_bytes,raw_ip_sha256,mesh_datagram_sha256,case_ids
+0,1792612669753105000,kernel_blocked,receiver,ens4,in,ipv6,icmp6,fe80::5054:ff:fe78:1,fe80::5054:ff:fe78:2,,,92,e9a29b68bb6015f81a5d641808b7ee9ff99236bba8a512dc6381d8cf7e841d51,,[]
+1,1792612669753164000,kernel_blocked,receiver,ens4,out,ipv6,icmp6,fe80::5054:ff:fe78:2,fe80::5054:ff:fe78:1,,,84,11c0cdc0706400e73e91457b97b904f13ff9d64ae34e37016ab239b706586185,,[]

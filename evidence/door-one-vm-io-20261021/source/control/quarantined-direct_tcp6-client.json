@@ -1,0 +1,33 @@
+{
+  "phase": "quarantined",
+  "case": "direct_tcp6",
+  "attempted": 5,
+  "echoed": 5,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 3267759
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 2264667
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 1747899
+    },
+    {
+      "sequence": 3,
+      "echoed": true,
+      "elapsed_ns": 2072983
+    },
+    {
+      "sequence": 4,
+      "echoed": true,
+      "elapsed_ns": 2290177
+    }
+  ]
+}

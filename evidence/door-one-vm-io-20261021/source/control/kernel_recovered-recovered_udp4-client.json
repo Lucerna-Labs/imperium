@@ -1,0 +1,23 @@
+{
+  "phase": "kernel_recovered",
+  "case": "recovered_udp4",
+  "attempted": 3,
+  "echoed": 3,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 3425442
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 1922003
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 1698514
+    }
+  ]
+}

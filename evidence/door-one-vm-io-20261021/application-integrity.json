@@ -1,0 +1,38 @@
+[
+  {
+    "phase": "healthy",
+    "application_ids_sent": 46,
+    "application_ids_received": 46,
+    "receiver_duplicates": {},
+    "receiver_payload_hash_mismatches": [],
+    "client_errors": 0,
+    "icmp_note": "ICMP is independently measured by ping and packet captures, outside this application byte log"
+  },
+  {
+    "phase": "quarantined",
+    "application_ids_sent": 46,
+    "application_ids_received": 46,
+    "receiver_duplicates": {},
+    "receiver_payload_hash_mismatches": [],
+    "client_errors": 0,
+    "icmp_note": "ICMP is independently measured by ping and packet captures, outside this application byte log"
+  },
+  {
+    "phase": "kernel_blocked",
+    "application_ids_sent": 5,
+    "application_ids_received": 0,
+    "receiver_duplicates": {},
+    "receiver_payload_hash_mismatches": [],
+    "client_errors": 5,
+    "icmp_note": "ICMP is independently measured by ping and packet captures, outside this application byte log"
+  },
+  {
+    "phase": "kernel_recovered",
+    "application_ids_sent": 3,
+    "application_ids_received": 3,
+    "receiver_duplicates": {},
+    "receiver_payload_hash_mismatches": [],
+    "client_errors": 0,
+    "icmp_note": "ICMP is independently measured by ping and packet captures, outside this application byte log"
+  }
+]

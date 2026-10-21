@@ -110,3 +110,44 @@ without another rewrite:
 - a TPU-trained, sealed pack can replace the lab packs at that single point.
 
 No sealing mechanism is built or claimed here.
+
+## Results (2026-10-21): 5 of 6 hold. D5 FAILED, and the failure is fully explained
+
+| # | Prediction | Result |
+|---|---|---|
+| D1 | the workspace tests pass | **MEASURED:** `cargo test --workspace --offline`: **952 passed, 0 failed** (12 ignored, all marked ignored before this change) |
+| D2 | the frozen crypto files are byte-identical | **MEASURED:** 0 diff lines in `imperium-net-crypto` and in mesh `handshake`, `crypto`, `session`, `wire`, `destination`, `gate`, `hardening`. `transport.rs` lost only the 22 lines of the duplicate tap; its `seal_for_session` / `open_for_session` calls are untouched |
+| D3 | no reference to the old world remains | **MEASURED:** none in `.rs`, `.toml`, `.py` or `.sh` |
+| D4 | the VM IO lab completes | **MEASURED** (`scripts/lightcone-vm-test.sh --io`, exit 0, `evidence/door-one-vm-io-20261021/`) — see below |
+| D5 | ≥ 0.95 of the healthy arm's receipts admitted | **FAILED:** hub 0.914 (405/443), source 0.882 (202/229), receiver 0.882 (202/229) |
+| D6 | untrained: nothing admitted, the node runs | **MEASURED** by tests: `untrained_world_admits_nothing`, and the CLI status test (world `"untrained"`). The node, strand and live bus run with no role set (`lightcone_live_bus`, `pilot_supervision`) |
+
+**D4 in detail:**
+- the healthy delivery baseline is complete;
+- the measurement block/recovery control passes;
+- the crash drill quarantines all three roles;
+- every role reports `working: true` with its trained world (hub 777, source 468, receiver 472
+  paths) and `filter_enforced: false`;
+- application integrity: 46/46 IDs received in both the healthy and quarantined arms.
+
+The passive door changed no delivery.
+
+### D5 diagnosis (after the run)
+
+**Every receipt not admitted belongs to one of the two one-example classes** that network-lightcone
+PATHCONE-1 run 6 had already named:
+1. **The lab's own control stimulus:** 20 datagrams per guest, sent by `packet_io.py` from each guest
+   to itself on `lo`, at port 41000, from a fresh client port each run. Training holds one example
+   of it.
+2. **The fresh tunnel interfaces' link-local MLD reports (143) and router solicitations (133):**
+   hub 18, source 7, receiver 7.
+
+**All other receipts were admitted: 809 of 809** (hub 405/405, source 202/202, receiver
+202/202). That covers every case packet and all real mesh traffic.
+
+The 0.95 prediction did not account for the share of the lab's own stimulus in a short run. It is
+recorded as FAILED, not relabelled.
+
+**Learning these one-example classes** (Jesse: "it should learn, or we will be stuck with not 100
+percent compatibility") is the next stage's job: door two, the brain, learning new normal. It is
+not done by loosening door one.

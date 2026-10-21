@@ -1,0 +1,266 @@
+{
+  "rows": [
+    {
+      "phase": "healthy",
+      "case": "tunnel_udp4",
+      "attempted": 10,
+      "client_echoes": 10,
+      "source_capture_out": 10,
+      "hub_capture_in": 10,
+      "hub_capture_out": 10,
+      "receiver_capture_in": 10,
+      "server_unique_received": 10,
+      "hub_raw_ip_receipts_with_case_hash_match": 20
+    },
+    {
+      "phase": "healthy",
+      "case": "tunnel_tcp4",
+      "attempted": 5,
+      "client_echoes": 5,
+      "source_capture_out": 5,
+      "hub_capture_in": 5,
+      "hub_capture_out": 5,
+      "receiver_capture_in": 5,
+      "server_unique_received": 5,
+      "hub_raw_ip_receipts_with_case_hash_match": 10
+    },
+    {
+      "phase": "healthy",
+      "case": "tunnel_icmp4",
+      "attempted": 3,
+      "client_echoes": 3,
+      "source_capture_out": 3,
+      "hub_capture_in": 3,
+      "hub_capture_out": 3,
+      "receiver_capture_in": 3,
+      "server_unique_received": null,
+      "hub_raw_ip_receipts_with_case_hash_match": 6
+    },
+    {
+      "phase": "healthy",
+      "case": "direct_udp4",
+      "attempted": 10,
+      "client_echoes": 10,
+      "source_capture_out": 10,
+      "hub_capture_in": 10,
+      "hub_capture_out": 10,
+      "receiver_capture_in": 10,
+      "server_unique_received": 10,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "healthy",
+      "case": "direct_udp6",
+      "attempted": 10,
+      "client_echoes": 10,
+      "source_capture_out": 10,
+      "hub_capture_in": 10,
+      "hub_capture_out": 10,
+      "receiver_capture_in": 10,
+      "server_unique_received": 10,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "healthy",
+      "case": "direct_tcp6",
+      "attempted": 5,
+      "client_echoes": 5,
+      "source_capture_out": 5,
+      "hub_capture_in": 5,
+      "hub_capture_out": 5,
+      "receiver_capture_in": 5,
+      "server_unique_received": 5,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "healthy",
+      "case": "loopback_udp4",
+      "attempted": 3,
+      "client_echoes": 3,
+      "source_capture_out": 0,
+      "hub_capture_in": 3,
+      "hub_capture_out": 0,
+      "receiver_capture_in": 3,
+      "server_unique_received": 3,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "healthy",
+      "case": "loopback_udp6",
+      "attempted": 3,
+      "client_echoes": 3,
+      "source_capture_out": 0,
+      "hub_capture_in": 3,
+      "hub_capture_out": 0,
+      "receiver_capture_in": 3,
+      "server_unique_received": 3,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "quarantined",
+      "case": "tunnel_udp4",
+      "attempted": 10,
+      "client_echoes": 10,
+      "source_capture_out": 10,
+      "hub_capture_in": 10,
+      "hub_capture_out": 10,
+      "receiver_capture_in": 10,
+      "server_unique_received": 10,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "quarantined",
+      "case": "tunnel_tcp4",
+      "attempted": 5,
+      "client_echoes": 5,
+      "source_capture_out": 5,
+      "hub_capture_in": 5,
+      "hub_capture_out": 5,
+      "receiver_capture_in": 5,
+      "server_unique_received": 5,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "quarantined",
+      "case": "tunnel_icmp4",
+      "attempted": 3,
+      "client_echoes": 3,
+      "source_capture_out": 3,
+      "hub_capture_in": 3,
+      "hub_capture_out": 3,
+      "receiver_capture_in": 3,
+      "server_unique_received": null,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "quarantined",
+      "case": "direct_udp4",
+      "attempted": 10,
+      "client_echoes": 10,
+      "source_capture_out": 10,
+      "hub_capture_in": 10,
+      "hub_capture_out": 10,
+      "receiver_capture_in": 10,
+      "server_unique_received": 10,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "quarantined",
+      "case": "direct_udp6",
+      "attempted": 10,
+      "client_echoes": 10,
+      "source_capture_out": 10,
+      "hub_capture_in": 10,
+      "hub_capture_out": 10,
+      "receiver_capture_in": 10,
+      "server_unique_received": 10,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "quarantined",
+      "case": "direct_tcp6",
+      "attempted": 5,
+      "client_echoes": 5,
+      "source_capture_out": 5,
+      "hub_capture_in": 5,
+      "hub_capture_out": 5,
+      "receiver_capture_in": 5,
+      "server_unique_received": 5,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "quarantined",
+      "case": "loopback_udp4",
+      "attempted": 3,
+      "client_echoes": 3,
+      "source_capture_out": 0,
+      "hub_capture_in": 3,
+      "hub_capture_out": 0,
+      "receiver_capture_in": 3,
+      "server_unique_received": 3,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "quarantined",
+      "case": "loopback_udp6",
+      "attempted": 3,
+      "client_echoes": 3,
+      "source_capture_out": 0,
+      "hub_capture_in": 3,
+      "hub_capture_out": 0,
+      "receiver_capture_in": 3,
+      "server_unique_received": 3,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "kernel_blocked",
+      "case": "blocked_udp4",
+      "attempted": 5,
+      "client_echoes": 0,
+      "source_capture_out": 5,
+      "hub_capture_in": 5,
+      "hub_capture_out": 0,
+      "receiver_capture_in": 0,
+      "server_unique_received": 0,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    },
+    {
+      "phase": "kernel_recovered",
+      "case": "recovered_udp4",
+      "attempted": 3,
+      "client_echoes": 3,
+      "source_capture_out": 3,
+      "hub_capture_in": 3,
+      "hub_capture_out": 3,
+      "receiver_capture_in": 3,
+      "server_unique_received": 3,
+      "hub_raw_ip_receipts_with_case_hash_match": 0
+    }
+  ],
+  "paired_cases": {
+    "tunnel_udp4": {
+      "healthy_echoes": 10,
+      "quarantined_echoes": 10,
+      "delivery_changed": false
+    },
+    "tunnel_tcp4": {
+      "healthy_echoes": 5,
+      "quarantined_echoes": 5,
+      "delivery_changed": false
+    },
+    "tunnel_icmp4": {
+      "healthy_echoes": 3,
+      "quarantined_echoes": 3,
+      "delivery_changed": false
+    },
+    "direct_udp4": {
+      "healthy_echoes": 10,
+      "quarantined_echoes": 10,
+      "delivery_changed": false
+    },
+    "direct_udp6": {
+      "healthy_echoes": 10,
+      "quarantined_echoes": 10,
+      "delivery_changed": false
+    },
+    "direct_tcp6": {
+      "healthy_echoes": 5,
+      "quarantined_echoes": 5,
+      "delivery_changed": false
+    },
+    "loopback_udp4": {
+      "healthy_echoes": 3,
+      "quarantined_echoes": 3,
+      "delivery_changed": false
+    },
+    "loopback_udp6": {
+      "healthy_echoes": 3,
+      "quarantined_echoes": 3,
+      "delivery_changed": false
+    }
+  },
+  "healthy_delivery_baseline_complete": true,
+  "measurement_block_recovery_pass": true,
+  "delivery_change_detected": false,
+  "claim_limit": "Bounded synthetic VM traffic, receipt availability and current forwarding dependency only; no trained-world benefit or all-host protection claim"
+}

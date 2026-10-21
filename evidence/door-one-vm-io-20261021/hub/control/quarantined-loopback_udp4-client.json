@@ -1,0 +1,23 @@
+{
+  "phase": "quarantined",
+  "case": "loopback_udp4",
+  "attempted": 3,
+  "echoed": 3,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 1678633
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 2110421
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 1386636
+    }
+  ]
+}

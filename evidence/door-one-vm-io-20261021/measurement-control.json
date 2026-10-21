@@ -1,0 +1,240 @@
+{
+  "kernel_blocked": {
+    "case": {
+      "phase": "kernel_blocked",
+      "case": "blocked_udp4",
+      "attempted": 5,
+      "echoed": 0
+    },
+    "capture_stats": {
+      "hub": {
+        "dropped_by_kernel": 0,
+        "packets_captured": 7,
+        "packets_received_by_filter": 7,
+        "log": "tcpdump: data link type LINUX_SLL2\ntcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes\n7 packets captured\n7 packets received by filter\n0 packets dropped by kernel\n"
+      },
+      "source": {
+        "dropped_by_kernel": 0,
+        "packets_captured": 5,
+        "packets_received_by_filter": 5,
+        "log": "tcpdump: data link type LINUX_SLL2\ntcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes\n5 packets captured\n5 packets received by filter\n0 packets dropped by kernel\n"
+      },
+      "receiver": {
+        "dropped_by_kernel": 0,
+        "packets_captured": 2,
+        "packets_received_by_filter": 2,
+        "log": "tcpdump: data link type LINUX_SLL2\ntcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes\n2 packets captured\n2 packets received by filter\n0 packets dropped by kernel\n"
+      }
+    },
+    "packet_receipt_summary": {
+      "hub": {
+        "packets": 7,
+        "truncated_packets": 0,
+        "receipt_records": 0,
+        "receipts_with_capture_hash_match": 0,
+        "receipts_with_direction_match": 0
+      },
+      "source": {
+        "packets": 5,
+        "truncated_packets": 0,
+        "receipt_records": 0,
+        "receipts_with_capture_hash_match": 0,
+        "receipts_with_direction_match": 0
+      },
+      "receiver": {
+        "packets": 2,
+        "truncated_packets": 0,
+        "receipt_records": 0,
+        "receipts_with_capture_hash_match": 0,
+        "receipts_with_direction_match": 0
+      }
+    },
+    "queue_rules": {
+      "nftables": [
+        {
+          "metainfo": {
+            "version": "1.0.9",
+            "release_name": "Old Doc Yak #3",
+            "json_schema_version": 1
+          }
+        },
+        {
+          "table": {
+            "family": "inet",
+            "name": "lc_io_control",
+            "handle": 3
+          }
+        },
+        {
+          "chain": {
+            "family": "inet",
+            "table": "lc_io_control",
+            "name": "forward",
+            "handle": 1,
+            "type": "filter",
+            "hook": "forward",
+            "prio": 0,
+            "policy": "accept"
+          }
+        },
+        {
+          "rule": {
+            "family": "inet",
+            "table": "lc_io_control",
+            "chain": "forward",
+            "handle": 2,
+            "expr": [
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "saddr"
+                    }
+                  },
+                  "right": "192.0.2.2"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "ip",
+                      "field": "daddr"
+                    }
+                  },
+                  "right": "198.51.100.2"
+                }
+              },
+              {
+                "match": {
+                  "op": "==",
+                  "left": {
+                    "payload": {
+                      "protocol": "udp",
+                      "field": "dport"
+                    }
+                  },
+                  "right": 45998
+                }
+              },
+              {
+                "counter": {
+                  "packets": 5,
+                  "bytes": 300
+                }
+              },
+              {
+                "queue": {
+                  "num": 42778
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "receiver_health_before": {
+      "hub": {
+        "time_ns": 1792612667187770621,
+        "expected_threads": 2,
+        "alive_threads": 2
+      },
+      "receiver": {
+        "time_ns": 1792612667863596870,
+        "expected_threads": 5,
+        "alive_threads": 5
+      }
+    },
+    "receiver_health_after": {
+      "hub": {
+        "time_ns": 1792612676388464491,
+        "expected_threads": 2,
+        "alive_threads": 2
+      },
+      "receiver": {
+        "time_ns": 1792612677312847190,
+        "expected_threads": 5,
+        "alive_threads": 5
+      }
+    }
+  },
+  "kernel_recovered": {
+    "case": {
+      "phase": "kernel_recovered",
+      "case": "recovered_udp4",
+      "attempted": 3,
+      "echoed": 3
+    },
+    "capture_stats": {
+      "hub": {
+        "dropped_by_kernel": 0,
+        "packets_captured": 12,
+        "packets_received_by_filter": 12,
+        "log": "tcpdump: data link type LINUX_SLL2\ntcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes\n12 packets captured\n12 packets received by filter\n0 packets dropped by kernel\n"
+      },
+      "source": {
+        "dropped_by_kernel": 0,
+        "packets_captured": 6,
+        "packets_received_by_filter": 6,
+        "log": "tcpdump: data link type LINUX_SLL2\ntcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes\n6 packets captured\n6 packets received by filter\n0 packets dropped by kernel\n"
+      },
+      "receiver": {
+        "dropped_by_kernel": 0,
+        "packets_captured": 6,
+        "packets_received_by_filter": 6,
+        "log": "tcpdump: data link type LINUX_SLL2\ntcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes\n6 packets captured\n6 packets received by filter\n0 packets dropped by kernel\n"
+      }
+    },
+    "packet_receipt_summary": {
+      "hub": {
+        "packets": 12,
+        "truncated_packets": 0,
+        "receipt_records": 0,
+        "receipts_with_capture_hash_match": 0,
+        "receipts_with_direction_match": 0
+      },
+      "source": {
+        "packets": 6,
+        "truncated_packets": 0,
+        "receipt_records": 0,
+        "receipts_with_capture_hash_match": 0,
+        "receipts_with_direction_match": 0
+      },
+      "receiver": {
+        "packets": 6,
+        "truncated_packets": 0,
+        "receipt_records": 0,
+        "receipts_with_capture_hash_match": 0,
+        "receipts_with_direction_match": 0
+      }
+    },
+    "queue_rules": null,
+    "receiver_health_before": {
+      "hub": {
+        "time_ns": 1792612678938596606,
+        "expected_threads": 2,
+        "alive_threads": 2
+      },
+      "receiver": {
+        "time_ns": 1792612679865113824,
+        "expected_threads": 5,
+        "alive_threads": 5
+      }
+    },
+    "receiver_health_after": {
+      "hub": {
+        "time_ns": 1792612682768381453,
+        "expected_threads": 2,
+        "alive_threads": 2
+      },
+      "receiver": {
+        "time_ns": 1792612683697112612,
+        "expected_threads": 5,
+        "alive_threads": 5
+      }
+    }
+  }
+}

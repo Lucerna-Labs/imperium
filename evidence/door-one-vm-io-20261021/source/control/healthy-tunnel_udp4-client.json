@@ -1,0 +1,58 @@
+{
+  "phase": "healthy",
+  "case": "tunnel_udp4",
+  "attempted": 10,
+  "echoed": 10,
+  "results": [
+    {
+      "sequence": 0,
+      "echoed": true,
+      "elapsed_ns": 4720109
+    },
+    {
+      "sequence": 1,
+      "echoed": true,
+      "elapsed_ns": 4051343
+    },
+    {
+      "sequence": 2,
+      "echoed": true,
+      "elapsed_ns": 3057776
+    },
+    {
+      "sequence": 3,
+      "echoed": true,
+      "elapsed_ns": 2906742
+    },
+    {
+      "sequence": 4,
+      "echoed": true,
+      "elapsed_ns": 3286765
+    },
+    {
+      "sequence": 5,
+      "echoed": true,
+      "elapsed_ns": 3623844
+    },
+    {
+      "sequence": 6,
+      "echoed": true,
+      "elapsed_ns": 3207711
+    },
+    {
+      "sequence": 7,
+      "echoed": true,
+      "elapsed_ns": 3384699
+    },
+    {
+      "sequence": 8,
+      "echoed": true,
+      "elapsed_ns": 3148894
+    },
+    {
+      "sequence": 9,
+      "echoed": true,
+      "elapsed_ns": 5116865
+    }
+  ]
+}

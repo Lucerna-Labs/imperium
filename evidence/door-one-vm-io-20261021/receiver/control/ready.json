@@ -1,0 +1,135 @@
+{
+  "role": "receiver",
+  "kernel": "6.8.0-142-generic",
+  "uid": 0,
+  "interfaces": [
+    {
+      "ifindex": 1,
+      "ifname": "lo",
+      "flags": [
+        "LOOPBACK",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 65536,
+      "qdisc": "noqueue",
+      "operstate": "UNKNOWN",
+      "group": "default",
+      "txqlen": 1000,
+      "link_type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00",
+      "addr_info": [
+        {
+          "family": "inet",
+          "local": "127.0.0.1",
+          "prefixlen": 8,
+          "scope": "host",
+          "label": "lo",
+          "valid_life_time": 4294967295,
+          "preferred_life_time": 4294967295
+        },
+        {
+          "family": "inet6",
+          "local": "::1",
+          "prefixlen": 128,
+          "scope": "host",
+          "noprefixroute": true,
+          "valid_life_time": 4294967295,
+          "preferred_life_time": 4294967295
+        }
+      ]
+    },
+    {
+      "ifindex": 2,
+      "ifname": "ens4",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "fq_codel",
+      "operstate": "UP",
+      "group": "default",
+      "txqlen": 1000,
+      "link_type": "ether",
+      "address": "52:54:00:78:00:02",
+      "broadcast": "ff:ff:ff:ff:ff:ff",
+      "altnames": [
+        "enp0s4"
+      ],
+      "addr_info": [
+        {
+          "family": "inet",
+          "local": "198.51.100.2",
+          "prefixlen": 24,
+          "scope": "global",
+          "label": "ens4",
+          "valid_life_time": 4294967295,
+          "preferred_life_time": 4294967295
+        },
+        {
+          "family": "inet6",
+          "local": "fd78::2",
+          "prefixlen": 64,
+          "scope": "global",
+          "nodad": true,
+          "valid_life_time": 4294967295,
+          "preferred_life_time": 4294967295
+        },
+        {
+          "family": "inet6",
+          "local": "fe80::5054:ff:fe78:2",
+          "prefixlen": 64,
+          "scope": "link",
+          "valid_life_time": 4294967295,
+          "preferred_life_time": 4294967295
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "dst": "192.0.2.0/24",
+      "gateway": "198.51.100.1",
+      "dev": "ens4",
+      "flags": []
+    },
+    {
+      "dst": "198.51.100.0/24",
+      "dev": "ens4",
+      "protocol": "kernel",
+      "scope": "link",
+      "prefsrc": "198.51.100.2",
+      "flags": []
+    }
+  ],
+  "ipv6_routes": [
+    {
+      "dst": "fd77::/64",
+      "gateway": "fd78::1",
+      "dev": "ens4",
+      "metric": 1024,
+      "flags": [],
+      "pref": "medium"
+    },
+    {
+      "dst": "fd78::/64",
+      "dev": "ens4",
+      "protocol": "kernel",
+      "metric": 256,
+      "flags": [],
+      "pref": "medium"
+    },
+    {
+      "dst": "fe80::/64",
+      "dev": "ens4",
+      "protocol": "kernel",
+      "metric": 256,
+      "flags": [],
+      "pref": "medium"
+    }
+  ]
+}
