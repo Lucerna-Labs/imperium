@@ -7,7 +7,6 @@ authors.workspace = true
 description = "Structural wire observation adapter for the passive network Lightcone"
 
 [dependencies]
-imperium-net-world = { path = "../imperium-net-world" }
 
 [features]
 default = []
