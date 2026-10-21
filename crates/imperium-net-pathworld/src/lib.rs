@@ -76,6 +76,12 @@ fn deny_paths(paths: &[Path], allow: &World, port: u128) -> Vec<Path> {
         .collect()
 }
 
+/// The trained paths of an embedded role's pack (door two needs door one's own training set).
+pub fn role_pack_paths(role: &str) -> Option<Vec<Path>> {
+    let (_, text) = PACKS.iter().find(|(r, _)| *r == role)?;
+    path_pack::decode(text).map(|p| p.paths)
+}
+
 impl PathWorld {
     /// No trained paths: admits nothing.
     pub fn untrained() -> PathWorld {

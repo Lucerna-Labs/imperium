@@ -1,0 +1,9 @@
+[package]
+name = "path-self"
+version = "0.1.0"
+edition = "2021"
+description = "CONSOLIDATE-1 (door two): the cause of a judged packet — self (identity-linked, explaining the novelty) or unexplained. A reading, no decision."
+
+[dependencies]
+path-sense = { path = "../path-sense" }
+path-world = { path = "../path-world" }

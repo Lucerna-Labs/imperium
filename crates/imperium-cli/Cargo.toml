@@ -30,6 +30,7 @@ imperium-net-signatures = { path = "../imperium-net-signatures" }
 imperium-net-strainer = { path = "../imperium-net-strainer" }
 imperium-net-toolkit = { path = "../imperium-net-toolkit" }
 imperium-net-lightcone = { path = "../imperium-net-lightcone" }
+imperium-net-brain = { path = "../imperium-net-brain" }
 imperium-net-transport = { path = "../imperium-net-transport" }
 imperium-gui = { path = "../imperium-gui" }
 imperium-store = { path = "../imperium-store" }

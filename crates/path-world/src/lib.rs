@@ -278,3 +278,47 @@ mod relative_tests {
         assert!(!rel.folded_fields().contains_key(&1) && rel.folded_fields().contains_key(&5));
     }
 }
+
+impl World {
+    fn walk_except(&self, n: usize, p: &[Sym], depth: usize, free: &[usize]) -> bool {
+        let Some((s, rest)) = p.split_first() else {
+            return self.nodes[n].terminal;
+        };
+        let node = &self.nodes[n];
+        if free.contains(&depth) {
+            // Any trained value of this field may stand here.
+            return node.children.iter().filter(|(k, _)| k.field == s.field).any(|(_, &c)| self.walk_except(c, rest, depth + 1, free));
+        }
+        if let Some(&c) = node.children.get(s) {
+            if self.walk_except(c, rest, depth + 1, free) {
+                return true;
+            }
+        }
+        if let Some(&c) = node.children.get(&Sym { field: s.field, value: WILD }) {
+            return self.walk_except(c, rest, depth + 1, free);
+        }
+        false
+    }
+
+    /// CONSOLIDATE-1: does this path follow a trained path everywhere except at the `free`
+    /// positions (where any trained value of the same field may stand)? Read-only; the world's
+    /// law is unchanged.
+    pub fn matches_except(&self, p: &Path, free: &[usize]) -> bool {
+        !self.nodes.is_empty() && self.walk_except(0, p, 0, free)
+    }
+}
+
+#[cfg(test)]
+mod except_tests {
+    use super::*;
+
+    #[test]
+    fn free_position_accepts_any_trained_value_of_its_field_only() {
+        let p = |a: u128, b: u128| vec![Sym { field: 3, value: a }, Sym { field: 6, value: b }];
+        let w = World::train(&[p(1, 53), p(2, 80)]);
+        assert!(w.matches_except(&p(9, 53), &[0]), "novel source, trained rest");
+        assert!(!w.matches_except(&p(9, 54), &[0]), "novelty elsewhere is not explained");
+        assert!(!w.matches_except(&p(1, 54), &[0]));
+        assert!(w.matches_except(&p(1, 53), &[]));
+    }
+}

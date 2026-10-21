@@ -68,3 +68,41 @@ The existing interface-based `cause` is kept for the offline lab tooling.
   path the deny world matches is present.
 - **B5:** the brain never blocks or mutates door one: it only reads receipts and emits a candidate;
   `filter_enforced` stays false, and door one's world is unchanged by the brain.
+
+## Results (2026-10-21)
+
+| # | Prediction | Result |
+|---|---|---|
+| B1 | workspace tests pass | **MEASURED:** 957 passed, 0 failed (12 ignored). +5 over door one, all new brain/path-self tests |
+| B2 | frozen crypto byte-identical | **MEASURED:** empty diff vs `work/unsealed-lightcone` across all frozen files |
+| B3 | identity classification + consolidation correct | **MEASURED** (unit): `own_address` learned; a spoof of our own address inbound, and novelty beyond the source, both `Unexplained`; candidate add-only, admits all evidence, 0 adversarial |
+| B4 | `review()` gates on deny-clean | **MEASURED** (unit): `deny_clean`, `add_only`, `admits_all_evidence` all reported |
+| B5 | the brain never blocks or mutates door one | **HOLDS by construction:** it only reads `net.lightcone.receipt` and accumulates a candidate; `filter_enforced` stays false; door one's world is untouched |
+
+**Landed:** `crates/imperium-net-brain` (`BrainService` + supervised `BrainStrand` on
+`net.lightcone.receipt`), vendored `path-self` (+ `cause_by_identity`) and `path-consolidate`, and
+`imperium_net_pathworld::role_pack_paths`. The brain strand is registered in the node before the
+run loop, beside door one.
+
+### Honest scope note: `authenticated_tunnel` needs interface telemetry
+
+The receipt carries the path and `direction`, not the interface. On the bus, identity is by
+address:
+- **`own_address` (outbound) works** — the host knows its own addresses, including fresh ones, so
+  it learns its outbound self-caused drops. In the CONSOLIDATE-1 lab this class covered the
+  **source and receiver** roles entirely.
+- **`authenticated_tunnel` (inbound) does not work by address**, because the packets to learn have
+  a *novel* source (a fresh tunnel link-local), which is not a known peer address. Only the
+  **interface** the packet arrived on distinguishes a genuine TUN-sourced ND from an attacker's
+  look-alike on a physical link — which is exactly how the lab's interface-based `cause` did it,
+  and why structure alone must not be trusted here (adversary A2). So the hub's inbound ND is left
+  `Unexplained` in-repo for now.
+
+**The next scoped step** (door two, continued): thread `input_interface` and a `tunnel` marker on
+the lightcone `LightconeStructure`/`LightconeReceipt` (lightcone telemetry, not a crypto change)
+from the host bridge through the daemon, so `authenticated_tunnel` works in-repo as it did in the
+lab. Recorded, not faked.
+
+**Also deferred (low-risk):** `vpn brain status` (evidence count, candidate size, review flags).
+The service handle is held; the strand already runs. Threading the read-only surface through the
+command dispatch is a follow-up.

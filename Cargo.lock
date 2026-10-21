@@ -2676,6 +2676,7 @@ dependencies = [
  "clap",
  "imperium-gui",
  "imperium-memory-log",
+ "imperium-net-brain",
  "imperium-net-cluster",
  "imperium-net-crypto",
  "imperium-net-host",
@@ -2758,6 +2759,24 @@ version = "0.1.0"
 dependencies = [
  "imperium-memory-log",
  "serde",
+]
+
+[[package]]
+name = "imperium-net-brain"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "imperium-net-pathworld",
+ "imperium-protocol",
+ "parking_lot",
+ "path-admit",
+ "path-consolidate",
+ "path-pack",
+ "path-self",
+ "path-sense",
+ "path-world",
+ "spiderweb",
+ "tracing",
 ]
 
 [[package]]
@@ -4250,6 +4269,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "path-consolidate"
+version = "0.1.0"
+dependencies = [
+ "path-sense",
+ "path-world",
+]
+
+[[package]]
 name = "path-frame"
 version = "0.1.0"
 dependencies = [
@@ -4261,6 +4288,14 @@ name = "path-pack"
 version = "0.1.0"
 dependencies = [
  "path-sense",
+]
+
+[[package]]
+name = "path-self"
+version = "0.1.0"
+dependencies = [
+ "path-sense",
+ "path-world",
 ]
 
 [[package]]

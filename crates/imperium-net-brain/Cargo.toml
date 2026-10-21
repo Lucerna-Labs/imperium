@@ -1,0 +1,23 @@
+[package]
+name = "imperium-net-brain"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Door two: the brain that reads door one's receipts, consolidates self-caused new normal, and gates the reseal"
+
+[dependencies]
+imperium-protocol = { path = "../imperium-protocol" }
+imperium-net-pathworld = { path = "../imperium-net-pathworld" }
+path-sense = { path = "../path-sense" }
+path-world = { path = "../path-world" }
+path-admit = { path = "../path-admit" }
+path-pack = { path = "../path-pack" }
+path-self = { path = "../path-self" }
+path-consolidate = { path = "../path-consolidate" }
+parking_lot = { workspace = true }
+spiderweb = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+chrono = { workspace = true }

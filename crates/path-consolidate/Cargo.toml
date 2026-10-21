@@ -1,0 +1,9 @@
+[package]
+name = "path-consolidate"
+version = "0.1.0"
+edition = "2021"
+description = "CONSOLIDATE-1 (door two): build door one's candidate training pack — old paths plus self-caused evidence; add-only, deny-checked."
+
+[dependencies]
+path-sense = { path = "../path-sense" }
+path-world = { path = "../path-world" }

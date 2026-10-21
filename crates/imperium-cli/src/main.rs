@@ -1120,6 +1120,21 @@ async fn initialize_node(
         }
     };
 
+    // Door two: the brain reads door one's receipts and consolidates self-caused new normal.
+    // Supervised like the lightcone; registered before the run loop. It never changes door one.
+    let brain = match imperium_net_brain::init_with_service(&publisher) {
+        Ok(Some((spec, service))) => {
+            kernel.register_spec(spec);
+            Some(service)
+        }
+        Ok(None) => None,
+        Err(e) => {
+            tracing::error!(error = %e, "brain init failed");
+            None
+        }
+    };
+    let _brain = brain; // held for the future `vpn brain status` surface; the strand already runs
+
     let store = Arc::new(Store::in_memory());
     let memory_log = Arc::new(MemoryLog::default());
     let toolkit = Arc::new(ToolManager::new(Arc::clone(&publisher)));
