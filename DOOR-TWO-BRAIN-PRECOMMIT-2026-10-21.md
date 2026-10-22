@@ -226,3 +226,51 @@ cause, such as the lab's own `lo` control stimulus, seen as an un-vouched mesh d
 
 **Door two now runs live inside Imperium.** It reads door one, learns self-caused new normal
 across restarts, and keeps a reseal-ready candidate. It never changes door one or delivery.
+
+---
+
+# RESEAL-1: the first reseal ceremony (approved by Jesse, 2026-10-21)
+
+**Status: PRECOMMITTED, 2026-10-21, before any RESEAL-1 code.**
+
+**The approval:** Jesse wrote "Approved" for the reseal. It does **not** cover enforcement on the
+real host: `filter_enforced` stays `false`, and no host rule is touched.
+
+## The ceremony
+
+**1. Write.** `imperium-net-brain/examples/reseal.rs ROLE EVIDENCE OUT`:
+- loads the role's door-one paths and LIVE-BRAIN-1's persisted evidence
+  (`evidence/live-brain-1-20261021/<role>.evidence.pathpack`);
+- writes the candidate through `BrainService::reseal_to(out, approved = true)`, so the gate's
+  review (add-only, deny-clean, admits all evidence) must pass, or nothing is written.
+
+**2. Offline "loosened nothing" check, same example.** For every trained path, make the
+exact-field mutations:
+- an untrained port;
+- an untrained source address;
+- the UDP/TCP swap.
+
+The candidate world must admit **no more** of them than the old world.
+
+**3. VM test.** Door one loads the candidates through its single loader, by a new override
+`IMPERIUM_LIGHTCONE_PACK_DIR=<dir>` (`<dir>/<role>.pathpack`, fail-closed on a malformed pack).
+This is the same seam the TPU-sealed pack will use. Then the three-VM lab (`brain_live.py`, with
+the override) runs fresh node starts with live traffic.
+
+**4. Swap.** Only if steps 1–3 pass, the candidates replace the embedded lab packs in
+`imperium-net-pathworld/packs/`, still **`sealed: false`** and revertible in git.
+
+**5. Seal.** The **TPU seal is external** (Jesse's path) and is not done here.
+
+## Predictions
+
+- **R1:** the gate writes a candidate for every role. Every review passes, and every candidate
+  contains every old path.
+- **R2:** offline, every role's candidate admits exactly as many mutated paths as the old world
+  does: 0 more.
+- **R3:** in the VM test with the candidates, each role's `self_caused` in its first episode is
+  lower than in LIVE-BRAIN-1's episode 1 (hub 16, source 2, receiver 2). Door one admits fresh
+  housekeeping it used to drop.
+- **R4:** delivery is 49/49 in every episode.
+- **R5:** after the swap, the workspace tests pass (the trained-path counts in the tests updated
+  to the new packs), and the frozen crypto diff is still 0.
