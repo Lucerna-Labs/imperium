@@ -22,6 +22,10 @@ pub const FOLD: CtxFold = CtxFold { min_distinct: 3, ephemeral_fraction: 0.8 };
 /// The environment variable choosing the embedded role (setting).
 pub const ROLE_ENV: &str = "IMPERIUM_LIGHTCONE_ROLE";
 pub const UNTRAINED: &str = "untrained";
+/// Override for door one's single loader (setting): a directory holding `<role>.pathpack`. It is
+/// the seam a reseal uses — first for the VM test of a candidate, later for the sealed pack.
+/// Fail-closed: a missing, malformed or wrong-role pack is an error, never a silent fallback.
+pub const PACK_DIR_ENV: &str = "IMPERIUM_LIGHTCONE_PACK_DIR";
 
 const PACKS: [(&str, &str); 3] = [
     ("hub", include_str!("../packs/hub.pathpack")),
@@ -76,6 +80,20 @@ fn deny_paths(paths: &[Path], allow: &World, port: u128) -> Vec<Path> {
         .collect()
 }
 
+fn override_pack(role: &str) -> Option<Result<String, Error>> {
+    let dir = std::env::var(PACK_DIR_ENV).ok().filter(|d| !d.is_empty())?;
+    Some(std::fs::read_to_string(std::path::Path::new(&dir).join(format!("{role}.pathpack"))).map_err(|_| Error::MalformedPack))
+}
+
+/// The trained paths door one is using for `role`: the override pack when
+/// `IMPERIUM_LIGHTCONE_PACK_DIR` is set, else the embedded pack. `None` on any failure.
+pub fn role_paths_from_env(role: &str) -> Option<Vec<Path>> {
+    match override_pack(role) {
+        Some(text) => path_pack::decode(&text.ok()?).filter(|p| p.role == role).map(|p| p.paths),
+        None => role_pack_paths(role),
+    }
+}
+
 /// The trained paths of an embedded role's pack (door two needs door one's own training set).
 pub fn role_pack_paths(role: &str) -> Option<Vec<Path>> {
     let (_, text) = PACKS.iter().find(|(r, _)| *r == role)?;
@@ -102,10 +120,21 @@ impl PathWorld {
         PathWorld::from_pack(text)
     }
 
-    /// The role named by `IMPERIUM_LIGHTCONE_ROLE`, or untrained when it is unset or empty.
+    /// The role named by `IMPERIUM_LIGHTCONE_ROLE`, or untrained when it is unset or empty. With
+    /// `IMPERIUM_LIGHTCONE_PACK_DIR` set, the role's pack comes from that directory instead of the
+    /// embedded lab packs.
     pub fn from_env() -> Result<PathWorld, Error> {
         match std::env::var(ROLE_ENV) {
-            Ok(role) if !role.is_empty() && role != UNTRAINED => PathWorld::embedded(&role),
+            Ok(role) if !role.is_empty() && role != UNTRAINED => match override_pack(&role) {
+                Some(text) => {
+                    let w = PathWorld::from_pack(&text?)?;
+                    if w.role != role {
+                        return Err(Error::MalformedPack);
+                    }
+                    Ok(w)
+                }
+                None => PathWorld::embedded(&role),
+            },
             _ => Ok(PathWorld::untrained()),
         }
     }
@@ -152,7 +181,7 @@ mod tests {
     #[test]
     fn embedded_receiver_admits_trained_service_and_refuses_untrained() {
         let w = PathWorld::embedded("receiver").unwrap();
-        assert_eq!(w.trained_paths(), 472);
+        assert_eq!(w.trained_paths(), 476);
         // Inbound direct UDP4 from the source to the trained service 45998, any client port.
         let ok = w.admit(Some(&udp(0, 0xc000_0202, 0xc633_6402, 51234, 45998)));
         assert!(ok.admitted && !ok.denied && ok.learned_positions == vec![5], "{ok:?}");
@@ -170,5 +199,33 @@ mod tests {
         for r in ["hub", "source"] {
             assert!(PathWorld::embedded(r).unwrap().is_trained());
         }
+    }
+}
+
+#[cfg(test)]
+mod override_tests {
+    use super::*;
+
+    /// One test owns the process environment (env vars are process-global).
+    #[test]
+    fn override_loads_the_pack_and_fails_closed() {
+        let dir = std::env::temp_dir().join(format!("pathworld-override-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let receiver = PACKS.iter().find(|(r, _)| *r == "receiver").unwrap().1;
+        std::fs::write(dir.join("receiver.pathpack"), receiver).unwrap();
+        std::env::set_var(ROLE_ENV, "receiver");
+        std::env::set_var(PACK_DIR_ENV, &dir);
+        assert_eq!(PathWorld::from_env().unwrap().trained_paths(), 476);
+        assert_eq!(role_paths_from_env("receiver").unwrap().len(), 476);
+        // Wrong role inside the file: refused.
+        std::fs::write(dir.join("hub.pathpack"), receiver).unwrap();
+        std::env::set_var(ROLE_ENV, "hub");
+        assert_eq!(PathWorld::from_env().err(), Some(Error::MalformedPack));
+        // Missing file: refused, never a silent fallback to the embedded pack.
+        std::env::set_var(ROLE_ENV, "source");
+        assert_eq!(PathWorld::from_env().err(), Some(Error::MalformedPack));
+        std::env::remove_var(PACK_DIR_ENV);
+        std::env::remove_var(ROLE_ENV);
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

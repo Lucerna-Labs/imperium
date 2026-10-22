@@ -409,7 +409,7 @@ mod tests {
     fn world_is_the_trained_receiver_and_unsealed() {
         let info = service().info();
         assert_eq!(info.world, "receiver");
-        assert!(info.trained && info.trained_paths == 472);
+        assert!(info.trained && info.trained_paths == 476);
         assert!(!info.sealed, "the lab world is never sealed");
     }
 

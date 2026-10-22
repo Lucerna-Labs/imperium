@@ -10,3 +10,12 @@
   and `PATHGATE-1-PRECOMMIT.md`.
 
 The world stays diagnostic and unsealed.
+
+## Reseal 1 (2026-10-21)
+
+The embedded packs were resealed from door one's original training plus door two's **self-caused**
+evidence from LIVE-BRAIN-1 (`imperium/evidence/live-brain-1-20261021/`), through the brain's gate
+(add-only, deny-clean) and the RESEAL-1 ceremony (Jesse approved; offline structure check; VM
+test). Counts: hub 777→791, source 468→473, receiver 472→476. The only new learned positions are
+at the source address (fresh tunnel link-local addresses). The world stays **`sealed: false`**; the
+TPU seal is a later, external step. Revert: `git checkout <pre-reseal> -- packs/`.

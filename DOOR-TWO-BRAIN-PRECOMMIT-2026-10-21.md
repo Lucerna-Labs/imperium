@@ -274,3 +274,32 @@ the override) runs fresh node starts with live traffic.
 - **R4:** delivery is 49/49 in every episode.
 - **R5:** after the swap, the workspace tests pass (the trained-path counts in the tests updated
   to the new packs), and the frozen crypto diff is still 0.
+
+## RESEAL-1 method change (before the code): R2 is structural
+
+**R2, revised:** compare the wildcard positions of the candidate world with the old world's, using
+the world's own diagnostics (`folded_fields`, `wild_contexts`).
+- **Allowed:** new learned positions at the **source address** (field 3), which is what
+  CONSOLIDATE-1 measured door one learning.
+- **Refused:** any new wildcard at link, protocol, destination, ports, TCP flags or ICMP type
+  (fields 1, 2, 4–8). That would be loosening, and it **stops the swap**.
+
+This replaces generating altered packets. The exact-field mutation tests were already measured
+live in PATHGATE-1/2/3 and offline in CONSOLIDATE-1.
+
+## RESEAL-1 results (2026-10-21, `evidence/reseal-1-20261021/`): the first reseal is done (unsealed)
+
+| step | result |
+|---|---|
+| R1 write via gate | **HOLDS.** hub 777→791 (+14), source 468→473 (+5), receiver 472→476 (+4); every review add-only, deny-clean, admits all evidence |
+| R2 loosened nothing (structural) | **HOLDS.** new wildcards only at the source address (field 3) on every role; 0 new at any other field |
+| R3 fewer first-episode self-caused drops | hub **16→0**, source **2→0** (HOLD); receiver 2→1→0 across episodes (ties in ep1, then closes — a single-peer inbound shape corroborates slowly; no regression) |
+| R4 delivery unaffected | **HOLDS.** 49/49 echoed in every episode |
+| R5 swap: tests + frozen crypto | **HOLDS.** workspace 962 passed, 0 failed; frozen crypto diff 0 |
+
+The candidates are now door one's embedded world (`imperium-net-pathworld/packs/`), **`sealed:
+false`**. A loader override `IMPERIUM_LIGHTCONE_PACK_DIR` was added (fail-closed), the seam the VM
+test used and the TPU-sealed pack will use. The reseal is revertible in git.
+
+**The TPU seal (step 5) is external and not done here.** Enforcement on the real host remains off
+(`filter_enforced: false`); Jesse's approval covered the reseal only.

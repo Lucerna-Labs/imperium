@@ -81,11 +81,11 @@ pub fn init_with_service(
         Ok(r) if !r.is_empty() && r != imperium_net_pathworld::UNTRAINED => r,
         _ => return Ok(None),
     };
-    let Some(paths) = imperium_net_pathworld::role_pack_paths(&role) else {
+    let Some(paths) = imperium_net_pathworld::role_paths_from_env(&role) else {
         tracing::error!(%role, "brain: no embedded pack for role");
         return Ok(None);
     };
-    let world = match imperium_net_pathworld::PathWorld::embedded(&role) {
+    let world = match imperium_net_pathworld::PathWorld::from_env() {
         Ok(w) => w,
         Err(e) => {
             tracing::error!(?e, "brain: role world failed to build");

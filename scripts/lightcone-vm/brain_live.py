@@ -5,6 +5,7 @@ IMPERIUM_BRAIN_STATE=/control/brain (evidence kept across restarts). After each 
 reads every node's `vpn brain status` through its control socket.
 """
 
+import argparse
 import json
 import re
 import shutil
@@ -19,10 +20,12 @@ from phase1 import required, start_node, status
 ROLES = ("hub", "source", "receiver")
 EPISODES = 3
 BRAIN_ENV = "IMPERIUM_BRAIN_STATE=/control/brain"
+PACK_DIR = None  # set by --pack-dir: door one's world comes from /lab/packs (RESEAL-1 VM test)
 
 
 def nodes(lab):
-    args = {"environment": BRAIN_ENV, "log_filter": "info"}
+    env = BRAIN_ENV + (" IMPERIUM_LIGHTCONE_PACK_DIR=/lab/packs" if PACK_DIR else "")
+    args = {"environment": env, "log_filter": "info"}
     left = start_node(lab, "source", "192.0.2.2", "10.88.0.1", "impb", "--route 10.77.0.0/24 --route 10.99.0.0/24", **args)
     right = start_node(lab, "receiver", "198.51.100.2", "10.99.0.1", "impc", "--route 10.77.0.0/24 --route 10.88.0.0/24", **args)
     start_node(lab, "hub", "0.0.0.0", "10.77.0.1", "impa",
@@ -42,12 +45,20 @@ def brain_status(lab, role):
 
 
 def main():
+    global PACK_DIR
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--pack-dir", type=Path, default=None, help="candidate packs for door one (<role>.pathpack)")
+    PACK_DIR = ap.parse_args().pack_dir
     lab = Lab(CACHE / "brain-live-runs" / time.strftime("%Y%m%d-%H%M%S"))
-    report = {"experiment": "LIVE-BRAIN-1", "episodes": {}}
+    report = {"experiment": "RESEAL-1 VM test" if PACK_DIR else "LIVE-BRAIN-1", "episodes": {}, "pack_dir": str(PACK_DIR)}
     print(f"Run directory: {lab.path}", flush=True)
     try:
         lab.prepare()
         shutil.copy2(Path(__file__).with_name("traffic_guest.py"), lab.input / "traffic_guest.py")
+        if PACK_DIR:
+            (lab.input / "packs").mkdir()
+            for role in ROLES:
+                shutil.copy2(PACK_DIR / f"{role}.pathpack", lab.input / "packs" / f"{role}.pathpack")
         lab.start()
         start_servers(lab)
         for ep in range(1, EPISODES + 1):
