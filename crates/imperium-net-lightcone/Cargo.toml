@@ -16,7 +16,6 @@ imperium-net-observer = { path = "../imperium-net-observer" }
 # The bus is Spiderweb-Bus-Next, vendored at `vendor/spiderweb-bus/`. There is
 # no Imperium bus crate: this is a direct dependency on the kernel.
 spiderweb = { workspace = true }
-tokio = { workspace = true }
 tracing = { workspace = true }
 thiserror = { workspace = true }
 chrono = { workspace = true }

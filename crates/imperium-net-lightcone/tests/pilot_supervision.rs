@@ -143,8 +143,9 @@ fn subscribe_queue(
     publisher: &BusPublisher,
     prefix: &'static str,
     capacity: usize,
-) -> tokio::sync::mpsc::Receiver<BusEvent> {
-    let (tx, rx) = tokio::sync::mpsc::channel(capacity);
+) -> std::sync::mpsc::Receiver<BusEvent> {
+    // A bounded std channel: Spiderweb delivers by push callback, no async runtime involved.
+    let (tx, rx) = std::sync::mpsc::sync_channel(capacity);
     publisher.subscribe_prefix(
         prefix,
         Box::new(move |_socket, payload| {
@@ -368,15 +369,15 @@ fn offer_frame(publisher: &BusPublisher, direction: u8, payload: &[u8]) {
 /// proving the strand's publish path (the kernel's deliver, which fans out to
 /// named subscribers after TypeId routing) is equivalent to an external
 /// publisher's.
-#[tokio::test]
-async fn pilot_strand_serves_frames_and_publishes_receipts_to_named_subscribers() {
+#[test]
+fn pilot_strand_serves_frames_and_publishes_receipts_to_named_subscribers() {
     let bus = Bus::open();
     let receipts = new_receipt_log();
 
     // The consumer surface every existing consumer of `net.lightcone.receipt`
     // uses: a prefix subscription feeding an owned bounded queue. Registered
     // before the run loop starts so no receipt can be missed.
-    let mut named = subscribe_queue(&bus.publisher(), topics::RECEIPT, 64);
+    let named = subscribe_queue(&bus.publisher(), topics::RECEIPT, 64);
 
     // A second strand on the same web, consuming the pilot's output by TypeId;
     // plus the pilot itself, with no injected fault (the production policy).
@@ -399,10 +400,9 @@ async fn pilot_strand_serves_frames_and_publishes_receipts_to_named_subscribers(
     // 1. Through the named subscription (the old public path).
     let mut delivered = Vec::new();
     for _ in 0..3 {
-        let event = tokio::time::timeout(Duration::from_secs(10), named.recv())
-            .await
-            .expect("receipt must arrive through the named subscription")
-            .expect("subscription queue must stay open for the test's life");
+        let event = named
+            .recv_timeout(Duration::from_secs(10))
+            .expect("receipt must arrive through the named subscription, with the queue open");
         assert_eq!(&*event.topic, topics::RECEIPT);
         match event.message {
             Message::LightconeReceipt(receipt) => delivered.push(receipt),
